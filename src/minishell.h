@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/06/08 16:27:03 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/07/14 19:18:41 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ typedef struct s_data
 	char	*output;
 	char	*command;
 	char	*option;
-	char	**arg;
+	t_list	**arg;
 	struct s_data	*next;
 }	t_data;
 /*			prototype			*/

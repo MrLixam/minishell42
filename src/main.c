@@ -6,7 +6,7 @@
 /*   By: gpouzet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/06/08 16:49:49 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/07/14 19:18:37 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -17,6 +17,9 @@
 
 void	show_data(t_data *data, int i)
 {
+	int	j;
+
+	j = -1;
 	ft_printf("\n%d table\n", i);
 	if (data->input != NULL)
 		ft_printf("input : %s\n", data->input);
@@ -27,7 +30,8 @@ void	show_data(t_data *data, int i)
 	if (data->option != NULL)
 		ft_printf("option : %s\n", data->option);
 	if (data->arg != NULL)
-		ft_printf("arg : %s\n", data->input);
+		while (data->arg[++j] != NULL)
+			ft_printf("arg%d : %s\n", j, data->arg[j]);
 	if (data->next != NULL)
 		show_data(data->next, ++i);
 }
@@ -49,6 +53,8 @@ int	main(void)
 			return (1);
 		data = parser(lexer);
 		freetab(lexer);
+		if (data == NULL)
+			return (1);
 		ft_printf("[	data table	]\n");
 		show_data(data, 1);
 		ft_printf("[	end		]\n");

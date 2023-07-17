@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gpouzet <marvin@42.fr>                     +#+  +:+       +#+         #
+#    By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/07 16:02:47 by gpouzet           #+#    #+#              #
-#    Updated: 2023/06/07 17:00:17 by gpouzet          ###   ########.fr        #
+#    Updated: 2023/07/17 17:43:23 by lvincent         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ FLAGS = -Wall -Wextra -Werror -g
 
 NAME = minishell
 
-SRC = src/main.c src/parser.c \
+SRC = src/main.c src/parser.c src/exec.c\
 
 OBJ	= $(SRC:.c=.o)
 

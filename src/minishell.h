@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/07/14 19:18:41 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/07/17 20:30:28 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define MINISHELL_H
 # include "../libft/libft.h"
 # include "../libft/printf.h"
+# include "../libft/list.h"
+# include "../libft/get_next_line.h"
 
 typedef struct s_data
 {

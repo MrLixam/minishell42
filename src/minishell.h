@@ -19,17 +19,20 @@
 
 typedef struct s_data
 {
-	char	*input;
-	char	*output;
 	char	*command;
-	char	*option;
-	t_list	**arg;
+	t_list	*input;
+	t_list	*output;
+	t_list	*option;
+	t_list	*arg;
 	struct s_data	*next;
 }	t_data;
+
 /*			prototype			*/
 void	freetab(char **tab);
 /*			data			*/
 void	clear_data(t_data *data);
 t_data	*new_data(void);
+/*			parser			*/
+char	**arg_sep(char const *s);
 t_data	*parser(char **lexer);
 #endif

@@ -6,7 +6,7 @@
 /*   By: gpouzet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:23 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/07/14 19:18:34 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/07/31 11:49:56 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -37,6 +37,20 @@ void	freetab(char **tab)
 	free(tab);
 }
 
+int	new_arg(t_list **lst, char *arg)
+{
+	t_list	*new;
+	char	*tmp;
+
+	tmp = ft_strdup(arg);
+	if (tmp == NULL)
+		return (1);
+	new = ft_lstnew(tmp);
+	ft_lstadd_back(lst, new);
+	return (0);
+}
+
+/*
 void	clear_data(t_data *data)
 {
 	if (data->input != NULL)
@@ -53,63 +67,7 @@ void	clear_data(t_data *data)
 		clear_data(data->next);
 	free(data);
 }
-/*
-char	**arg(char **arg, char *lexer)
-{
-	char	**newarg;
-	int		i;
-
-	i = -1;
-	newarg = ft_calloc(sizeof(char *), ft_tabstrlen(arg) + 1);
-	while (arg[++i] != NULL)
-		newarg[i] = ft_strdup(arg[i]);
-	 gerer lexer
-	if (lexer[0] == "'")
-	 fin 
-	if (arg != NULL)
-		freetab(arg);
-	return (newarg);
-}
 */
-char	**append(char *lexer, char **src)
-{
-	char	**dest;
-	int		i;
-
-	i = 0;
-	if (lexer == NULL)
-	{
-		freetab(src);
-		return (NULL);
-	}
-	dest = ft_calloc(sizeof(char **), ft_tabstrlen(src) + 1 + (src == NULL));
-	if (dest == NULL)
-	{
-		freetab(src);
-		return (NULL);
-	}
-	while (src != NULL && i < (int)ft_tabstrlen(src))
-	{
-		dest[i] = ft_strdup(src[i]);
-		if (dest[i] == NULL)
-		{
-			freetab(src);
-			freetab(dest);
-			return (NULL);
-		}
-		i++;
-	}
-//	if (src != NULL)
-//		freetab(src);
-	dest[i] = ft_strdup(lexer);
-	if (dest[i] == NULL)
-	{
-		freetab(src);
-		return (NULL);
-	}
-	return (dest);
-}
-
 t_data	*parser(char **lexer)
 {
 	t_data	*first;
@@ -121,7 +79,7 @@ t_data	*parser(char **lexer)
 	curent = first;
 	while (lexer[i])
 	{
-		if (!ft_strncmp(lexer[i], "<", ft_strlen(lexer[i])))
+/*		if (!ft_strncmp(lexer[i], "<", ft_strlen(lexer[i])))
 		{
 			curent->input = ft_strdup(lexer[++i]);
 			if (curent->input == NULL)
@@ -133,18 +91,18 @@ t_data	*parser(char **lexer)
 			if (curent->output == NULL)
 				return (NULL);
 		}
-		else if (curent->command == NULL)
+		else */if (curent->command == NULL)
 		{
 			curent->command = ft_strdup(lexer[i]);
 			if (curent->command == NULL)
 				return (NULL);
-		}
+		}/*
 		else if (lexer[i][0] == '-')
 		{
 			curent->option = ft_strdup(lexer[i]);
 			if (curent->option == NULL)
 				return (NULL);
-		}
+		}*/
 		else if (!ft_strncmp(lexer[i], "|", ft_strlen(lexer[i])))
 		{
 			curent->next = new_data();
@@ -153,11 +111,8 @@ t_data	*parser(char **lexer)
 			curent = curent->next;
 		}
 		else
-		{
-			curent->arg = append(lexer[i], curent->arg);
-			if (curent->arg == NULL)
+			if (new_arg(&curent->arg, lexer[i]))
 				return (NULL);
-		}
 		i++;
 	}
 	return (first);

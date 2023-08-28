@@ -23,16 +23,30 @@ void	show_data(t_data *data, int i)
 	t_list *tmp;
 
 	j = 0;
-	tmp = data->arg;
 	ft_printf("\n%d table\n", i);
-	if (data->input != NULL)
-		ft_printf("input : %s\n", data->input);
-	if (data->output != NULL)
-		ft_printf("output : %s\n", data->output);
+	tmp = data->input;
+	if (tmp != NULL)
+	{
+		while (tmp != NULL)
+		{
+			ft_printf("input %d : %s\n", ++j, tmp->content);
+			tmp = tmp->next;
+		}
+	}
+	tmp = data->output;
+	if (tmp != NULL)
+	{
+		while (tmp != NULL)
+		{
+			ft_printf("output %d : %s\n", ++j, tmp->content);
+			tmp = tmp->next;
+		}
+	}
 	if (data->command != NULL)
 		ft_printf("command : %s\n", data->command);
 	if (data->option != NULL)
 		ft_printf("option : %s\n", data->option);
+	tmp = data->arg;
 	if (tmp != NULL)
 	{
 		while (tmp != NULL)

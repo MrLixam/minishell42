@@ -20,6 +20,7 @@
 typedef struct s_data
 {
 	char	*command;
+	t_list	*redirection;
 	t_list	*input;
 	t_list	*output;
 	t_list	*option;

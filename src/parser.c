@@ -6,7 +6,7 @@
 /*   By: gpouzet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:23 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/07/31 11:49:56 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/08/29 14:42:24 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -148,7 +148,7 @@ t_data	*parser(char **lexer)
 		tmp = ft_lstlast(curent->redirection);
 		if (tmp && (!ft_strncmp(tmp->content, ">", 1) || !ft_strncmp(tmp->content, "<", 1)))
 		{
-			if (new_arg(&curent->redirection, lexer[i]))
+			if (lexer[i][0] == '<' || lexer[i][0] == '>' || new_arg(&curent->redirection, lexer[i]))
 				return (NULL);
 		}
 		else if (lexer[i][0] == '<' || lexer[i][0] == '>')

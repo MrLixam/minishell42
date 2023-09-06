@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/07/17 20:30:28 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/09/06 17:09:44 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_data
 
 /*			prototype			*/
 void	freetab(char **tab);
+char    *ft_realloc(char *src, int size);
 /*			data			*/
 void	clear_data(t_data *data);
 t_data	*new_data(void);

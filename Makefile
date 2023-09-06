@@ -6,7 +6,7 @@
 #    By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/07 16:02:47 by gpouzet           #+#    #+#              #
-#    Updated: 2023/07/17 17:43:23 by lvincent         ###   ########.fr        #
+#    Updated: 2023/09/06 17:06:48 by gpouzet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ FLAGS = -Wall -Wextra -Werror -g
 
 NAME = minishell
 
-SRC = src/main.c src/parser.c src/exec.c\
+SRC = src/main.c src/parserv2.c src/parser.c src/arg_sep.c src/ft_realloc.c
 
 OBJ	= $(SRC:.c=.o)
 

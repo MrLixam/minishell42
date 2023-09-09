@@ -6,12 +6,12 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/07/17 20:29:50 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/09/09 14:50:22 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+/*
 char	*ft_strndup(const char *s, size_t n)
 {
 	size_t			size;
@@ -33,25 +33,32 @@ char	*ft_strndup(const char *s, size_t n)
 	}
 	new[i] = '\0';
 	return (new);
+}*/
+
+int	exec_bin(char *bin, char **args, char **envp)
+{
+	int	pid;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		execve(bin, args, envp);
+		exit(0);
+	}
+	else if (pid < 0)
+		return (1);
+	else
+		waitpid(pid, NULL, 0);
+	return (0);
 }
 
-int	ft_strli(char *s, char c)
+int	file_access(char *path)
 {
 	int i;
 
-	i = ft_strlen(s);
-	while (--i)
-		if (s[i] == c)
-			return (i);
-	return (-1);
-}
-
-int	exec(char *arg, char **envp)
-{
-	int fd;
-	fd = open(arg[0]);
-	if (fd == -1)
-		return (-1);
-	close(fd);
-	return (1);
+	i = access(path, F_OK & R_OK & W_OK & X_OK);
+	if (i == 0)
+		return (0);
+	else
+		return (1);
 }

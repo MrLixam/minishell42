@@ -16,6 +16,10 @@
 # include "../libft/printf.h"
 # include "../libft/list.h"
 # include "../libft/get_next_line.h"
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <stdio.h>
+# include <errno.h>
 
 typedef struct s_data
 {

@@ -62,3 +62,4 @@ int	file_access(char *path)
 	else
 		return (1);
 }
+

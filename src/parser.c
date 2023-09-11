@@ -6,7 +6,7 @@
 /*   By: gpouzet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:23 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/08/29 14:42:24 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/09/11 16:13:38 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -133,6 +133,24 @@ int	switcher(t_data *data)
 	return (0);
 }
 
+char	**pre_parser(char *lexer)
+{
+	char	**tmp;
+
+	if (check_quote(lexer))
+	{
+		write(1, "error\n", 6);
+		return(0);
+	}
+	tmp = arg_sep(lexer);
+	free(lexer);
+	if (tmp == NULL)
+		return (0);
+	if (swap_env_var(tmp))
+		return (0);
+	return (tmp);
+}
+
 t_data	*parser(char **lexer)
 {
 	t_data	*first;
@@ -161,13 +179,7 @@ t_data	*parser(char **lexer)
 			curent->command = ft_strdup(lexer[i]);
 			if (curent->command == NULL)
 				return (NULL);
-		}/*
-		else if (lexer[i][0] == '-')
-		{
-			curent->option = ft_strdup(lexer[i]);
-			if (curent->option == NULL)
-				return (NULL);
-		}*/
+		}
 		else if (!ft_strncmp(lexer[i], "|", ft_strlen(lexer[i])))
 		{
 			switcher(curent);

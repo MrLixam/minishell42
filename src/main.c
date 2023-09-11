@@ -6,7 +6,7 @@
 /*   By: gpouzet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/07/31 12:17:17 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/09/11 16:27:51 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -14,8 +14,6 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "minishell.h"
-
-int check_quote(char *readline); 
 
 void	show_data(t_data *data, int i)
 {
@@ -59,15 +57,6 @@ void	show_data(t_data *data, int i)
 		show_data(data->next, ++i);
 }
 
-void	show_lexer(char **lexer)
-{
-	int	j;
-
-	j = -1;
-	while (lexer[++j])
-		ft_printf("arg %d : %s\n", j, lexer[j]);
-}
-
 int	main(void)
 {
 	char	*str;
@@ -81,15 +70,11 @@ int	main(void)
 			return (1);
 		if (ft_strncmp(str, "\0", 2))
 			add_history(str);
-		if (check_quote(str))
-			return(write(1, "error\n", 6));
-		lexer = arg_sep(str);
-		free(str);
+		lexer = pre_parser(str);
 		if (lexer == NULL)
 			return (1);
-//		show_lexer(lexer);
 		data = parser(lexer);
-//		freetab(lexer);
+		freetab(lexer);
 		if (data == NULL)
 			return (1);
 		ft_printf("[	data table	]\n");

@@ -6,7 +6,7 @@
 #    By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/07 16:02:47 by gpouzet           #+#    #+#              #
-#    Updated: 2023/09/06 17:06:48 by gpouzet          ###   ########.fr        #
+#    Updated: 2023/09/11 20:34:35 by gpouzet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ FLAGS = -Wall -Wextra -Werror -g
 
 NAME = minishell
 
-SRC = src/main.c src/parserv2.c src/parser.c src/arg_sep.c src/ft_realloc.c
+SRC = src/main.c src/parserv2.c src/parser.c src/arg_sep.c
 
 OBJ	= $(SRC:.c=.o)
 
@@ -30,7 +30,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@make -s --no-print-directory -C libft
-	@$(CC) $(FLAGS) -lreadline $(OBJ) -L./libft -lft -o $(NAME) 
+	@$(CC) $(FLAGS) $(OBJ) -lreadline -L./libft -lft -o $(NAME)
 	@echo -n "\\r\033[2K"
 	@echo "\033[1;32m[executable created]"
 

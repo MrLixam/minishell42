@@ -20,13 +20,7 @@ int	exec_bin(char *bin, char **args, char **envp)
 
 int	file_access(char *path)
 {
-	int i;
-
-	i = access(path, F_OK & R_OK & W_OK & X_OK);
-	if (i == 0)
-		return (0);
-	else
-		return (1);
+	return (access(path, F_OK & R_OK & W_OK & X_OK));
 }
 
 int pipe_exec(t_data *line)

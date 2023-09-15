@@ -11,45 +11,11 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-/*
-char	*ft_strndup(const char *s, size_t n)
-{
-	size_t			size;
-	unsigned int	i;
-	char			*new;
-
-	if (ft_strlen(s) > n)
-		size = n + 1;
-	else
-		size = ft_strlen(s) + 1;
-	i = 0;
-	new = malloc(size);
-	if (!new)
-		return (new);
-	while (s[i] && i < n)
-	{
-		new[i] = s[i];
-		i++;
-	}
-	new[i] = '\0';
-	return (new);
-}*/
 
 int	exec_bin(char *bin, char **args, char **envp)
 {
-	int	pid;
-
-	pid = fork();
-	if (pid == 0)
-	{
-		execve(bin, args, envp);
-		exit(0);
-	}
-	else if (pid < 0)
-		return (1);
-	else
-		waitpid(pid, NULL, 0);
-	return (0);
+	execve(bin, args, envp);
+	exit(0);
 }
 
 int	file_access(char *path)
@@ -63,3 +29,7 @@ int	file_access(char *path)
 		return (1);
 }
 
+int pipe_exec(t_data *line)
+{
+	
+}

@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/09/11 20:35:00 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/09/15 16:27:24 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,14 @@ typedef struct s_data
 	t_list	*output;
 	t_list	*option;
 	t_list	*arg;
-	struct s_data	*next;
+	t_data	*next;
 }	t_data;
 
-/*			prototype			*/
+/*			prototype		*/
 void	freetab(char **tab);
 /*			data			*/
-void	clear_data(t_data *data);
 t_data	*new_data(void);
+int		data_len(t_data *line);
 /*			parser			*/
 int		swap_env_var(char **lex);
 int		check_quote(char *readline);

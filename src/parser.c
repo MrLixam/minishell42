@@ -6,26 +6,10 @@
 /*   By: gpouzet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:23 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/09/11 16:13:38 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/09/15 16:17:45 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
-
-t_data	*new_data(void)
-{
-	t_data	*create;
-
-	create = ft_calloc(1, sizeof(t_data));
-	if (create == NULL)
-		return (NULL);
-	create->input = NULL;
-	create->output = NULL;
-	create->command = NULL;
-	create->option = NULL;
-	create->arg = NULL;
-	create->next = NULL;
-	return(create);
-}
 
 void	freetab(char **tab)
 {
@@ -49,25 +33,6 @@ static int	new_arg(t_list **lst, char *arg)
 	ft_lstadd_back(lst, new);
 	return (0);
 }
-
-/*
-void	clear_data(t_data *data)
-{
-	if (data->input != NULL)
-		free(data->input);
-	if (data->output != NULL)
-		free(data->output);
-	if (data->command != NULL)
-		free(data->command);
-	if (data->option != NULL)
-		free(data->option);
-	if (data->arg != NULL)
-		freetab(data->arg);
-	if (data->next != NULL)
-		clear_data(data->next);
-	free(data);
-}
-*/
 
 int	redirection(char *lexer, t_data *data)
 {

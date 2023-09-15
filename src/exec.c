@@ -25,5 +25,7 @@ int	file_access(char *path)
 
 int pipe_exec(t_data *line)
 {
-	
+	int pipes[2];
+	int saves[2];
+	pipes = pipe
 }

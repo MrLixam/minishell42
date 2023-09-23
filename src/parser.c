@@ -11,16 +11,6 @@
 /* ************************************************************************** */
 #include "minishell.h"
 
-void	freetab(char **tab)
-{
-	int	i;
-
-	i = 0;
-	while (tab[i])
-		free(tab[i++]);
-	free(tab);
-}
-
 static int	new_arg(t_list **lst, char *arg)
 {
 	t_list	*new;

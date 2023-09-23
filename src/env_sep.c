@@ -30,39 +30,46 @@ static int	cut(char const *s)
 			s_quote *= -1;
 		else if (s[i] == 34 && s_quote > 0)
 			d_quote *= -1;
-		if (i > 0 && s[i] == '$' && s_quote > 0)
+		if (s[i] == '$' && s_quote > 0)
 		{
 			nb_arg++;
-			if (s[i + 1] && s[i + 1] == '$')
-				i++;
-			while (s[++i])
+			i++;
+			if (s[i] != '?')
+				while (s[i] && !ft_isalnum(s[i]))
+					i++;
 		}
+		if (s[i] == '$' && s_quote > 0)
+			nb_arg++;
 	}
 	return (nb_arg);
 }
 
 static int	next_arg(char const *s)
 {
+	static	int	s_quote = 1;
+	static	int	d_quote = 1;
 	int	i;
-	int	s_quote;
-	int	d_quote;
 
-	i = -1;
-	s_quote = 1;
-	d_quote = 1;
-	while (s[++i])
+	i = 0;
+	if (s[i] == '$')
 	{
-		if (s[i] == 39 && d_quote > 0)
-			s_quote *= -1;
-		else if (s[i] == 34 && s_quote > 0)
-			d_quote *= -1;
-		if (s[i] == 32 && s_quote > 0 && d_quote > 0)
-			return (i);
+		i++;
+		while (ft_isalnum(s[i]))
+			i++;
 	}
+	else
+		while (s[i] && (s[i] != '$' || s_quote < 0))
+		{
+			if (s[i] == 39 && d_quote > 0)
+				s_quote *= -1;
+			else if (s[i] == 34 && s_quote > 0)
+				d_quote *= -1;
+			i++;
+		}
 	return (i);
 }
 
-char	**arg_sep(char const *s)
+char	**env_sep(char const *s)
 {
 	char	**args;
 	int		next;
@@ -78,12 +85,9 @@ char	**arg_sep(char const *s)
 		return (args);
 	while (s[i] && s)
 	{
-		while (s[i] == 32 && s[i])
-			i++;
 		next = next_arg(s + i);
-		if (s[i] || s[i - 1] == 32)
-			args[j++] = ft_substr(s + i, 0, next);
-		i += next + (s[i + next] == 32);
+		args[j++] = ft_substr(s + i, 0, next);
+		i += next;
 	}
 	args[j] = 0;
 	return (args);

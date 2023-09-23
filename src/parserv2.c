@@ -67,17 +67,23 @@ char	*format_env_var(char *var)
 {
 	char	**split;
 	char	*new;
+	char	*tmp2;
 	char	*tmp;
 	int		i;
 
 	i = 0 + ft_strncmp(var, "$", 1) != 0;
-	split = ft_split(var, '$');
+	split = env_sep(var);
 	if (!split)
 		return (0);
 	if (i)
 		new = ft_strdup(split[0]);
 	else
-		new = getenv_malloc(split[i++]);
+	{
+		tmp2 = ft_substr(split[i], 1, ft_strlen(split[i]) + 1);
+		new = getenv_malloc(tmp2);
+		free (tmp2);
+		i++;
+	}
 	if (!new)
 	{
 		freetab(split);
@@ -85,19 +91,27 @@ char	*format_env_var(char *var)
 	}
 	while (split[i])
 	{
-		tmp = getenv_malloc(split[i++]);
-		if (!tmp)
+		if (split[i][0] == '$')
 		{
-			freetab(split);
-			free(new);
-			return (0);
+			tmp2 = ft_substr(split[i], 1, ft_strlen(split[i]) + 1);
+			tmp = getenv_malloc(tmp2);
+			free (tmp2);
+			if (!tmp)
+			{
+				freetab(split);
+				free(new);
+				return (0);
+			}
+			new = ft_strmerge(new, tmp);
+			if (!new)
+			{
+				freetab(split);
+				return (0);
+			}
 		}
-		new = ft_strmerge(new, tmp);
-		if (!new)
-		{
-			freetab(split);
-			return (0);
-		}
+		else
+			ft_strlcat(new, split[i], ft_strlen(new) + ft_strlen(split[i]) + 1);
+		i++;
 	}
 	freetab(split);
 	return (new);

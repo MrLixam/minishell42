@@ -23,9 +23,8 @@ typedef struct s_data
 	t_list	*redirection;
 	t_list	*input;
 	t_list	*output;
-	t_list	*option;
 	t_list	*arg;
-	t_data	*next;
+	struct	s_data	*next;
 }	t_data;
 
 /*			prototype		*/
@@ -33,10 +32,13 @@ void	freetab(char **tab);
 /*			data			*/
 t_data	*new_data(void);
 int		data_len(t_data *line);
+void	freetab(char **tab);
+void	clear_data(t_data *data);
 /*			parser			*/
 int		swap_env_var(char **lex);
 int		check_quote(char *readline);
 char	**pre_parser(char *lexer);
 char	**arg_sep(char const *s);
+char	**env_sep(char const *s);
 t_data	*parser(char **lexer);
 #endif

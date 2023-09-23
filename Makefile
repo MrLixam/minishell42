@@ -16,7 +16,7 @@ FLAGS = -Wall -Wextra -Werror -g
 
 NAME = minishell
 
-SRC = src/main.c src/parserv2.c src/parser.c src/arg_sep.c
+SRC = src/main.c src/parserv2.c src/parser.c src/arg_sep.c src/t_data.c src/env_sep.c
 
 OBJ	= $(SRC:.c=.o)
 

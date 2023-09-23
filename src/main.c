@@ -42,8 +42,6 @@ void	show_data(t_data *data, int i)
 	}
 	if (data->command != NULL)
 		ft_printf("command : %s\n", data->command);
-	if (data->option != NULL)
-		ft_printf("option : %s\n", data->option);
 	tmp = data->arg;
 	if (tmp != NULL)
 	{
@@ -80,6 +78,6 @@ int	main(void)
 		ft_printf("[	data table	]\n");
 		show_data(data, 1);
 		ft_printf("[	end		]\n");
-//		clear_data(data);
+		clear_data(data);
 	}
 }

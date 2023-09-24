@@ -18,8 +18,8 @@ void free_data(t_data **line)
 
 	cmd = *line;
 	free(cmd->command);
-	ft_lstclear(cmd->arg);
-	ft_lstclear(cmd->input);
+	ft_lstclear(cmd->arg, free());
+	ft_lstclear(cmd->input, free());
 	ft_lstclear(cmd->output);
 	ft_lstclear(cmd->option);
 	ft_lstclear(cmd->redirection);
@@ -34,7 +34,7 @@ int	file_access(char *path)
 
 void pipeline(t_data **line, char **envp)
 {
-	int pipe[2];
+	int pipes[2];
 	int save[2];
 	int pid;
 	t_data *curr;
@@ -59,25 +59,30 @@ void pipeline(t_data **line, char **envp)
 		}
 		else if (!pid)
 		{
-			close(pipe[1]);
+			close(pipes[1]);
 			if (i)
 			{
-				dup2(pipe[0], save[0]);
-				close(pipe[0]);
+				dup2(pipes[0], save[0]);
+				close(pipes[0]);
 			}
 			if (curr->next != NULL)
 			{
-				dup2(pipe[1], save[1]);
-				close(pipe[1]);
+				dup2(pipes[1], save[1]);
+				close(pipes[1]);
 			}
 			execve(curr->command, curr->arg, envp);
 			exit(EXIT_SUCCESS);
 		}
 		else
 		{
-			close(pipe[1]);
+			close(pipes[1]);
 			i++;
 			curr = curr->next;
 		}
 	}
+}
+
+int main(int argc, char **argv, char **envp)
+{
+
 }

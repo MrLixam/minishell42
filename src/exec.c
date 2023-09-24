@@ -11,23 +11,30 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdio.h>
+#include <errno.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
-void free_data(t_data **line)
+static char **lst_to_str(t_list *lst, char *command)
 {
-	t_data *cmd;
+	char **str;
+	int i;
 
-	cmd = *line;
-	free(cmd->command);
-	ft_lstclear(cmd->arg, free());
-	ft_lstclear(cmd->input, free());
-	ft_lstclear(cmd->output);
-	ft_lstclear(cmd->option);
-	ft_lstclear(cmd->redirection);
-	*line = *line->next;
-	free(cmd);
+	i = 0;
+	str = ft_calloc(ft_lstsize(lst) + 2, sizeof(char *));
+	str[0] = ft_strdup(command);
+	i++;
+	while (lst)
+	{
+		str[i] = ft_strdup(lst->content);
+		lst = lst->next;
+		i++;
+	}
+	return (str);
 }
 
-int	file_access(char *path)
+static int	file_access(char *path)
 {
 	return (access(path, F_OK & R_OK & W_OK & X_OK));
 }
@@ -35,22 +42,20 @@ int	file_access(char *path)
 void pipeline(t_data **line, char **envp)
 {
 	int pipes[2];
-	int save[2];
+	int fd;
 	int pid;
 	t_data *curr;
-	int i;
+	char **str;
 
 	curr = *line;
-	save[0] = dup(0);
-	save[1] = dup(1);
-	if (pipe(pipes) == -1)
-	{
-		perror("pipe failed");
-		exit(EXIT_FAILURE);
-	}
-	i = 0;
+	fd = STDIN_FILENO;
 	while (curr)
 	{
+		if (pipe(pipes) == -1)
+		{
+			perror("pipe failed");
+			exit(EXIT_FAILURE);
+		}
 		pid = fork();
 		if (pid < 0)
 		{
@@ -59,30 +64,39 @@ void pipeline(t_data **line, char **envp)
 		}
 		else if (!pid)
 		{
-			close(pipes[1]);
-			if (i)
+			if (curr != *line && curr->next != NULL)
 			{
-				dup2(pipes[0], save[0]);
+				dup2(fd, STDIN_FILENO);
+				dup2(pipes[1], STDOUT_FILENO);
+				close(fd);
 				close(pipes[0]);
-			}
-			if (curr->next != NULL)
-			{
-				dup2(pipes[1], save[1]);
 				close(pipes[1]);
 			}
-			execve(curr->command, curr->arg, envp);
-			exit(EXIT_SUCCESS);
+			else if (curr == *line)
+			{
+				dup2(pipes[1], STDOUT_FILENO);
+				close(pipes[0]);
+				close(pipes[1]);
+			}
+			else
+			{
+				dup2(fd, STDIN_FILENO);
+				close(fd);
+			}
+			str = lst_to_str(curr->arg, curr->command);
+			execve(curr->command, str, envp);
+			freetab(str);
 		}
 		else
 		{
-			close(pipes[1]);
-			i++;
+			if (curr != *line)
+				close(fd);
+			if (curr->next != NULL)
+			{
+				fd = pipes[0];
+				close(pipes[1]);
+			}
 			curr = curr->next;
 		}
 	}
-}
-
-int main(int argc, char **argv, char **envp)
-{
-
 }

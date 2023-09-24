@@ -41,4 +41,6 @@ char	**pre_parser(char *lexer);
 char	**arg_sep(char const *s);
 char	**env_sep(char const *s);
 t_data	*parser(char **lexer);
+/*			exec			*/
+void	pipeline(t_data **line, char **envp);
 #endif

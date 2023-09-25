@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/09/25 16:06:39 by marvin           ###   ########.fr       */
+/*   Updated: 2023/09/25 16:11:06 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void	pipeline(t_group *group)
 	close(pipes[0]);
 	close(pipes[1]);
 }
-
+/*
 int	main(int argc, char **argv, char **envp)
 {
 	t_data		*line;
@@ -137,4 +137,4 @@ int	main(int argc, char **argv, char **envp)
 	clear_data(line);
 	free(group);
 	return (0);
-}
+}*/

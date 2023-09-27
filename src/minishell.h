@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/09/25 15:26:38 by marvin           ###   ########.fr       */
+/*   Updated: 2023/09/28 00:33:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_data
 
 typedef struct s_group
 {
+	int	*child_pid;
 	t_data **line;
 	char **envp;
 }	t_group;

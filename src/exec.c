@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/09/25 21:48:28 by marvin           ###   ########.fr       */
+/*   Updated: 2023/09/28 00:34:27 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,14 +104,16 @@ static void	close_pipe(int pipes[2])
 	close(pipes[1]);
 }
 
-void	pipeline(t_group *group)
+int	*pipeline(t_group *group)
 {
 	int		pipes[2];
 	int		fd_pid[2];
+	int		i;
 	t_data	*curr;
 
 	curr = *group->line;
 	fd_pid[0] = STDIN_FILENO;
+	i = 0;
 	while (curr)
 	{
 		if (pipe(pipes) == -1)
@@ -122,11 +124,14 @@ void	pipeline(t_group *group)
 		else if (!fd_pid[1])
 			do_logic(pipes, fd_pid[0], curr, group);
 		else
+		{
 			p_pass(group, &curr, &fd_pid[0], pipes);
+			group->child_pid[i++] = fd_pid[1];
+		}
 	}
 	close_pipe(pipes);
 }
-/*
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_data		*line;
@@ -139,12 +144,9 @@ int	main(int argc, char **argv, char **envp)
 	line->command = ft_strdup("/bin/ls");
 	line->arg = ft_lstnew(ft_strdup("-l"));
 	line->next = new_data();
-	line->next->command = ft_strdup("/bin/grep");
-	line->next->arg = ft_lstnew(ft_strdup("main"));
-	line->next->next = new_data();
-	line->next->next->command = ft_strdup("/bin/wc");
-	line->next->next->arg = ft_lstnew(ft_strdup("-l"));
-	line->next->next->next = NULL;
+	line->next->command = ft_strdup("/bin/echo");
+	line->next->arg = ft_lstnew(ft_strdup("$?"));
+	line->next->next = NULL;
 	pipeline(group);
 	while (wait(NULL) > 0)
 		;
@@ -152,4 +154,3 @@ int	main(int argc, char **argv, char **envp)
 	free(group);
 	return (0);
 }
-*/

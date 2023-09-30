@@ -13,6 +13,8 @@
 #include "minishell.h"
 #include <errno.h>
 
+char	*ft_getenv(char *name)
+
 int	ft_pwd(void)
 {
 	char	*pwd;
@@ -20,7 +22,7 @@ int	ft_pwd(void)
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 	{
-		perror("pwd: error retrieving directory");
+		perror("minishell: pwd:");
 		return (1);
 	}
 	ft_putendl_fd(pwd, STDOUT_FILENO);
@@ -30,8 +32,9 @@ int	ft_pwd(void)
 
 int ft_cd(char *arg, char **envp)
 {
-	int ret;
-	char *err_mess;
+	int		ret;
+	char	*err_mess;
+	char	*pwd;
 
 	if (!arg)
 		arg = ft_getenv("HOME");

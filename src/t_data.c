@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   t_data.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lvincent <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 16:12:41 by lvincent          #+#    #+#             */
-/*   Updated: 2023/09/15 16:26:35 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/09/29 21:40:34 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	data_len(t_data *line)
 		i++;
 		line = line->next;
 	}
-	return (0);
+	return (i);
 }
 
 void	freetab(char **tab)

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/09/28 00:34:27 by marvin           ###   ########.fr       */
+/*   Updated: 2023/09/29 21:51:23 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,12 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <fcntl.h>
+
+static void	close_pipe(int pipes[2])
+{
+	close(pipes[0]);
+	close(pipes[1]);
+}
 
 static char	**lst_to_str(t_list *lst, char *command)
 {
@@ -44,8 +50,11 @@ static void	clean_child(t_group *group, t_data *curr, int pipes[2], int fd)
 {
 	close(pipes[0]);
 	close(pipes[1]);
-	close(fd);
+	if (curr != *group->line)
+		close(fd);
 	clear_data(*group->line);
+	free(group->child_pid);
+	free(group);
 	exit(EXIT_FAILURE);
 }
 
@@ -58,14 +67,12 @@ static void	do_logic(int pipes[2], int fd, t_data *curr, t_group *group)
 		dup2(fd, STDIN_FILENO);
 		dup2(pipes[1], STDOUT_FILENO);
 		close(fd);
-		close(pipes[0]);
-		close(pipes[1]);
+		close_pipe(pipes);
 	}
 	else if (curr == *group->line)
 	{
 		dup2(pipes[1], STDOUT_FILENO);
-		close(pipes[0]);
-		close(pipes[1]);
+		close_pipe(pipes);
 	}
 	else
 	{
@@ -75,6 +82,7 @@ static void	do_logic(int pipes[2], int fd, t_data *curr, t_group *group)
 	str = lst_to_str(curr->arg, curr->command);
 	execve(curr->command, str, group->envp);
 	freetab(str);
+	perror("minishell: execve:")
 	clean_child(group, curr, pipes, fd);
 }
 
@@ -98,13 +106,7 @@ static void	p_pass(t_group *group, t_data **curr, int *fd, int pipes[2])
 	*curr = (*curr)->next;
 }
 
-static void	close_pipe(int pipes[2])
-{
-	close(pipes[0]);
-	close(pipes[1]);
-}
-
-int	*pipeline(t_group *group)
+void	pipeline(t_group *group)
 {
 	int		pipes[2];
 	int		fd_pid[2];
@@ -147,10 +149,12 @@ int	main(int argc, char **argv, char **envp)
 	line->next->command = ft_strdup("/bin/echo");
 	line->next->arg = ft_lstnew(ft_strdup("$?"));
 	line->next->next = NULL;
+	group->child_pid = ft_calloc(data_len(line), sizeof(int));
 	pipeline(group);
 	while (wait(NULL) > 0)
 		;
 	clear_data(line);
+	free(group->child_pid);
 	free(group);
 	return (0);
 }

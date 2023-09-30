@@ -13,7 +13,37 @@
 #include "minishell.h"
 #include <errno.h>
 
+int	ft_strmcmp(char *s1, char *s2)
+{
+	int len[2];
+
+	len[0] = ft_strlen(s1);
+	len[1] = ft_strlen(s2);
+	if (len[0] >= len[1])
+		return (ft_stncmp(s1, s2, len[0]))
+	else
+		return (ft_strncmp(s1, s2, len[1]))
+}
+
 char	*ft_getenv(char *name)
+{
+	char	*ret_val;
+	char	*tmp;
+	int		i;
+
+	tmp = ft_strjoin(name, "=");
+	i = -1;
+	while (g_env[++i])
+	{
+		if (!ft_strmcmp(tmp, g_env[i]))
+		{
+			ret_val = ft_substr(g_env[i], ft_strlen(tmp), ft_strlen(g_env[i]));
+			break ;
+		}
+	}
+	free(tmp);
+	return (ret_val);
+}
 
 int	ft_pwd(void)
 {
@@ -30,7 +60,7 @@ int	ft_pwd(void)
 	return (0);
 }
 
-int ft_cd(char *arg, char **envp)
+int	ft_cd(char *arg, char **envp)
 {
 	int		ret;
 	char	*err_mess;
@@ -46,12 +76,5 @@ int ft_cd(char *arg, char **envp)
 		free(err_mess);
 		return (1);
 	}
-	return (0);
-}
-
-int main(int argc, char **argv)
-{
-	ft_cd(argv[1]);
-	ft_pwd();
 	return (0);
 }

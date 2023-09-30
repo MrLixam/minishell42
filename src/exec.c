@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/09/29 21:51:23 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/01 01:11:12 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,10 +119,10 @@ void	pipeline(t_group *group)
 	while (curr)
 	{
 		if (pipe(pipes) == -1)
-			ft_error("pipe failed", group);
+			ft_error("-minishell: pipe failed", group);
 		fd_pid[1] = fork();
 		if (fd_pid[1] < 0)
-			ft_error("fork failed", group);
+			ft_error("-minishell: fork failed", group);
 		else if (!fd_pid[1])
 			do_logic(pipes, fd_pid[0], curr, group);
 		else
@@ -133,7 +133,7 @@ void	pipeline(t_group *group)
 	}
 	close_pipe(pipes);
 }
-
+/*
 int	main(int argc, char **argv, char **envp)
 {
 	t_data		*line;
@@ -157,4 +157,4 @@ int	main(int argc, char **argv, char **envp)
 	free(group->child_pid);
 	free(group);
 	return (0);
-}
+} */

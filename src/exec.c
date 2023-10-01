@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/01 01:11:12 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/01 18:13:59 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,10 @@ static void	do_logic(int pipes[2], int fd, t_data *curr, t_group *group)
 		close(fd);
 	}
 	str = lst_to_str(curr->arg, curr->command);
-	execve(curr->command, str, group->envp);
+	if (file_access(curr->command))
+		execve(curr->command, str, g_env);
 	freetab(str);
-	perror("minishell: execve:")
+	perror("minishell: execve:");
 	clean_child(group, curr, pipes, fd);
 }
 

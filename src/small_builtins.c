@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdio.h>
+#include <unistd.h>
 #include <errno.h>
 
 int	ft_strmcmp(char *s1, char *s2)
@@ -20,9 +22,9 @@ int	ft_strmcmp(char *s1, char *s2)
 	len[0] = ft_strlen(s1);
 	len[1] = ft_strlen(s2);
 	if (len[0] >= len[1])
-		return (ft_stncmp(s1, s2, len[0]))
+		return (ft_strncmp(s1, s2, len[0]));
 	else
-		return (ft_strncmp(s1, s2, len[1]))
+		return (ft_strncmp(s1, s2, len[1]));
 }
 
 char	*ft_getenv(char *name)
@@ -33,9 +35,10 @@ char	*ft_getenv(char *name)
 
 	tmp = ft_strjoin(name, "=");
 	i = -1;
+	ret_val = NULL;
 	while (g_env[++i])
 	{
-		if (!ft_strmcmp(tmp, g_env[i]))
+		if (!ft_strncmp(tmp, g_env[i], ft_strlen(tmp)))
 		{
 			ret_val = ft_substr(g_env[i], ft_strlen(tmp), ft_strlen(g_env[i]));
 			break ;

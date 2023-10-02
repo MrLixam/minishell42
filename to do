@@ -1,17 +1,10 @@
-all :
-- history
-- path
 parser :
-- handle ' "
-- redirection 
-- pipe
-- environement variable
+- environement variable -> char ** to t_list and t_list to char **
 other :
-- handle ctrl c ctrl d
-- echo with option -n
 ◦ cd with only a relative or absolute path
-◦ pwd with no options
 ◦ export with no options
 ◦ unset with no options
 ◦ env with no options or arguments
 ◦ exit with no options
+  - handle ctrl c ctrl d 
+

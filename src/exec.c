@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/01 18:13:59 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/05 17:35:23 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,39 @@ static void	clean_child(t_group *group, t_data *curr, int pipes[2], int fd)
 	exit(EXIT_FAILURE);
 }
 
-static void	do_logic(int pipes[2], int fd, t_data *curr, t_group *group)
+static int	redir_in(t_data *command)
 {
-	char	**str;
+	t_list *input;
+	int		i;
+	char	*tmp;
 
+	input = command->input;
+	i = 0;
+	tmp = ft_strdup("");
+	while (input->next)
+	{
+		if (!(i / 2))
+		{
+			free(tmp);
+			tmp = ft_strdup(input->content);
+		}
+		else
+		{
+			if (file_access(input->content))
+			{
+				tmp = ft_strjoin("minishell :", tmp);
+			}
+		}
+	}
+}
+
+static int	redir_out(t_data *command)
+{
+	t_list output
+}
+
+static void no_redir(int pipes[2], int fd, t_data *curr, t_group *group)
+{
 	if (curr != *group->line && curr->next != NULL)
 	{
 		dup2(fd, STDIN_FILENO);
@@ -74,11 +103,47 @@ static void	do_logic(int pipes[2], int fd, t_data *curr, t_group *group)
 		dup2(pipes[1], STDOUT_FILENO);
 		close_pipe(pipes);
 	}
-	else
+	else if (curr->next == NULL)
 	{
 		dup2(fd, STDIN_FILENO);
 		close(fd);
 	}
+}
+
+static void	link_redir(int pipes[2], int fd, t_data *curr, t_group *group)
+{	
+	int	redir[2];
+
+	redir[0] = redir_in(curr);
+	redir[1] = redir_out(curr);
+	if (curr != *group->line && curr->next != NULL)
+	{
+		dup2(fd, STDIN_FILENO);
+		dup2(pipes[1], STDOUT_FILENO);
+		close(fd);
+		close_pipe(pipes);
+	}
+	else if (curr == *group->line)
+	{
+		dup2(pipes[1], STDOUT_FILENO);
+		close_pipe(pipes);
+	}
+	else if (curr->next == NULL)
+}
+
+int	redir_present(t_data *command)
+{
+	return (command->output != NULL || command->input != NULL);
+}
+
+static void	do_logic(int pipes[2], int fd, t_data *curr, t_group *group)
+{
+	char	**str;
+
+	if (!redir_present(curr))
+		no_redir(pipes, fd, curr, group);
+	else
+		link_redir(pipes, fd, curr, group);
 	str = lst_to_str(curr->arg, curr->command);
 	if (file_access(curr->command))
 		execve(curr->command, str, g_env);

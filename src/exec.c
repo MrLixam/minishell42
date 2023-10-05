@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/05 17:35:23 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/05 18:10:02 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static int	redir_in(t_data *command)
 		{
 			if (file_access(input->content))
 			{
-				tmp = ft_strjoin("minishell :", tmp);
+				tmp = ft_strjoin("minishell :", input);
 			}
 		}
 	}

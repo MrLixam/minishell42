@@ -27,11 +27,14 @@ int	ft_strmcmp(char *s1, char *s2)
 		return (ft_strncmp(s1, s2, len[1]));
 }
 
+
+
 char	*ft_getenv(char *name)
 {
 	char	*ret_val;
 	char	*tmp;
 	int		i;
+	
 
 	tmp = ft_strjoin(name, "=");
 	i = -1;
@@ -68,9 +71,11 @@ int	ft_cd(char *arg, char **envp)
 	int		ret;
 	char	*err_mess;
 	char	*pwd;
+	char	*oldpwd;
 
 	if (!arg)
 		arg = ft_getenv("HOME");
+	oldpwd = getcwd(NULL, 0);
 	ret = chdir(arg);
 	if (ret == -1)
 	{
@@ -79,5 +84,8 @@ int	ft_cd(char *arg, char **envp)
 		free(err_mess);
 		return (1);
 	}
+	pwd = getcwd(NULL, 0);
+	ft_setenv("OLDPWD", oldpwd, envp);
+	ft_setenv("PWD", pwd, envp);
 	return (0);
 }

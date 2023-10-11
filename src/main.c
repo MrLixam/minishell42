@@ -55,14 +55,18 @@ void	show_data(t_data *data, int i)
 		show_data(data->next, ++i);
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
 	char	*str;
 	char	**lexer;
 	t_data	*data;
 
+	(void) envp;
+	(void) argc;
+	(void) argv;
 	while (1)
 	{
+		ft_printf("minishell>");
 		str = readline(NULL);
 		if (str == NULL)
 			return (1);
@@ -79,5 +83,6 @@ int	main(void)
 		show_data(data, 1);
 		ft_printf("[	end		]\n");
 		clear_data(data);
+	//	to do : free all lst and other 
 	}
 }

@@ -60,3 +60,17 @@ void	clear_data(t_data *data)
 		clear_data(data->next);
 	free(data);
 }
+
+int	new_arg(t_list **lst, char *arg)
+{
+	t_list	*new;
+	char	*tmp;
+
+	tmp = ft_strdup(arg);
+	if (tmp == NULL)
+		return (write(1, "malloc failed \n", 15));
+	new = ft_lstnew(tmp);
+	ft_lstadd_back(lst, new);
+	return (0);
+}
+

@@ -54,6 +54,8 @@ static int	next_arg(char const *s)
 	if (s[i] == '$')
 	{
 		i++;
+		if (s[i] == '?')
+				return (++i);
 		while (ft_isalnum(s[i]))
 			i++;
 	}

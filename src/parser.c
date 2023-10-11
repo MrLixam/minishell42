@@ -11,19 +11,6 @@
 /* ************************************************************************** */
 #include "minishell.h"
 
-static int	new_arg(t_list **lst, char *arg)
-{
-	t_list	*new;
-	char	*tmp;
-
-	tmp = ft_strdup(arg);
-	if (tmp == NULL)
-		return (write(1, "malloc failed \n", 15));
-	new = ft_lstnew(tmp);
-	ft_lstadd_back(lst, new);
-	return (0);
-}
-
 int	redirection(char *lexer, t_data *data)
 {
 	int		i;

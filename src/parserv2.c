@@ -91,7 +91,9 @@ char	*format_env_var(char *var)
 	}
 	while (split[i])
 	{
-		if (split[i][0] == '$')
+		if (!ft_strncmp(split[i], "$?", 2))
+			ft_strlcat(new, "0", ft_strlen(new) + 2);
+		else if (split[i][0] == '$')
 		{
 			tmp2 = ft_substr(split[i], 1, ft_strlen(split[i]) + 1);
 			tmp = getenv_malloc(tmp2);

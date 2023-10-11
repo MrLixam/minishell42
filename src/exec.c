@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/11 13:32:16 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/11 16:42:34 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static int	redir_in(t_data *command)
 	i = 0;
 	while (input->next)
 	{
-		if ((i % 2 != 0 && file_access(input->content))
+		if (i % 2 != 0 && file_access(input->content))
 		{
 			err = ft_strjoin("minishell: ", input->content);
 			perror(err);
@@ -92,50 +92,40 @@ static int	redir_out(t_data *command)
 	t_list *output;
 	int		i;
 	int		fd;
-	char 	*mode;
+	char 	*tmp[2];
 
 	output = command->output;
 	if (!output)
 		return (STDOUT_FILENO);
 	i = 0;
-	mode = ft_strdup("");
+	tmp[0] = ft_strdup("");
 	while (output)
 	{
-		if ((i % 2 != 0)
+		if (i % 2 != 0)
 		{
-			if (ft_strlen(mode) == 2)
-				open
-			if (output->next && fd != -1)
+			if (ft_strlen(tmp[0]) == 1)
+				fd = open(output->content, O_CREAT | O_TRUNC, O_RDWR);
+			else
+				fd = open(output->content, O_CREAT | O_APPEND, O_RDWR);
+			if (fd == -1)
+			{
+				tmp[1] = ft_strjoin("minishell: ", output->content);
+				perror("-minishell");
+				free(tmp[1]);
+				return (-1);
+			}
+			if (output->next)
 				close(fd);
 		}
 		else
 		{
-			free(mode);
-			mode = ft_strdup(output->content);
+			free(tmp[0]);
+			tmp[0] = ft_strdup(output->content);
 		}
 		output = output->next;
 	}
-}
-
-static void no_redir(int pipes[2], int fd, t_data *curr, t_group *group)
-{
-	if (curr != *group->line && curr->next != NULL)
-	{
-		dup2(fd, STDIN_FILENO);
-		dup2(pipes[1], STDOUT_FILENO);
-		close(fd);
-		close_pipe(pipes);
-	}
-	else if (curr == *group->line)
-	{
-		dup2(pipes[1], STDOUT_FILENO);
-		close_pipe(pipes);
-	}
-	else if (curr->next == NULL)
-	{
-		dup2(fd, STDIN_FILENO);
-		close(fd);
-	}
+	free(tmp[0]);
+	return (fd);
 }
 
 static void	link_redir(int pipes[2], int fd, t_data *curr, t_group *group)
@@ -159,7 +149,7 @@ static void	link_redir(int pipes[2], int fd, t_data *curr, t_group *group)
 	else if (curr == *group->line)
 	{
 		dup2(pipes[1], redir[1]);
-		close_pipe(pipes);
+		close(pipes[1]);
 	}
 	else if (curr->next == NULL)
 	{
@@ -177,15 +167,10 @@ static void	do_logic(int pipes[2], int fd, t_data *curr, t_group *group)
 {
 	char	**str;
 
-	if (!redir_present(curr))
-		no_redir(pipes, fd, curr, group);
-	else
-		link_redir(pipes, fd, curr, group);
+	link_redir(pipes, fd, curr, group);
 	str = lst_to_str(curr->arg, curr->command);
-	if (file_access(curr->command))
-		execve(curr->command, str, g_env);
+	execve(curr->command, str, g_env);
 	freetab(str);
-	perror("minishell: execve:");
 	clean_child(group, curr, pipes, fd);
 }
 

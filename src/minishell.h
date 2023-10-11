@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/11 12:48:57 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/11 15:29:18 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,8 @@
 # include "../libft/get_next_line.h"
 
 /*			global			*/
-char	**g_env;
-t_list	*g_env2;
-int		g_error;
+static char	**g_env = NULL;
+static int	g_error = 0;
 
 /*			struct			*/
 
@@ -50,6 +49,7 @@ t_data	*new_data(void);
 int		data_len(t_data *line);
 void	freetab(char **tab);
 void	clear_data(t_data *data);
+int		new_arg(t_list **lst, char *arg);
 
 /*			parser			*/
 int		swap_env_var(char **lex);

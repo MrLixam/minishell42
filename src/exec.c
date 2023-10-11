@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/11 12:54:17 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/11 13:32:16 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,29 +91,27 @@ static int	redir_out(t_data *command)
 {
 	t_list *output;
 	int		i;
-	char	*err;
 	int		fd;
+	char 	*mode;
 
 	output = command->output;
 	if (!output)
 		return (STDOUT_FILENO);
 	i = 0;
-	while (output->next)
+	mode = ft_strdup("");
+	while (output)
 	{
-		if ((i % 2 == 0)
+		if ((i % 2 != 0)
 		{
-			if (file_access(output->content))
-			{
-				err = ft_strjoin("minishell: ", output->content);
-				perror(err);
-				free(err);
-				return (-1);
-			}
-			else
-			{
-				fd = open(output->content, O_RDWR | O_CREAT | O_TRUNC, 0644);
+			if (ft_strlen(mode) == 2)
+				open
+			if (output->next && fd != -1)
 				close(fd);
-			}
+		}
+		else
+		{
+			free(mode);
+			mode = ft_strdup(output->content);
 		}
 		output = output->next;
 	}

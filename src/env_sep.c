@@ -6,7 +6,7 @@
 /*   By: gpouzet <gpouzet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 11:52:19 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/09/14 20:51:50 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/11 16:35:00 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../libft/libft.h"
@@ -35,7 +35,7 @@ static int	cut(char const *s)
 			nb_arg++;
 			i++;
 			if (s[i] != '?')
-				while (s[i] && !ft_isalnum(s[i]))
+				while (s[i] && (!ft_isalnum(s[i]) && s[i] == '_'))
 					i++;
 		}
 		if (s[i] == '$' && s_quote > 0)
@@ -56,7 +56,7 @@ static int	next_arg(char const *s)
 		i++;
 		if (s[i] == '?')
 				return (++i);
-		while (ft_isalnum(s[i]))
+		while (ft_isalnum(s[i]) || s[i] == '_')
 			i++;
 	}
 	else

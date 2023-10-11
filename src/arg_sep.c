@@ -6,7 +6,7 @@
 /*   By: gpouzet <gpouzet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:12:58 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/07/31 10:10:11 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/11 16:52:15 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../libft/libft.h"
@@ -32,6 +32,8 @@ static int	cut(char const *s)
 			d_quote *= -1;
 		if (i > 0 && s[i] == 32 && s[i - 1] != 32 && (s_quote + d_quote) > 0)
 			nb_arg++;
+		if (s[i] == '|' && (s_quote + d_quote) > 0)
+			nb_arg++;
 	}
 	if (s[ft_strlen(s) - 1] == 32)
 		nb_arg--;
@@ -47,13 +49,15 @@ static int	next_arg(char const *s)
 	i = -1;
 	s_quote = 1;
 	d_quote = 1;
+	if (s[i + 1] == '|')
+		return (1);
 	while (s[++i])
 	{
 		if (s[i] == 39 && d_quote > 0)
 			s_quote *= -1;
 		else if (s[i] == 34 && s_quote > 0)
 			d_quote *= -1;
-		if (s[i] == 32 && s_quote > 0 && d_quote > 0)
+		if ((s[i] == 32 || s[i] == '|') && s_quote > 0 && d_quote > 0)
 			return (i);
 	}
 	return (i);
@@ -75,7 +79,7 @@ char	**arg_sep(char const *s)
 		return (args);
 	while (s[i] && s)
 	{
-		while (s[i] == 32 && s[i])
+		while (s[i] && s[i] == 32)
 			i++;
 		next = next_arg(s + i);
 		if (s[i] || s[i - 1] == 32)

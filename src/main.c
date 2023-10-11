@@ -6,7 +6,7 @@
 /*   By: gpouzet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/09/11 16:27:51 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/11 16:50:50 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -66,8 +66,7 @@ int	main(int argc, char **argv, char **envp)
 	(void) argv;
 	while (1)
 	{
-		ft_printf("minishell>");
-		str = readline(NULL);
+		str = readline("minishell>");
 		if (str == NULL)
 			return (1);
 		if (ft_strncmp(str, "\0", 2))

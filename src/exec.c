@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/05 18:10:02 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/11 12:54:17 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,13 @@ static int	file_access(char *path)
 
 static void	clean_child(t_group *group, t_data *curr, int pipes[2], int fd)
 {
-	close(pipes[0]);
-	close(pipes[1]);
+	close_pipe(pipes);
 	if (curr != *group->line)
 		close(fd);
 	clear_data(*group->line);
 	free(group->child_pid);
 	free(group);
+	g_error = 1;
 	exit(EXIT_FAILURE);
 }
 
@@ -62,31 +62,61 @@ static int	redir_in(t_data *command)
 {
 	t_list *input;
 	int		i;
-	char	*tmp;
+	char	*err;
 
 	input = command->input;
+	if (!input)
+		return (STDIN_FILENO);
 	i = 0;
-	tmp = ft_strdup("");
 	while (input->next)
 	{
-		if (!(i / 2))
+		if ((i % 2 != 0 && file_access(input->content))
 		{
-			free(tmp);
-			tmp = ft_strdup(input->content);
+			err = ft_strjoin("minishell: ", input->content);
+			perror(err);
+			free(err);
+			return (-1);
 		}
-		else
-		{
-			if (file_access(input->content))
-			{
-				tmp = ft_strjoin("minishell :", input);
-			}
-		}
+		input = input->next;
 	}
+	if (!file_access(input->content))
+		return (open(input->content, O_RDONLY));
+	err = ft_strjoin("minishell: ", input->content);
+	perror(err);
+	free(err);
+	return (-1);
 }
 
 static int	redir_out(t_data *command)
 {
-	t_list output
+	t_list *output;
+	int		i;
+	char	*err;
+	int		fd;
+
+	output = command->output;
+	if (!output)
+		return (STDOUT_FILENO);
+	i = 0;
+	while (output->next)
+	{
+		if ((i % 2 == 0)
+		{
+			if (file_access(output->content))
+			{
+				err = ft_strjoin("minishell: ", output->content);
+				perror(err);
+				free(err);
+				return (-1);
+			}
+			else
+			{
+				fd = open(output->content, O_RDWR | O_CREAT | O_TRUNC, 0644);
+				close(fd);
+			}
+		}
+		output = output->next;
+	}
 }
 
 static void no_redir(int pipes[2], int fd, t_data *curr, t_group *group)
@@ -116,19 +146,28 @@ static void	link_redir(int pipes[2], int fd, t_data *curr, t_group *group)
 
 	redir[0] = redir_in(curr);
 	redir[1] = redir_out(curr);
+	if (redir[0] == -1 || redir[1] == -1)
+	{
+		perror("minishell: ");
+		clean_child(group, curr, pipes, fd);
+	}
 	if (curr != *group->line && curr->next != NULL)
 	{
-		dup2(fd, STDIN_FILENO);
-		dup2(pipes[1], STDOUT_FILENO);
+		dup2(fd, redir[0]);
+		dup2(pipes[1], redir[1]);
 		close(fd);
 		close_pipe(pipes);
 	}
 	else if (curr == *group->line)
 	{
-		dup2(pipes[1], STDOUT_FILENO);
+		dup2(pipes[1], redir[1]);
 		close_pipe(pipes);
 	}
 	else if (curr->next == NULL)
+	{
+		dup2(fd, redir[0]);
+		close(fd);
+	}
 }
 
 int	redir_present(t_data *command)
@@ -157,7 +196,8 @@ static void	ft_error(char *message, t_group *group)
 	perror(message);
 	clear_data(*group->line);
 	free(group);
-	exit(EXIT_FAILURE);
+	free(group->child_pid);
+	g_error = 1;
 }
 
 static void	p_pass(t_group *group, t_data **curr, int *fd, int pipes[2])
@@ -182,7 +222,8 @@ void	pipeline(t_group *group)
 	curr = *group->line;
 	fd_pid[0] = STDIN_FILENO;
 	i = 0;
-	while (curr)
+	g_error = 0;
+	while (curr && !g_error)
 	{
 		if (pipe(pipes) == -1)
 			ft_error("-minishell: pipe failed", group);
@@ -199,28 +240,3 @@ void	pipeline(t_group *group)
 	}
 	close_pipe(pipes);
 }
-/*
-int	main(int argc, char **argv, char **envp)
-{
-	t_data		*line;
-	t_group		*group;
-
-	group = ft_calloc(1, sizeof(t_group));
-	group->line = &line;
-	group->envp = envp;
-	line = new_data();
-	line->command = ft_strdup("/bin/ls");
-	line->arg = ft_lstnew(ft_strdup("-l"));
-	line->next = new_data();
-	line->next->command = ft_strdup("/bin/echo");
-	line->next->arg = ft_lstnew(ft_strdup("$?"));
-	line->next->next = NULL;
-	group->child_pid = ft_calloc(data_len(line), sizeof(int));
-	pipeline(group);
-	while (wait(NULL) > 0)
-		;
-	clear_data(line);
-	free(group->child_pid);
-	free(group);
-	return (0);
-} */

@@ -33,7 +33,7 @@ static int	cut(char const *s)
 		if (i > 0 && s[i] == 32 && s[i - 1] != 32 && (s_quote + d_quote) > 0)
 			nb_arg++;
 		if (s[i] == '|' && (s_quote + d_quote) > 0)
-			nb_arg++;
+			nb_arg += 2;
 	}
 	if (s[ft_strlen(s) - 1] == 32)
 		nb_arg--;

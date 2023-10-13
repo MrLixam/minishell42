@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/13 06:46:31 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/13 22:33:50 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,6 @@ static int	redir_out(t_data *command, int out)
 		i++;
 	}
 	free(tmp[0]);
-	printf("fd = %d\n", fd);
 	return (fd);
 }
 
@@ -169,12 +168,45 @@ int	redir_present(t_data *command)
 	return (command->output != NULL || command->input != NULL);
 }
 
+void fix_path(t_data **line)
+{
+	char	*path;
+	char	**path_tab;
+	char	*tmp;
+	int		i;
+
+	path = getenv("PATH");
+	if (path == NULL || file_access((*line)->command) == 0)
+		return ;
+	path_tab = ft_split(path, ':');
+	i = 0;
+	while (path_tab[i])
+	{
+		tmp = ft_strjoin(path_tab[i], "/");
+		free(path_tab[i]);
+		path_tab[i] = ft_strjoin(tmp, (*line)->command);
+		free(tmp);
+		if (!file_access(path_tab[i]))
+		{
+			free((*line)->command);
+			(*line)->command = ft_strdup(path_tab[i]);
+			freetab(path_tab);
+			return ;
+		}
+		i++;
+	}
+	freetab(path_tab);
+}
+
 static void	do_logic(int pipes[2], int fd, t_data *curr, t_group *group)
 {
 	char	**str;
 
 	link_redir(pipes, fd, curr, group);
 	str = lst_to_str(curr->arg, curr->command);
+	//if (is_builtin(curr->command))
+		//exit(exec_builtin(curr->command, str));
+	fix_path(&curr);
 	execve(curr->command, str, g_env);
 	freetab(str);
 	clean_child(group, curr, pipes, fd);
@@ -230,6 +262,15 @@ static void	pipeline(t_group *group)
 	close_pipe(pipes);
 }
 
+void perror_filename(char *filename)
+{
+	char *err;
+
+	err = ft_strjoin("minishell: ", filename);
+	perror(err);
+	free(err);
+}
+
 static void	no_pipe(t_data *line)
 {
 	char	**str;
@@ -256,7 +297,11 @@ static void	no_pipe(t_data *line)
 			dup2(redir[1], STDOUT_FILENO);
 			close(redir[1]);
 		}
+		//if (is_builtin(line->command))
+			//exit(exec_builtin(line->command, str));
+		fix_path(&line);
 		execve(line->command, str, g_env);
+		perror_filename(line->command);
 	}
 	else
 		waitpid(pid, &ret, 0);
@@ -266,6 +311,8 @@ static void	no_pipe(t_data *line)
 void	exec(t_data *line)
 {
 	t_group *group;
+	int		i;
+	int		ret;
 
 	if (data_len(line) > 1)
 	{
@@ -273,7 +320,11 @@ void	exec(t_data *line)
 		group->child_pid = ft_calloc(data_len(line), sizeof(int));
 		group->line = &line;
 		pipeline(group);
-		waitpid(-1, NULL, 0);
+		i = 0;
+		while (i < data_len(line))
+			waitpid(group->child_pid[i++], &ret, 0);
+		free(group->child_pid);
+		free(group);
 	}
 	else
 		no_pipe(line);

@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/13 06:23:27 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/13 06:46:31 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void	clean_child(t_group *group, t_data *curr, int pipes[2], int fd)
 	exit(EXIT_FAILURE);
 }
 
-static int	redir_in(t_data *command, int fd)
+static int	redir_in(t_data *command, int in)
 {
 	t_list *input;
 	int		i;
@@ -66,7 +66,7 @@ static int	redir_in(t_data *command, int fd)
 
 	input = command->input;
 	if (!input)
-		return (fd);
+		return (in);
 	i = 0;
 	while (input->next)
 	{
@@ -105,9 +105,9 @@ static int	redir_out(t_data *command, int out)
 		if (i % 2 != 0)
 		{
 			if (ft_strlen(tmp[0]) == 1)
-				fd = open(output->content, O_CREAT | O_TRUNC, O_RDWR, 0644);
+				fd = open(output->content, O_CREAT | O_TRUNC | O_RDWR, 0644);
 			else
-				fd = open(output->content, O_CREAT | O_APPEND, O_RDWR, 0644);
+				fd = open(output->content, O_CREAT | O_APPEND | O_RDWR, 0644);
 			if (fd == -1)
 			{
 				tmp[1] = ft_strjoin("minishell: ", output->content);
@@ -127,6 +127,7 @@ static int	redir_out(t_data *command, int out)
 		i++;
 	}
 	free(tmp[0]);
+	printf("fd = %d\n", fd);
 	return (fd);
 }
 

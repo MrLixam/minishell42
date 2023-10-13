@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/13 05:02:11 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/13 06:23:27 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,16 +97,17 @@ static int	redir_out(t_data *command, int out)
 	output = command->output;
 	if (!output)
 		return (out);
-	i = 0;
-	tmp[0] = ft_strdup("");
+	i = 1;
+	tmp[0] = ft_strdup(output->content);
+	output = output->next;
 	while (output)
 	{
 		if (i % 2 != 0)
 		{
 			if (ft_strlen(tmp[0]) == 1)
-				fd = open(output->content, O_CREAT | O_TRUNC, O_RDWR);
+				fd = open(output->content, O_CREAT | O_TRUNC, O_RDWR, 0644);
 			else
-				fd = open(output->content, O_CREAT | O_APPEND, O_RDWR);
+				fd = open(output->content, O_CREAT | O_APPEND, O_RDWR, 0644);
 			if (fd == -1)
 			{
 				tmp[1] = ft_strjoin("minishell: ", output->content);
@@ -123,6 +124,7 @@ static int	redir_out(t_data *command, int out)
 			tmp[0] = ft_strdup(output->content);
 		}
 		output = output->next;
+		i++;
 	}
 	free(tmp[0]);
 	return (fd);
@@ -198,7 +200,7 @@ static void	p_pass(t_group *group, t_data **curr, int *fd, int pipes[2])
 	*curr = (*curr)->next;
 }
 
-void	pipeline(t_group *group)
+static void	pipeline(t_group *group)
 {
 	int		pipes[2];
 	int		fd_pid[2];
@@ -225,4 +227,53 @@ void	pipeline(t_group *group)
 		}
 	}
 	close_pipe(pipes);
+}
+
+static void	no_pipe(t_data *line)
+{
+	char	**str;
+	int		pid;
+	int		ret;
+	int 	redir[2];
+
+	str = lst_to_str(line->arg, line->command);
+	pid = fork();
+
+	if (pid < 0)
+		perror("minishell: fork failed");
+	else if (!pid)
+	{
+		redir[0] = redir_in(line, STDIN_FILENO);
+		redir[1] = redir_out(line, STDOUT_FILENO);
+		if (redir[0] != STDIN_FILENO)
+		{
+			dup2(redir[0], STDIN_FILENO);
+			close(redir[0]);
+		}
+		if (redir[1] != STDOUT_FILENO)
+		{
+			dup2(redir[1], STDOUT_FILENO);
+			close(redir[1]);
+		}
+		execve(line->command, str, g_env);
+	}
+	else
+		waitpid(pid, &ret, 0);
+	freetab(str);
+}
+
+void	exec(t_data *line)
+{
+	t_group *group;
+
+	if (data_len(line) > 1)
+	{
+		group = ft_calloc(1, sizeof(t_group));
+		group->child_pid = ft_calloc(data_len(line), sizeof(int));
+		group->line = &line;
+		pipeline(group);
+		waitpid(-1, NULL, 0);
+	}
+	else
+		no_pipe(line);
 }

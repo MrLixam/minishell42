@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/11 16:42:34 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/13 05:02:11 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void	clean_child(t_group *group, t_data *curr, int pipes[2], int fd)
 	exit(EXIT_FAILURE);
 }
 
-static int	redir_in(t_data *command)
+static int	redir_in(t_data *command, int fd)
 {
 	t_list *input;
 	int		i;
@@ -66,7 +66,7 @@ static int	redir_in(t_data *command)
 
 	input = command->input;
 	if (!input)
-		return (STDIN_FILENO);
+		return (fd);
 	i = 0;
 	while (input->next)
 	{
@@ -87,7 +87,7 @@ static int	redir_in(t_data *command)
 	return (-1);
 }
 
-static int	redir_out(t_data *command)
+static int	redir_out(t_data *command, int out)
 {
 	t_list *output;
 	int		i;
@@ -96,7 +96,7 @@ static int	redir_out(t_data *command)
 
 	output = command->output;
 	if (!output)
-		return (STDOUT_FILENO);
+		return (out);
 	i = 0;
 	tmp[0] = ft_strdup("");
 	while (output)
@@ -110,7 +110,7 @@ static int	redir_out(t_data *command)
 			if (fd == -1)
 			{
 				tmp[1] = ft_strjoin("minishell: ", output->content);
-				perror("-minishell");
+				perror(tmp[1]);
 				free(tmp[1]);
 				return (-1);
 			}
@@ -132,8 +132,10 @@ static void	link_redir(int pipes[2], int fd, t_data *curr, t_group *group)
 {	
 	int	redir[2];
 
-	redir[0] = redir_in(curr);
-	redir[1] = redir_out(curr);
+	if (curr == *group->line && curr->next == NULL)
+		return ;
+	redir[0] = redir_in(curr, fd);
+	redir[1] = redir_out(curr, pipes[1]);
 	if (redir[0] == -1 || redir[1] == -1)
 	{
 		perror("minishell: ");
@@ -141,20 +143,21 @@ static void	link_redir(int pipes[2], int fd, t_data *curr, t_group *group)
 	}
 	if (curr != *group->line && curr->next != NULL)
 	{
-		dup2(fd, redir[0]);
-		dup2(pipes[1], redir[1]);
-		close(fd);
+		dup2(redir[0], STDIN_FILENO);
+		dup2(redir[1], STDOUT_FILENO);
+		close(redir[0]);
 		close_pipe(pipes);
 	}
 	else if (curr == *group->line)
 	{
-		dup2(pipes[1], redir[1]);
-		close(pipes[1]);
+		dup2(redir[1], STDOUT_FILENO);
+		close(redir[1]);
+		close(pipes[0]);
 	}
 	else if (curr->next == NULL)
 	{
-		dup2(fd, redir[0]);
-		close(fd);
+		dup2(redir[0], STDIN_FILENO);
+		close(redir[0]);
 	}
 }
 

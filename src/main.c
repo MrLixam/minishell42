@@ -65,7 +65,6 @@ int	main(int argc, char **argv, char **envp)
 	(void) argv;
 	if (create_env(envp))
 		return (1);
-	//export_env("PET=PROUT");
 	while (1)
 	{
 		str = readline("minishell>");

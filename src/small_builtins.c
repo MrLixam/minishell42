@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
-/*
+
 int	ft_strmcmp(char *s1, char *s2)
 {
 	int len[2];
@@ -26,32 +26,7 @@ int	ft_strmcmp(char *s1, char *s2)
 	else
 		return (ft_strncmp(s1, s2, len[1]));
 }
-*/
 
-char	*ft_getenv(char *name)
-{
-	char	*ret_val;
-	char	*tmp;
-	int		i;
-	
-
-	tmp = ft_strjoin(name, "=");
-	i = -1;
-	ret_val = NULL;
-	if (!g_env)
-		return (NULL);
-	while (g_env[++i])
-	{
-		if (!ft_strncmp(tmp, g_env[i], ft_strlen(tmp)))
-		{
-			ret_val = ft_substr(g_env[i], ft_strlen(tmp), ft_strlen(g_env[i]));
-			break ;
-		}
-	}
-	free(tmp);
-	return (ret_val);
-}
-/*
 int	ft_pwd(void)
 {
 	char	*pwd;
@@ -89,4 +64,4 @@ int	ft_cd(char *arg, char **envp)
 	ft_setenv("OLDPWD", oldpwd, envp);
 	ft_setenv("PWD", pwd, envp);
 	return (0);
-}*/
+}

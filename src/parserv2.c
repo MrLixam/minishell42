@@ -32,27 +32,7 @@ int check_quote(char *readline)
 		return (1);
 	return (0); 
 }
-/*
-char	*getenv_malloc(char *src)
-{
-	char	*env;
-	char	*env_malloc;
 
-	env = getenv(src);
-	if (env)
-	{
-		env_malloc = ft_strdup(env);
-		if (!env_malloc)
-		{
-			write(1, "malloc faild\n", 13);
-			return (0);
-		}
-	}
-	else
-		env_malloc = ft_calloc(1, 1);
-	return (env_malloc);
-}
-*/
 char	*ft_strmerge(char *s1, char *s2)
 {
 	char	*tmp;

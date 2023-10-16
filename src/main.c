@@ -61,9 +61,10 @@ int	main(int argc, char **argv, char **envp)
 	char	**lexer;
 	t_data	*data;
 
-	(void) envp;
 	(void) argc;
 	(void) argv;
+	if (create_env(envp))
+		return (1);
 	while (1)
 	{
 		str = readline("minishell>");

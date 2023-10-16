@@ -32,7 +32,7 @@ int check_quote(char *readline)
 		return (1);
 	return (0); 
 }
-
+/*
 char	*getenv_malloc(char *src)
 {
 	char	*env;
@@ -52,7 +52,7 @@ char	*getenv_malloc(char *src)
 		env_malloc = ft_calloc(1, 1);
 	return (env_malloc);
 }
-
+*/
 char	*ft_strmerge(char *s1, char *s2)
 {
 	char	*tmp;
@@ -80,7 +80,7 @@ char	*format_env_var(char *var)
 	else
 	{
 		tmp2 = ft_substr(split[i], 1, ft_strlen(split[i]) + 1);
-		new = getenv_malloc(tmp2);
+		new = ft_getenv(tmp2);
 		free (tmp2);
 		i++;
 	}
@@ -96,7 +96,7 @@ char	*format_env_var(char *var)
 		else if (split[i][0] == '$')
 		{
 			tmp2 = ft_substr(split[i], 1, ft_strlen(split[i]) + 1);
-			tmp = getenv_malloc(tmp2);
+			tmp = ft_getenv(tmp2);
 			free (tmp2);
 			if (!tmp)
 			{

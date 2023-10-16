@@ -11,20 +11,20 @@
 /* ************************************************************************** */
 #include "minishell.h"
 
-int	check_env(char **c_env, char *find)
+static int	check_env(char **c_env, char *find)
 {
 	int	i;
 
 	i = -1;
 	while (c_env[++i])
 	{
-		if (ft_strncmp(c_env, find, ft_strlen(find) - ft_strlen(ft_strchr(find, '=') + 1)))
+		if (ft_strncmp(c_env[i], find, ft_strlen(find) - ft_strlen(ft_strchr(find, '=') + 1)))
 			return (1);
 	}
 	return (0);
 }
 
-char	**update_env(char **c_env, char *add)
+static char	**update_env(char **c_env, char *add)
 {
 	char	**new_env;
 	int		i;
@@ -35,10 +35,10 @@ char	**update_env(char **c_env, char *add)
 	i = -1;
 	while (new_env != NULL && c_env[++i])
 	{
-		if (!ft_strncmp(c_env, add, ft_strlen(add) - ft_strlen(ft_strchr(add, '=') + 1)))
-			new_env[i] = ft_substr(add);
+		if (!ft_strncmp(c_env[i], add, ft_strlen(add) - ft_strlen(ft_strchr(add, '=') + 1)))
+			new_env[i] = ft_strdup(add);
 		else
-			new_env[i] = ft_substr(c_env[i]);
+			new_env[i] = ft_strdup(c_env[i]);
 		if (new_env == NULL)
 		{
 			freetab(c_env);
@@ -50,31 +50,7 @@ char	**update_env(char **c_env, char *add)
 	return (new_env);
 }
 
-char	**unset_env(char **c_env, char *unset)
-{
-	char	**new_env;
-	int		i;
-	
-	if (!unset)
-		return (c_env);
-	new_env = ft_calloc(ft_tabstrlen(c_env), 1);
-	i = -1;
-	while (new_env != NULL && c_env[++i])
-	{
-		if (ft_strncmp(c_env, unset, ft_strlen(unset) - ft_strlen(ft_strchr(unset, '=') + 1)))
-			new_env[i] = ft_substr(c_env[i]);
-		if (new_env == NULL)
-		{
-			freetab(c_env);
-			freetab(new_env);
-			return (NULL);
-		}
-	}
-	freetab(c_env);
-	return (new_env);
-}
-
-char	**add_env(char **c_env, char *add)
+static char	**add_env(char **c_env, char *add)
 {
 	char	**new_env;
 	int		i;
@@ -90,7 +66,7 @@ char	**add_env(char **c_env, char *add)
 	i = -1;
 	while (c_env[++i])
 	{
-		new_env[i] = ft_substr(c_env[i]);
+		new_env[i] = ft_strdup(c_env[i]);
 		if (new_env == NULL)
 		{
 			freetab(c_env);
@@ -99,11 +75,62 @@ char	**add_env(char **c_env, char *add)
 		}
 	}
 	freetab(c_env);
-	new_env[i] = ft_substr(add);
+	new_env[i] = ft_strdup(add);
 	if (new_env == NULL)
 	{
 		freetab(new_env);
 		return (NULL);
 	}
 	return (new_env);
+}
+
+char	**export_env(char **c_env, char *env)
+{
+	if (check_env (c_env, env))
+		return (update_env(c_env, env));
+	return (add_env(c_env, env));
+}
+
+char	**unset_env(char **c_env, char *unset)
+{
+	char	**new_env;
+	int		i;
+	
+	if (!unset)
+		return (c_env);
+	new_env = ft_calloc(ft_tabstrlen(c_env), 1);
+	i = -1;
+	while (new_env != NULL && c_env[++i])
+	{
+		if (ft_strncmp(c_env[i], unset, ft_strlen(unset) - ft_strlen(ft_strchr(unset, '=') + 1)))
+			new_env[i] = ft_strdup(c_env[i]);
+		if (new_env == NULL)
+		{
+			freetab(c_env);
+			freetab(new_env);
+			return (NULL);
+		}
+	}
+	freetab(c_env);
+	return (new_env);
+}
+
+int	create_env(char **envp)
+{
+	int		i;
+	
+	g_env = ft_calloc(ft_tabstrlen(envp) + 1, 1);
+	if (g_env == NULL)
+		return (1);
+	i = -1;
+	while (envp[++i])
+	{
+		g_env[i] = ft_strdup(envp[i]);
+		if (g_env[i] == NULL)
+		{
+			freetab(g_env);
+			return (1);
+		}
+	}
+	return (0);
 }

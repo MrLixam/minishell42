@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/17 01:26:58 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/17 01:52:26 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static char	*set_prompt()
 	char	*pwd;
 	char	*prompt;
 
-	user = getenv("USER");
+	user = ft_getenv("USER");
 	pwd = getcwd(NULL, 0);
 	prompt = ft_strjoin("\e[32m", user);
 	prompt = ft_strjoin(prompt, "\e[94m ");
@@ -79,7 +79,7 @@ int	main(int argc, char **argv, char **envp)
 	t_data	*data;
 	char	*prompt;
 
-	g_env = envp;
+	create_env(envp);
 	(void) argc;
 	(void) argv;
 	while (1)

@@ -3,20 +3,20 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+         #
+#    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/07 16:02:47 by gpouzet           #+#    #+#              #
-#    Updated: 2023/09/11 20:34:35 by gpouzet          ###   ########.fr        #
+#    Updated: 2023/10/17 01:36:15 by marvin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC 	= clang
 
-FLAGS = -Wall -Wextra -Werror -g 
+FLAGS = -Wall -Wextra -Werror -g
 
 NAME = minishell
 
-SRC = src/main.c src/parserv2.c src/parser.c src/arg_sep.c src/t_data.c src/env_sep.c
+SRC = src/small_builtins.c src/g_env.c src/ft_echo.c src/main.c src/parserv2.c src/parser.c src/arg_sep.c src/t_data.c src/env_sep.c src/exec.c src/export.c
 
 OBJ	= $(SRC:.c=.o)
 

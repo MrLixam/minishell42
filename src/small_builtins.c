@@ -45,8 +45,8 @@ int	ft_pwd(void)
 int	ft_cd(char **arg)
 {
 	int		ret;
-	//char	*pwd;
-	//char	*oldpwd;
+	char	*pwd;
+	char	*oldpwd;
 
 	if (ft_tabstrlen(arg) > 2)
 	{
@@ -56,15 +56,17 @@ int	ft_cd(char **arg)
 	arg++;
 	if (!*arg)
 		*arg = ft_getenv("HOME");
-	//oldpwd = getcwd(NULL, 0);
+	oldpwd = ft_strjoin("OLDPWD=", getcwd(NULL, 0));
 	ret = chdir(*arg);
 	if (ret == -1)
 	{
 		perror_filename("minishell: cd: ", *arg);
 		return (1);
 	}
-	pwd = getcwd(NULL, 0);
-	export_env("OLDPWD", oldpwd, g_env);
-	export_env("PWD", pwd, g_env);
+	pwd = ft_strjoin("PWD=", getcwd(NULL, 0));
+	export_env(oldpwd);
+	export_env(pwd);
+	free(oldpwd);
+	free(pwd);
 	return (0);
 }

@@ -6,10 +6,11 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:12:58 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/16 20:50:10 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/17 01:53:37 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
 #include "../libft/libft.h"
 
 static int	cut(char const *s)

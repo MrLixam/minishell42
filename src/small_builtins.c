@@ -45,25 +45,26 @@ int	ft_pwd(void)
 int	ft_cd(char **arg)
 {
 	int		ret;
-	char	*pwd;
-	char	*oldpwd;
+	//char	*pwd;
+	//char	*oldpwd;
 
-	if (arg[1])
+	if (ft_tabstrlen(arg) > 2)
 	{
 		ft_putendl_fd("minishell: cd: too many arguments", STDERR_FILENO);
 		return (1);
 	}
-	if (!arg)
-		arg = ft_getenv("HOME");
-	oldpwd = getcwd(NULL, 0);
-	ret = chdir(arg);
+	arg++;
+	if (!*arg)
+		*arg = ft_getenv("HOME");
+	//oldpwd = getcwd(NULL, 0);
+	ret = chdir(*arg);
 	if (ret == -1)
 	{
-		perror_filename("minishell: cd: ", arg);
+		perror_filename("minishell: cd: ", *arg);
 		return (1);
 	}
 	pwd = getcwd(NULL, 0);
-	ft_setenv("OLDPWD", oldpwd, g_env);
-	ft_setenv("PWD", pwd, g_env);
+	export_env("OLDPWD", oldpwd, g_env);
+	export_env("PWD", pwd, g_env);
 	return (0);
 }

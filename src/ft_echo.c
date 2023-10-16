@@ -37,7 +37,6 @@ static int check_n(t_list *arg)
 
 int	ft_echo(t_list *arg)
 {
-	char *str;
 	t_list *curr;
 	int option;
 	int i;
@@ -56,4 +55,5 @@ int	ft_echo(t_list *arg)
 	}
 	if (!option)
 		ft_putchar_fd('\n', 1);
+	return (0);
 }

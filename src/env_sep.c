@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   env_sep.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gpouzet <gpouzet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 11:52:19 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/11 16:35:00 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/16 20:50:33 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "../libft/libft.h"
 
 static int	cut(char const *s)

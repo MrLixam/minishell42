@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   arg_sep.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gpouzet <gpouzet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:12:58 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/11 16:52:15 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/16 20:50:10 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "../libft/libft.h"
 
 static int	cut(char const *s)

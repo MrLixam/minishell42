@@ -3,13 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gpouzet <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/11 16:50:50 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/17 01:26:58 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdio.h>
+
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -55,19 +55,37 @@ void	show_data(t_data *data, int i)
 		show_data(data->next, ++i);
 }
 
+static char	*set_prompt()
+{
+	char	*user;
+	char	*pwd;
+	char	*prompt;
+
+	user = getenv("USER");
+	pwd = getcwd(NULL, 0);
+	prompt = ft_strjoin("\e[32m", user);
+	prompt = ft_strjoin(prompt, "\e[94m ");
+	prompt = ft_strjoin(prompt, pwd);
+	prompt = ft_strjoin(prompt, "\e[0m");
+	prompt = ft_strjoin(prompt, " $ ");
+
+	return (prompt);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char	*str;
 	char	**lexer;
 	t_data	*data;
+	char	*prompt;
 
+	g_env = envp;
 	(void) argc;
 	(void) argv;
-	if (create_env(envp))
-		return (1);
 	while (1)
 	{
-		str = readline("minishell>");
+		prompt = set_prompt();
+		str = readline(prompt);
 		if (str == NULL)
 			return (1);
 		if (ft_strncmp(str, "\0", 2))
@@ -79,10 +97,9 @@ int	main(int argc, char **argv, char **envp)
 		freetab(lexer);
 		if (data == NULL)
 			return (1);
-		ft_printf("[	data table	]\n");
-		show_data(data, 1);
-		ft_printf("[	end		]\n");
+		if (data->command != NULL)
+			exec(data);
 		clear_data(data);
-	//	to do : free all lst and other 
+		free(prompt);
 	}
 }

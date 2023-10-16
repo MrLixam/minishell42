@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/11 15:29:18 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/16 20:44:19 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,20 @@ char	**env_sep(char const *s);
 t_data	*parser(char **lexer);
 
 /*			exec			*/
-void	pipeline(t_group *group);
+void	exec(t_data *line);
 
 /*			builtins		*/
 int		ft_pwd(void);
-int		ft_cd(char *arg, char **envp);
-int		ft_echo(char **arg);
+int		ft_cd(char **arg);
+int		ft_echo(t_list *arg);
+
+/*			env_modif		*/
+char	*ft_getenv(char *name);
+int		create_env(char **envp);
+int		unset_env(char *unset);
+
+
+/*			error			*/
+int		perror_filename(char *command, char *filename);
 
 #endif

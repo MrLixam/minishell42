@@ -42,26 +42,28 @@ int	ft_pwd(void)
 	return (0);
 }
 
-int	ft_cd(char *arg, char **envp)
+int	ft_cd(char **arg)
 {
 	int		ret;
-	char	*err_mess;
 	char	*pwd;
 	char	*oldpwd;
 
+	if (arg[1])
+	{
+		ft_putendl_fd("minishell: cd: too many arguments", STDERR_FILENO);
+		return (1);
+	}
 	if (!arg)
 		arg = ft_getenv("HOME");
 	oldpwd = getcwd(NULL, 0);
 	ret = chdir(arg);
 	if (ret == -1)
 	{
-		err_mess = ft_strjoin("-minishell: cd: ", arg);
-		perror(err_mess);
-		free(err_mess);
+		perror_filename("minishell: cd: ", arg);
 		return (1);
 	}
 	pwd = getcwd(NULL, 0);
-	ft_setenv("OLDPWD", oldpwd, envp);
-	ft_setenv("PWD", pwd, envp);
+	ft_setenv("OLDPWD", oldpwd, g_env);
+	ft_setenv("PWD", pwd, g_env);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/13 22:33:50 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/16 20:38:32 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,17 @@ static int	file_access(char *path)
 	return (access(path, F_OK & R_OK & W_OK & X_OK));
 }
 
+int	is_builtin(char *command)
+{
+	int	l;
+
+	l = ft_strlen(command);
+	return (!ft_strncmp(command, "echo", l) || !ft_strncmp(command, "cd", l)
+		|| !ft_strncmp(command, "pwd", l) || !ft_strncmp(command, "export", l)
+		|| !ft_strncmp(command, "unset", l) || !ft_strncmp(command, "env", l)
+		|| !ft_strncmp(command, "exit", l));
+}
+
 static void	clean_child(t_group *group, t_data *curr, int pipes[2], int fd)
 {
 	close_pipe(pipes);
@@ -58,11 +69,20 @@ static void	clean_child(t_group *group, t_data *curr, int pipes[2], int fd)
 	exit(EXIT_FAILURE);
 }
 
+int	perror_filename(char *command, char *filename)
+{
+	char	*err;
+
+	err = ft_strjoin(command, filename);
+	perror(err);
+	free(err);
+	return (-1);
+}
+
 static int	redir_in(t_data *command, int in)
 {
-	t_list *input;
+	t_list	*input;
 	int		i;
-	char	*err;
 
 	input = command->input;
 	if (!input)
@@ -71,67 +91,55 @@ static int	redir_in(t_data *command, int in)
 	while (input->next)
 	{
 		if (i % 2 != 0 && file_access(input->content))
-		{
-			err = ft_strjoin("minishell: ", input->content);
-			perror(err);
-			free(err);
-			return (-1);
-		}
+			return (perror_filename("minishell :", input->content));
 		input = input->next;
+		i++;
 	}
 	if (!file_access(input->content))
 		return (open(input->content, O_RDONLY));
-	err = ft_strjoin("minishell: ", input->content);
-	perror(err);
-	free(err);
-	return (-1);
+	return (perror_filename("minishell :", input->content));
 }
 
 static int	redir_out(t_data *command, int out)
 {
-	t_list *output;
+	t_list	*output;
 	int		i;
 	int		fd;
-	char 	*tmp[2];
+	char	*tmp;
 
 	output = command->output;
 	if (!output)
 		return (out);
 	i = 1;
-	tmp[0] = ft_strdup(output->content);
+	tmp = ft_strdup(output->content);
 	output = output->next;
 	while (output)
 	{
 		if (i % 2 != 0)
 		{
-			if (ft_strlen(tmp[0]) == 1)
+			if (ft_strlen(tmp) == 1)
 				fd = open(output->content, O_CREAT | O_TRUNC | O_RDWR, 0644);
 			else
 				fd = open(output->content, O_CREAT | O_APPEND | O_RDWR, 0644);
 			if (fd == -1)
-			{
-				tmp[1] = ft_strjoin("minishell: ", output->content);
-				perror(tmp[1]);
-				free(tmp[1]);
-				return (-1);
-			}
+				return (perror_filename("minishell :", output->content));
 			if (output->next)
 				close(fd);
 		}
 		else
 		{
-			free(tmp[0]);
-			tmp[0] = ft_strdup(output->content);
+			free(tmp);
+			tmp = ft_strdup(output->content);
 		}
 		output = output->next;
 		i++;
 	}
-	free(tmp[0]);
+	free(tmp);
 	return (fd);
 }
 
 static void	link_redir(int pipes[2], int fd, t_data *curr, t_group *group)
-{	
+{
 	int	redir[2];
 
 	if (curr == *group->line && curr->next == NULL)
@@ -168,7 +176,7 @@ int	redir_present(t_data *command)
 	return (command->output != NULL || command->input != NULL);
 }
 
-void fix_path(t_data **line)
+void	fix_path(t_data **line)
 {
 	char	*path;
 	char	**path_tab;
@@ -198,14 +206,38 @@ void fix_path(t_data **line)
 	freetab(path_tab);
 }
 
+void	exec_builtin(char *command, char **str, t_list *arg)
+{
+	int len;
+
+	len = ft_strlen(command);
+	if (!ft_strncmp(command, "echo", len))
+		ft_echo(arg);
+	else if (!ft_strncmp(command, "cd", len))
+		ft_cd(str);
+	else if (!ft_strncmp(command, "pwd", len))
+		ft_pwd();
+	/*else if (!ft_strncmp(command, "export", len))
+		ft_export(str);
+	else if (!ft_strncmp(command, "unset", len))
+		ft_unset(str);
+	else if (!ft_strncmp(command, "env", len))
+		ft_env();*/
+	else if (!ft_strncmp(command, "exit", len))
+		exit(0);
+}
+
 static void	do_logic(int pipes[2], int fd, t_data *curr, t_group *group)
 {
 	char	**str;
 
 	link_redir(pipes, fd, curr, group);
 	str = lst_to_str(curr->arg, curr->command);
-	//if (is_builtin(curr->command))
-		//exit(exec_builtin(curr->command, str));
+	if (is_builtin(curr->command))
+	{
+		exec_builtin(curr->command, str, curr->arg);
+		return ;
+	}
 	fix_path(&curr);
 	execve(curr->command, str, g_env);
 	freetab(str);
@@ -262,13 +294,22 @@ static void	pipeline(t_group *group)
 	close_pipe(pipes);
 }
 
-void perror_filename(char *filename)
+void	redir_single(t_data *line)
 {
-	char *err;
+	int	redir[2];
 
-	err = ft_strjoin("minishell: ", filename);
-	perror(err);
-	free(err);
+	redir[0] = redir_in(line, STDIN_FILENO);
+	redir[1] = redir_out(line, STDOUT_FILENO);
+	if (redir[0] != STDIN_FILENO)
+	{
+		dup2(redir[0], STDIN_FILENO);
+		close(redir[0]);
+	}
+	if (redir[1] != STDOUT_FILENO)
+	{
+		dup2(redir[1], STDOUT_FILENO);
+		close(redir[1]);
+	}
 }
 
 static void	no_pipe(t_data *line)
@@ -276,32 +317,23 @@ static void	no_pipe(t_data *line)
 	char	**str;
 	int		pid;
 	int		ret;
-	int 	redir[2];
 
 	str = lst_to_str(line->arg, line->command);
+	if (is_builtin(line->command))
+	{
+		redir_single(line);
+		exec_builtin(line->command, str, line->arg);
+		return ;
+	}
 	pid = fork();
-
 	if (pid < 0)
 		perror("minishell: fork failed");
 	else if (!pid)
 	{
-		redir[0] = redir_in(line, STDIN_FILENO);
-		redir[1] = redir_out(line, STDOUT_FILENO);
-		if (redir[0] != STDIN_FILENO)
-		{
-			dup2(redir[0], STDIN_FILENO);
-			close(redir[0]);
-		}
-		if (redir[1] != STDOUT_FILENO)
-		{
-			dup2(redir[1], STDOUT_FILENO);
-			close(redir[1]);
-		}
-		//if (is_builtin(line->command))
-			//exit(exec_builtin(line->command, str));
+		redir_single(line);
 		fix_path(&line);
 		execve(line->command, str, g_env);
-		perror_filename(line->command);
+		perror_filename("minishell :", line->command);
 	}
 	else
 		waitpid(pid, &ret, 0);
@@ -310,7 +342,7 @@ static void	no_pipe(t_data *line)
 
 void	exec(t_data *line)
 {
-	t_group *group;
+	t_group	*group;
 	int		i;
 	int		ret;
 

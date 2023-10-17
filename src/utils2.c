@@ -41,7 +41,7 @@ int	perror_filename(char *command, char *filename)
 	return (-1);
 }
 
-void	fix_path(t_data **line)
+int	fix_path(t_data **line)
 {
 	char	*path;
 	char	**path_tab;
@@ -50,7 +50,7 @@ void	fix_path(t_data **line)
 
 	path = getenv("PATH");
 	if (path == NULL || file_access((*line)->command) == 0)
-		return ;
+		return (0);
 	path_tab = ft_split(path, ':');
 	i = -1;
 	while (path_tab[++i])
@@ -64,10 +64,13 @@ void	fix_path(t_data **line)
 			free((*line)->command);
 			(*line)->command = ft_strdup(path_tab[i]);
 			freetab(path_tab);
-			return ;
+			return (0);
 		}
 	}
 	freetab(path_tab);
+	ft_putstr_fd((*line)->command, 2);
+	ft_putendl_fd(": command not found", 2);
+	return (1);
 }
 
 int	ft_error(char *message, t_group *group)

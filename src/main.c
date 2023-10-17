@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/17 13:36:08 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/17 14:02:32 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,6 @@ int	main(int argc, char **argv, char **envp)
 		if (data->command != NULL)
 			exec(data);
 		clear_data(data);
+		printf("%d\n", g_exit);
 	}
 }

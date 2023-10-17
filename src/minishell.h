@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/17 13:23:09 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/17 13:49:18 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int		file_access(char *path);
 char	**lst_to_str(t_list *lst, char *command);
 int		redir_present(t_data *command);
 int		exec_builtin(char **str, t_data *line);
-void	fix_path(t_data **line);
+int		fix_path(t_data **line);
 void	clean_child(t_group *group, t_data *curr, int pipes[2], int fd);
 void	close_pipe(int pipes[2]);
 void	redirect(int in, int out, t_data *curr, int redir[2]);

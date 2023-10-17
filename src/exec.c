@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/17 13:15:04 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/17 14:08:44 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,12 @@ static int	no_pipe(t_data *line)
 	else if (!var[0])
 	{
 		redir_single(line);
-		fix_path(&line);
+		var[1] = fix_path(&line);
+		if (var[1])
+		{
+			clear_data(line);
+			exit(127);
+		}
 		execve(line->command, str, g_env);
 		perror_filename("minishell: execve", line->command);
 		clear_data(line);
@@ -57,7 +62,7 @@ static int	no_pipe(t_data *line)
 	else
 		waitpid(var[0], &var[1], 0);
 	freetab(str);
-	return (var[1]);
+	return (WEXITSTATUS(var[1]));
 }
 
 void	exec(t_data *line)
@@ -78,6 +83,7 @@ void	exec(t_data *line)
 				waitpid(group->child_pid[i++], &ret, 0);
 		free(group->child_pid);
 		free(group);
+		ret = WEXITSTATUS(ret);
 	}
 	else
 		ret = no_pipe(line);

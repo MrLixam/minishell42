@@ -16,15 +16,22 @@
 static void	do_logic(int pipes[2], int fd, t_data *curr, t_group *group)
 {
 	char	**str;
+	int		i;
 
 	link_redir(pipes, fd, curr, group);
 	str = lst_to_str(curr->arg, curr->command);
 	if (is_builtin(curr->command))
 		exit(exec_builtin(str, curr));
-	fix_path(&curr);
+	i = fix_path(&curr);
+	if (i)
+	{
+		freetab(str);
+		clean_child(group, curr, pipes, fd);
+		exit(127);
+	}
 	execve(curr->command, str, g_env);
 	freetab(str);
-	perror("minishell: execve");
+	perror("minishell");
 	clean_child(group, curr, pipes, fd);
 }
 

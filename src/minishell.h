@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/17 01:53:57 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/17 02:04:42 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "../libft/get_next_line.h"
 
 /*			global			*/
-static char	**g_env;
+extern char	**g_env;
 static int		g_error = 0;
 /*			struct			*/
 

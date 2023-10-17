@@ -72,7 +72,13 @@ char	*format_env_var(char *var)
 	while (split[i])
 	{
 		if (!ft_strncmp(split[i], "$?", 2))
-			ft_strlcat(new, "0", ft_strlen(new) + 2);
+		{
+			tmp = ft_itoa(g_exit);
+			if (!tmp)
+				return (1);
+			ft_strlcat(new, tmp, ft_strlen(new) + ft_strlen(tmp) + 1);
+			free(tmp);
+		}
 		else if (split[i][0] == '$')
 		{
 			tmp2 = ft_substr(split[i], 1, ft_strlen(split[i]) + 1);

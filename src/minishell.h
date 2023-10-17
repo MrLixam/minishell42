@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/17 09:33:52 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/17 10:17:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int		ft_pwd(void);
 int		ft_cd(char **arg);
 int		ft_echo(t_list *arg);
 int		ft_export(char **arg);
+int		ft_unset(char **arg);
 
 /*			env_modif		*/
 char	*ft_getenv(char *name);

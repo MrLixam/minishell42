@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/17 10:11:28 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/17 10:18:39 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,8 +219,8 @@ void	exec_builtin(char *command, char **str, t_list *arg)
 		ft_pwd();
 	else if (!ft_strncmp(command, "export", len))
 		ft_export(str);
-	//else if (!ft_strncmp(command, "unset", len))
-	//	unset_env(str);
+	else if (!ft_strncmp(command, "unset", len))
+		ft_unset(str);
 	else if (!ft_strncmp(command, "env", len))
 		print_env(str);
 	else if (!ft_strncmp(command, "exit", len))
@@ -336,10 +336,7 @@ static void	no_pipe(t_data *line)
 		perror_filename("minishell :", line->command);
 	}
 	else
-	{
 		waitpid(pid, &ret, 0);
-		g_status = ret;
-	}
 	freetab(str);
 }
 

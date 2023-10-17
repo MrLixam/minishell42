@@ -80,7 +80,6 @@ int	ft_unset(char **arg)
 	int	i;
 
 	i = 0;
-	
 	while (arg[++i])
 		unset_env(arg[i]);
 	return (0);

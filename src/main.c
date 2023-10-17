@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/17 10:00:24 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/17 13:36:08 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,11 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "minishell.h"
+#include <fcntl.h>
 
-void	show_data(t_data *data, int i)
+int	g_exit;
+
+/*void	show_data(t_data *data, int i)
 {
 	int	j;
 	t_list *tmp;
@@ -53,41 +56,21 @@ void	show_data(t_data *data, int i)
 	}
 	if (data->next != NULL)
 		show_data(data->next, ++i);
-}
-
-static char	*set_prompt()
-{
-	char	*user;
-	char	*pwd;
-	char	*prompt;
-
-	user = ft_getenv("USER");
-	pwd = getcwd(NULL, 0);
-	prompt = ft_strjoin("\e[32m", user);
-	prompt = ft_strjoin(prompt, "\e[94m ");
-	prompt = ft_strjoin(prompt, pwd);
-	prompt = ft_strjoin(prompt, "\e[0m");
-	prompt = ft_strjoin(prompt, " $ ");
-	/*prompt = ft_strjoin(user, " ");
-	prompt = ft_strjoin(prompt, pwd);
-	prompt = ft_strjoin(prompt, " $ ");*/
-	return (prompt);
-}
+}*/
 
 int	main(int argc, char **argv, char **envp)
 {
 	char	*str;
 	char	**lexer;
 	t_data	*data;
-	char	*prompt;
 
 	create_env(envp);
+	g_exit = 0;
 	(void) argc;
 	(void) argv;
 	while (1)
 	{
-		prompt = set_prompt();
-		str = readline(prompt);
+		str = readline("\e[94mminishell\e[0m$ ");
 		if (str == NULL)
 			return (1);
 		if (ft_strncmp(str, "\0", 2))
@@ -102,6 +85,5 @@ int	main(int argc, char **argv, char **envp)
 		if (data->command != NULL)
 			exec(data);
 		clear_data(data);
-		free(prompt);
 	}
 }

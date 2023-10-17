@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 20:51:06 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/17 02:04:46 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/17 13:33:51 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	update_env(char *add)
 {
 	char	**new_env;
 	int		i;
-	
+
 	if (!add || !ft_strchr(add, '='))
 		return (1);
 	new_env = ft_calloc(ft_tabstrlen(g_env) + 1, sizeof(char *));

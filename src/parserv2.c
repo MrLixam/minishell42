@@ -6,22 +6,21 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:28:26 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/17 02:04:08 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/17 13:30:06 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int check_quote(char *readline) 
+int	check_quote(char *readline)
 {
 	int	one;
-	int	two; 
+	int	two;
 	int	i;
- 
+
 	i = -1;
 	one = 1;
-	two = 1; 
-
+	two = 1;
 	while (readline[++i])
 	{
 		if (readline[i] == 39 && two > 0)
@@ -31,7 +30,7 @@ int check_quote(char *readline)
 	}
 	if (one < 0 || two < 0)
 		return (1);
-	return (0); 
+	return (0);
 }
 
 char	*ft_strmerge(char *s1, char *s2)
@@ -100,7 +99,7 @@ char	*format_env_var(char *var)
 	return (new);
 }
 
-int	swap_env_var(char **lex) 
+int	swap_env_var(char **lex)
 {
 	int		i;
 	char	*tmp;

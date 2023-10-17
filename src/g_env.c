@@ -6,15 +6,15 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 14:11:44 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/17 09:52:39 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/17 13:28:35 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char **g_env;
+char	**g_env;
 
-int unset_env(char *unset)
+int	unset_env(char *unset)
 {
 	char	**new_env;
 	int		i;
@@ -39,9 +39,9 @@ int unset_env(char *unset)
 	return (0);
 }
 
-int create_env(char **envp)
+int	create_env(char **envp)
 {
-	int i;
+	int	i;
 
 	g_env = ft_calloc(ft_tabstrlen(envp) + 1, sizeof(char *));
 	if (g_env == NULL)
@@ -59,11 +59,11 @@ int create_env(char **envp)
 	return (0);
 }
 
-char *ft_getenv(char *name)
+char	*ft_getenv(char *name)
 {
-	char *ret_val;
-	char *tmp;
-	int i;
+	char	*ret_val;
+	char	*tmp;
+	int		i;
 
 	tmp = ft_strjoin(name, "=");
 	i = -1;
@@ -77,7 +77,7 @@ char *ft_getenv(char *name)
 			ret_val = ft_substr(g_env[i], ft_strlen(tmp), ft_strlen(g_env[i]));
 			if (ret_val == NULL)
 				return (NULL);
-			break;
+			break ;
 		}
 	}
 	free(tmp);
@@ -88,7 +88,7 @@ char *ft_getenv(char *name)
 
 int	print_env(char **arg)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	if (ft_tabstrlen(arg) > 1)

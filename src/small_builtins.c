@@ -84,3 +84,9 @@ int	ft_unset(char **arg)
 		unset_env(arg[i]);
 	return (0);
 }
+
+void	ft_exit(t_data *line)
+{
+	clear_data(line);
+	exit(0);
+}

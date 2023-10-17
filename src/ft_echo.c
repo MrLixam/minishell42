@@ -12,14 +12,14 @@
 
 #include "minishell.h"
 
-static int check_n(t_list *arg)
+static int	check_n(t_list *arg)
 {
-	int i;
-	int j;
-	char *str;
-	
+	int		i;
+	int		j;
+	char	*str;
+
 	j = 0;
-	while(arg)
+	while (arg)
 	{
 		str = (char *)arg->content;
 		i = 0;
@@ -37,17 +37,17 @@ static int check_n(t_list *arg)
 
 int	ft_echo(t_list *arg)
 {
-	t_list *curr;
-	int option;
-	int i;
-	
+	t_list	*curr;
+	int		option;
+	int		i;
+
 	curr = arg;
 	option = check_n(curr);
 	i = -1;
 	while (++i != option)
 		curr = curr->next;
 	while (curr)
-	{	
+	{
 		ft_putstr_fd((char *)curr->content, 1);
 		if (curr->next)
 			ft_putchar_fd(' ', 1);

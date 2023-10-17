@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 11:52:19 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/17 02:04:48 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/17 13:32:21 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,20 +48,21 @@ static int	cut(char const *s)
 
 static int	next_arg(char const *s)
 {
-	static	int	s_quote = 1;
-	static	int	d_quote = 1;
-	int	i;
+	static int	s_quote = 1;
+	static int	d_quote = 1;
+	int			i;
 
 	i = 0;
 	if (s[i] == '$')
 	{
 		i++;
 		if (s[i] == '?')
-				return (++i);
+			return (++i);
 		while (ft_isalnum(s[i]) || s[i] == '_')
 			i++;
 	}
 	else
+	{
 		while (s[i] && (s[i] != '$' || s_quote < 0))
 		{
 			if (s[i] == 39 && d_quote > 0)
@@ -70,6 +71,7 @@ static int	next_arg(char const *s)
 				d_quote *= -1;
 			i++;
 		}
+	}
 	return (i);
 }
 

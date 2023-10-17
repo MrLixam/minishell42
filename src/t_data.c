@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 16:12:41 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/17 02:04:38 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/17 13:24:34 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_data	*new_data(void)
 	create->command = NULL;
 	create->arg = NULL;
 	create->next = NULL;
-	return(create);
+	return (create);
 }
 
 int	data_len(t_data *line)
@@ -73,4 +73,3 @@ int	new_arg(t_list **lst, char *arg)
 	ft_lstadd_back(lst, new);
 	return (0);
 }
-

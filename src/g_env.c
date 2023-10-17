@@ -16,8 +16,8 @@ char **g_env;
 
 int unset_env(char *unset)
 {
-	char **new_env;
-	int i;
+	char	**new_env;
+	int		i;
 
 	if (!unset)
 		return (0);
@@ -25,7 +25,7 @@ int unset_env(char *unset)
 	i = -1;
 	while (new_env != NULL && g_env[++i])
 	{
-		if (ft_strncmp(g_env[i], unset, ft_strlen(unset) - ft_strlen(ft_strchr(unset, '=') + 1)))
+		if (ft_strncmp(g_env[i], unset, ft_strlen(g_env[i]) - ft_strlen(ft_strchr(g_env[i], '='))))
 			new_env[i] = ft_strdup(g_env[i]);
 		if (new_env == NULL)
 		{

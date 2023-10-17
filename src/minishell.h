@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/17 02:04:42 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/17 09:33:52 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "../libft/get_next_line.h"
 
 /*			global			*/
-extern char	**g_env;
+extern char		**g_env;
 static int		g_error = 0;
 /*			struct			*/
 
@@ -65,12 +65,14 @@ void	exec(t_data *line);
 int		ft_pwd(void);
 int		ft_cd(char **arg);
 int		ft_echo(t_list *arg);
+int		ft_export(char **arg);
 
 /*			env_modif		*/
 char	*ft_getenv(char *name);
 int		create_env(char **envp);
 int		unset_env(char *unset);
 int		export_env(char *env);
+int		print_env(char **arg);
 
 
 /*			error			*/

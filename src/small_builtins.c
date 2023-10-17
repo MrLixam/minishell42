@@ -15,18 +15,6 @@
 #include <unistd.h>
 #include <errno.h>
 
-int	ft_strmcmp(char *s1, char *s2)
-{
-	int len[2];
-
-	len[0] = ft_strlen(s1);
-	len[1] = ft_strlen(s2);
-	if (len[0] >= len[1])
-		return (ft_strncmp(s1, s2, len[0]));
-	else
-		return (ft_strncmp(s1, s2, len[1]));
-}
-
 int	ft_pwd(void)
 {
 	char	*pwd;
@@ -35,7 +23,7 @@ int	ft_pwd(void)
 	if (!pwd)
 	{
 		perror("minishell: pwd:");
-		return (1);
+		return (errno);
 	}
 	ft_putendl_fd(pwd, STDOUT_FILENO);
 	free(pwd);
@@ -51,7 +39,7 @@ int	ft_cd(char **arg)
 	if (ft_tabstrlen(arg) > 2)
 	{
 		ft_putendl_fd("minishell: cd: too many arguments", STDERR_FILENO);
-		return (1);
+		return (7);
 	}
 	arg++;
 	if (!*arg)
@@ -61,12 +49,39 @@ int	ft_cd(char **arg)
 	if (ret == -1)
 	{
 		perror_filename("minishell: cd: ", *arg);
-		return (1);
+		return (errno);
 	}
 	pwd = ft_strjoin("PWD=", getcwd(NULL, 0));
 	export_env(oldpwd);
 	export_env(pwd);
 	free(oldpwd);
 	free(pwd);
+	return (0);
+}
+
+int	ft_export(char **arg)
+{
+	int	i;
+
+	i = 0;
+	if (ft_tabstrlen(arg) == 1)
+	{
+		print_env(arg);
+		return (0);
+	}
+	while (arg[++i])
+		if (ft_strchr(arg[i], '='))
+			export_env(arg[i]);
+	return (0);
+}
+
+int	ft_unset(char **arg)
+{
+	int	i;
+
+	i = 0;
+	
+	while (arg[++i])
+		unset_env(arg[i]);
 	return (0);
 }

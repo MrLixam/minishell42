@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/17 02:04:44 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/17 10:00:24 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,9 @@ static char	*set_prompt()
 	prompt = ft_strjoin(prompt, pwd);
 	prompt = ft_strjoin(prompt, "\e[0m");
 	prompt = ft_strjoin(prompt, " $ ");
-
+	/*prompt = ft_strjoin(user, " ");
+	prompt = ft_strjoin(prompt, pwd);
+	prompt = ft_strjoin(prompt, " $ ");*/
 	return (prompt);
 }
 

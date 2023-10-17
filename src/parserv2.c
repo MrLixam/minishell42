@@ -54,7 +54,7 @@ char	*format_env_var(char *var)
 	i = 0 + ft_strncmp(var, "$", 1) != 0;
 	split = env_sep(var);
 	if (!split)
-		return (0);
+		return (NULL);
 	if (i)
 		new = ft_strdup(split[0]);
 	else
@@ -67,7 +67,7 @@ char	*format_env_var(char *var)
 	if (!new)
 	{
 		freetab(split);
-		return (0);
+		return (NULL);
 	}
 	while (split[i])
 	{
@@ -75,7 +75,7 @@ char	*format_env_var(char *var)
 		{
 			tmp = ft_itoa(g_exit);
 			if (!tmp)
-				return (1);
+				return (NULL);
 			ft_strlcat(new, tmp, ft_strlen(new) + ft_strlen(tmp) + 1);
 			free(tmp);
 		}
@@ -88,13 +88,13 @@ char	*format_env_var(char *var)
 			{
 				freetab(split);
 				free(new);
-				return (0);
+				return (NULL);
 			}
 			new = ft_strmerge(new, tmp);
 			if (!new)
 			{
 				freetab(split);
-				return (0);
+				return (NULL);
 			}
 		}
 		else

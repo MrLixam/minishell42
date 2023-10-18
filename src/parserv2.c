@@ -54,7 +54,7 @@ char	*format_env_var(char *var)
 	i = 0 + ft_strncmp(var, "$", 1) != 0;
 	split = env_sep(var);
 	if (!split)
-		return (0);
+		return (NULL);
 	if (i)
 		new = ft_strdup(split[0]);
 	else
@@ -67,12 +67,18 @@ char	*format_env_var(char *var)
 	if (!new)
 	{
 		freetab(split);
-		return (0);
+		return (NULL);
 	}
 	while (split[i])
 	{
 		if (!ft_strncmp(split[i], "$?", 2))
-			ft_strlcat(new, "0", ft_strlen(new) + 2);
+		{
+			tmp = ft_itoa(g_exit);
+			if (!tmp)
+				return (NULL);
+			ft_strlcat(new, tmp, ft_strlen(new) + ft_strlen(tmp) + 1);
+			free(tmp);
+		}
 		else if (split[i][0] == '$')
 		{
 			tmp2 = ft_substr(split[i], 1, ft_strlen(split[i]) + 1);
@@ -82,13 +88,13 @@ char	*format_env_var(char *var)
 			{
 				freetab(split);
 				free(new);
-				return (0);
+				return (NULL);
 			}
 			new = ft_strmerge(new, tmp);
 			if (!new)
 			{
 				freetab(split);
-				return (0);
+				return (NULL);
 			}
 		}
 		else

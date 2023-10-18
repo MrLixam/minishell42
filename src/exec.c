@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/18 03:44:42 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/18 03:48:38 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static int	no_pipe(t_data *line)
 			exit(127);
 		}
 		execve(line->command, str, g_env);
-		perror_filename("minishell: execve", line->command);
+		perror_filename("minishell: execve ", line->command);
 		clear_data(line);
 	}
 	else

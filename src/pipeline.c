@@ -12,6 +12,19 @@
 
 #include "minishell.h"
 #include <stdio.h>
+#include <errno.h>
+
+static void	exit_command(t_group *group, t_data *curr, int fd, int pipes[2], char **str)
+{
+	freetab(str);
+	close_pipe(pipes);
+	if (curr != *group->line)
+		close(fd);
+	clear_data(*group->line);
+	free(group->child_pid);
+	free(group);
+	exit(127);
+}
 
 static void	do_logic(int pipes[2], int fd, t_data *curr, t_group *group)
 {
@@ -24,14 +37,10 @@ static void	do_logic(int pipes[2], int fd, t_data *curr, t_group *group)
 		exit(exec_builtin(str, curr));
 	i = fix_path(&curr);
 	if (i)
-	{
-		freetab(str);
-		clean_child(group, curr, pipes, fd);
-		exit(127);
-	}
+		exit_command(group, curr, fd, pipes, str);
 	execve(curr->command, str, g_env);
-	freetab(str);
 	perror("minishell");
+	freetab(str);
 	clean_child(group, curr, pipes, fd);
 }
 

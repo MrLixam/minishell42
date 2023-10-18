@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/17 13:49:18 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/17 15:07:15 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ char	**pre_parser(char *lexer);
 char	**arg_sep(char const *s);
 char	**env_sep(char const *s);
 t_data	*parser(char **lexer);
+char	*ft_strmerge(char *s1, char *s2);
 
 /*			exec			*/
 void	exec(t_data *line);

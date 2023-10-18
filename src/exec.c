@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/17 14:08:44 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/17 14:49:28 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ static int	no_pipe(t_data *line)
 	else
 		waitpid(var[0], &var[1], 0);
 	freetab(str);
-	return (WEXITSTATUS(var[1]));
+
+	return (var[1]);
 }
 
 void	exec(t_data *line)
@@ -78,14 +79,24 @@ void	exec(t_data *line)
 		group->child_pid = ft_calloc(data_len(line), sizeof(int));
 		group->line = &line;
 		ret = pipeline(group);
-		if (!ret)
-			while (i < data_len(line))
-				waitpid(group->child_pid[i++], &ret, 0);
+		if (ret == -1)
+		{
+			free(group->child_pid);
+			free(group);
+			return ;
+		}
+		while (i < data_len(line))
+			waitpid(group->child_pid[i++], &ret, 0);
 		free(group->child_pid);
 		free(group);
-		ret = WEXITSTATUS(ret);
+		if (WIFEXITED(ret))
+			ret = WEXITSTATUS(ret);
 	}
 	else
+	{
 		ret = no_pipe(line);
+		if (WIFEXITED(ret))
+			ret = WEXITSTATUS(ret);
+	}
 	g_exit = ret;
 }

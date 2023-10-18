@@ -79,5 +79,5 @@ int	ft_error(char *message, t_group *group)
 	clear_data(*group->line);
 	free(group);
 	free(group->child_pid);
-	return (errno);
+	return (-1);
 }

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/17 15:07:15 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/18 16:17:34 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,12 @@
 extern char		**g_env;
 extern int		g_exit;
 /*			struct			*/
+
+typedef struct s_local
+{
+	char			**env;
+	struct s_data	*data;
+}	t_local;
 
 typedef struct s_data
 {
@@ -56,7 +62,7 @@ int		check_quote(char *readline);
 char	**pre_parser(char *lexer);
 char	**arg_sep(char const *s);
 char	**env_sep(char const *s);
-t_data	*parser(char **lexer);
+t_data	*switch_elem(char **lexer);
 char	*ft_strmerge(char *s1, char *s2);
 
 /*			exec			*/
@@ -72,7 +78,7 @@ void	ft_exit(t_data *line);
 
 /*			env_modif		*/
 char	*ft_getenv(char *name);
-int		create_env(char **envp);
+int		create_env(char **env, char **envp);
 int		unset_env(char *unset);
 int		export_env(char *env);
 int		print_env(char **arg);

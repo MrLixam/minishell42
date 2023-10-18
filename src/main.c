@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/17 14:33:41 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/18 16:14:41 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 int	g_exit;
 
-/*void	show_data(t_data *data, int i)
+void	show_data(t_data *data, int i)
 {
 	int	j;
 	t_list *tmp;
@@ -56,15 +56,15 @@ int	g_exit;
 	}
 	if (data->next != NULL)
 		show_data(data->next, ++i);
-}*/
+}
 
 int	main(int argc, char **argv, char **envp)
 {
 	char	*str;
 	char	**lexer;
-	t_data	*data;
+	t_local	local;
 
-	create_env(envp);
+	create_env(local.env, envp);
 	g_exit = 0;
 	(void) argc;
 	(void) argv;
@@ -75,15 +75,21 @@ int	main(int argc, char **argv, char **envp)
 			return (1);
 		if (ft_strncmp(str, "\0", 2))
 			add_history(str);
+		//
+	//	parser(local, str);
+		//
 		lexer = pre_parser(str);
 		if (lexer == NULL)
 			return (1);
-		data = parser(lexer);
+		local.data = parser(lexer);
 		freetab(lexer);
-		if (data == NULL)
+		//
+		if (local.data == NULL)
 			return (1);
-		if (data->command != NULL)
-			exec(data);
-		clear_data(data);
+	//	if (local->data->command != NULL)
+	//		exec(data);
+		show_data(local.data, 0);
+		clear_data(local.data);
 	}
+	//clear_local(local);
 }

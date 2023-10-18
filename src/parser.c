@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:23 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/17 13:33:26 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/18 16:22:08 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ char	**pre_parser(char *lexer)
 	return (tmp);
 }
 
-t_data	*parser(char **lexer)
+t_data	*switch_elem(char **lexer)
 {
 	t_data	*first;
 	t_data	*curent;
@@ -140,4 +140,25 @@ t_data	*parser(char **lexer)
 	}
 	switcher(curent);
 	return (first);
+}
+
+int	parser(t_local local, char *lexer)
+{
+	char	**tmp;
+
+	if (check_quote(lexer))
+	{
+		write(1, "error\n", 6);
+		return (0);
+	}
+	tmp = arg_sep(lexer);
+	free(lexer);
+	if (tmp == NULL)
+		return (0);
+	if (swap_env_var(tmp))
+		return (0);
+	if (tmp == NULL)
+		return (1);
+	local.data = parser(tmp);
+	freetab(tmp);
 }

@@ -34,25 +34,25 @@ static int	redir_in(t_data *command, int in)
 	return (perror_filename("minishell : ", input->content));
 }
 
-static int	outfile_logic(int *fd, int *i, t_list *output, char **tmp)
+static int	outfile_logic(int *fd, int *i, t_list **output, char **tmp)
 {
 	if (*i % 2 != 0)
 	{
-		if (ft_strlen(output->content) == 1)
-			*fd = open(output->content, O_CREAT | O_TRUNC | O_RDWR, 0644);
+		if (ft_strlen(*tmp) == 1)
+			*fd = open((*output)->content, O_CREAT | O_TRUNC | O_RDWR, 0644);
 		else
-			*fd = open(output->content, O_CREAT | O_APPEND | O_RDWR, 0644);
+			*fd = open((*output)->content, O_CREAT | O_APPEND | O_RDWR, 0644);
 		if (*fd == -1)
 			return (1);
-		if (output->next)
+		if ((*output)->next)
 			close(*fd);
 	}
 	else
 	{
 		free(*tmp);
-		*tmp = ft_strdup(output->content);
+		*tmp = ft_strdup((*output)->content);
 	}
-	output = output->next;
+	*output = (*output)->next;
 	(*i)++;
 	return (0);
 }
@@ -72,7 +72,7 @@ static int	redir_out(t_data *command, int out)
 	output = output->next;
 	while (output)
 	{
-		if (outfile_logic(&fd, &i, output, &tmp))
+		if (outfile_logic(&fd, &i, &output, &tmp))
 			return (perror_filename("minishell : ", output->content));
 	}
 	free(tmp);

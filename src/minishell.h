@@ -47,7 +47,6 @@ typedef struct s_group
 /*			prototype		*/
 void	freetab(char **tab);
 int		ft_strmcmp(char *s1, char *s2);
-char	*ft_getenv(char *name);
 
 /*			data			*/
 t_data	*new_data(void);
@@ -57,8 +56,8 @@ void	clear_data(t_data *data);
 int		new_arg(t_list **lst, char *arg);
 
 /*			parser			*/
-int		parser(t_local local, char *lexer);
-int		swap_env_var(char **lex);
+int		parser(t_local *local, char *lexer);
+int		swap_env_var(t_local *local, char **lex);
 int		check_quote(char *readline);
 char	**pre_parser(char *lexer);
 char	**arg_sep(char const *s);
@@ -78,8 +77,8 @@ int		ft_unset(char **arg);
 void	ft_exit(t_data *line);
 
 /*			env_modif		*/
-char	*ft_getenv(char *name);
-int		create_env(char **env, char **envp);
+char	*ft_getenv(t_local *local, char *name);
+int		create_env(t_local *local, char **envp);
 int		unset_env(char *unset);
 int		export_env(char *env);
 int		print_env(char **arg);

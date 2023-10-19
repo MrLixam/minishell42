@@ -43,7 +43,7 @@ char	*ft_strmerge(char *s1, char *s2)
 	return (tmp);
 }
 
-char	*format_env_var(char *var)
+static char	*format_env_var(t_local *local, char *var)
 {
 	char	**split;
 	char	*new;
@@ -60,7 +60,7 @@ char	*format_env_var(char *var)
 	else
 	{
 		tmp2 = ft_substr(split[i], 1, ft_strlen(split[i]) + 1);
-		new = ft_getenv(tmp2);
+		new = ft_getenv(local, tmp2);
 		free (tmp2);
 		i++;
 	}
@@ -82,7 +82,7 @@ char	*format_env_var(char *var)
 		else if (split[i][0] == '$')
 		{
 			tmp2 = ft_substr(split[i], 1, ft_strlen(split[i]) + 1);
-			tmp = ft_getenv(tmp2);
+			tmp = ft_getenv(local, tmp2);
 			free (tmp2);
 			if (!tmp)
 			{
@@ -105,7 +105,7 @@ char	*format_env_var(char *var)
 	return (new);
 }
 
-int	swap_env_var(char **lex)
+int	swap_env_var(t_local *local, char **lex)
 {
 	int		i;
 	char	*tmp;
@@ -115,14 +115,17 @@ int	swap_env_var(char **lex)
 	{
 		if (ft_strchr(lex[i], '$') != NULL)
 		{
-			tmp = format_env_var(lex[i]);
+			tmp = format_env_var(local, lex[i]);
 			if (!tmp)
 				return (1);
 			free(lex[i]);
 			lex[i] = ft_strdup(tmp);
 			free(tmp);
 			if (!lex[i])
+			{
+				freetab(lex);
 				return (1);
+			}
 		}
 	}
 	return (0);

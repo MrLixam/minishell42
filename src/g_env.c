@@ -39,27 +39,27 @@ int	unset_env(char *unset)
 	return (0);
 }
 
-int	create_env(char	**env, char **envp)
+int	create_env(t_local *local, char **envp)
 {
 	int	i;
 
-	env = ft_calloc(ft_tabstrlen(envp) + 1, sizeof(char *));
-	if (env == NULL)
+	local->env = ft_calloc(ft_tabstrlen(envp) + 1, sizeof(char *));
+	if (local->env == NULL)
 		return (1);
 	i = -1;
 	while (envp[++i])
 	{
-		env[i] = ft_strdup(envp[i]);
-		if (env[i] == NULL)
+		local->env[i] = ft_strdup(envp[i]);
+		if (local->env[i] == NULL)
 		{
-			freetab(env);
+			freetab(local->env);
 			return (1);
 		}
 	}
 	return (0);
 }
 
-char	*ft_getenv(char *name)
+char	*ft_getenv(t_local *local, char *name)
 {
 	char	*ret_val;
 	char	*tmp;
@@ -68,13 +68,13 @@ char	*ft_getenv(char *name)
 	tmp = ft_strjoin(name, "=");
 	i = -1;
 	ret_val = NULL;
-	if (!g_env)
+	if (!local->env)
 		return (NULL);
-	while (g_env[++i])
+	while (local->env[++i])
 	{
-		if (!ft_strncmp(tmp, g_env[i], ft_strlen(tmp)))
+		if (!ft_strncmp(tmp, local->env[i], ft_strlen(tmp)))
 		{
-			ret_val = ft_substr(g_env[i], ft_strlen(tmp), ft_strlen(g_env[i]));
+			ret_val = ft_substr(local->env[i], ft_strlen(tmp), ft_strlen(local->env[i]));
 			if (ret_val == NULL)
 				return (NULL);
 			break ;

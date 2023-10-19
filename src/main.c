@@ -58,13 +58,20 @@ void	show_data(t_data *data, int i)
 		show_data(data->next, ++i);
 }
 
+static void	clear_local(t_local	*local)
+{
+	free(local);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char	*str;
-//	char	**lexer;
-	t_local	local;
+	t_local	*local;
 
-	create_env(local.env, envp);
+	local = ft_calloc(1, sizeof(t_local));
+	if (!local)
+		return (1);
+	create_env(local, envp);
 	g_exit = 0;
 	(void) argc;
 	(void) argv;
@@ -75,21 +82,13 @@ int	main(int argc, char **argv, char **envp)
 			return (1);
 		if (ft_strncmp(str, "\0", 2))
 			add_history(str);
-		//
 		parser(local, str);
-		/*
-		lexer = pre_parser(str);
-		if (lexer == NULL)
-			return (1);
-		local.data = parser(lexer);
-		freetab(lexer);
-		*/
-		if (local.data == NULL)
+		if (local->data == NULL)
 			return (1);
 	//	if (local->data->command != NULL)
-	//		exec(data);
-		show_data(local.data, 0);
-		clear_data(local.data);
+	//		exec(local->data);
+	//	show_data(local->data, 0);
+		clear_data(local->data);
 	}
-	//clear_local(local);
+	clear_local(local);
 }

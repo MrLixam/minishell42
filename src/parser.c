@@ -75,7 +75,7 @@ int	switcher(t_data *data)
 	}
 	return (0);
 }
-
+/*
 char	**pre_parser(char *lexer)
 {
 	char	**tmp;
@@ -93,7 +93,7 @@ char	**pre_parser(char *lexer)
 		return (0);
 	return (tmp);
 }
-
+*/
 t_data	*switch_elem(char **lexer)
 {
 	t_data	*first;
@@ -149,16 +149,17 @@ int	parser(t_local local, char *lexer)
 	if (check_quote(lexer))
 	{
 		write(1, "error\n", 6);
-		return (0);
+		return (1);
 	}
 	tmp = arg_sep(lexer);
 	free(lexer);
 	if (tmp == NULL)
-		return (0);
+		return (1);
 	if (swap_env_var(tmp))
-		return (0);
+		return (1);
 	if (tmp == NULL)
 		return (1);
-	local.data = parser(tmp);
+	local.data = switch_elem(tmp);
 	freetab(tmp);
+	return (0);
 }

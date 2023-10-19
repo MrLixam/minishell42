@@ -57,6 +57,7 @@ void	clear_data(t_data *data);
 int		new_arg(t_list **lst, char *arg);
 
 /*			parser			*/
+int		parser(t_local local, char *lexer);
 int		swap_env_var(char **lex);
 int		check_quote(char *readline);
 char	**pre_parser(char *lexer);

@@ -51,7 +51,7 @@ int	redir_present(t_data *command)
 	return (command->output != NULL || command->input != NULL);
 }
 
-int	exec_builtin(char **str, t_data *line)
+int	exec_builtin(t_local *local, char **str, t_data *line)
 {
 	int	len;
 
@@ -59,15 +59,15 @@ int	exec_builtin(char **str, t_data *line)
 	if (!ft_strncmp(line->command, "echo", len))
 		return (ft_echo(line->arg));
 	else if (!ft_strncmp(line->command, "cd", len))
-		return (ft_cd(str));
+		return (ft_cd(local, str));
 	else if (!ft_strncmp(line->command, "pwd", len))
 		return (ft_pwd());
 	else if (!ft_strncmp(line->command, "export", len))
-		return (ft_export(str));
+		return (ft_export(local, str));
 	else if (!ft_strncmp(line->command, "unset", len))
-		return (ft_unset(str));
+		return (ft_unset(local, str));
 	else if (!ft_strncmp(line->command, "env", len))
-		return (print_env(str));
+		return (print_env(local, str));
 	else if (!ft_strncmp(line->command, "exit", len))
 		ft_exit(line);
 	return (-1);

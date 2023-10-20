@@ -42,17 +42,17 @@ void fix_fd(int save[2])
 	close(save[1]);
 }
 
-static int	no_pipe(t_data *line)
+static int	no_pipe(t_local *local)
 {
 	char	**str;
 	int		var[2];
 	int 	save[2];
 
-	str = lst_to_str(line->arg, line->command);
-	if (is_builtin(line->command))
+	str = lst_to_str(local->data->arg, local->data->command);
+	if (is_builtin(local->data->command))
 	{
-		redir_single(line, save);
-		var[1] = exec_builtin(str, line);
+		redir_single(local->data, save);
+		var[1] = exec_builtin(local, str, local->data);
 		fix_fd(save);
 		return (var[1]);
 	}
@@ -61,16 +61,16 @@ static int	no_pipe(t_data *line)
 		perror("minishell: fork failed");
 	else if (!var[0])
 	{
-		redir_single(line, save);
-		var[1] = fix_path(&line);
+		redir_single(local->data, save);
+		var[1] = fix_path(&local->data);
 		if (var[1])
 		{
-			clear_data(line);
+			clear_data(local->data);
 			exit(127);
 		}
-		execve(line->command, str, g_env);
-		perror_filename("minishell: execve ", line->command);
-		clear_data(line);
+		execve(local->data->command, str, local->env);
+		perror_filename("minishell: execve ", local->data->command);
+		clear_data(local->data);
 	}
 	else
 		waitpid(var[0], &var[1], 0);
@@ -79,35 +79,30 @@ static int	no_pipe(t_data *line)
 	return (var[1]);
 }
 
-void	exec(t_data *line)
+void	exec(t_local *local)
 {
-	t_group	*group;
 	int		i;
 	int		ret;
 
 	i = 0;
-	if (data_len(line) > 1)
+	if (data_len(local->data) > 1)
 	{
-		group = ft_calloc(1, sizeof(t_group));
-		group->child_pid = ft_calloc(data_len(line), sizeof(int));
-		group->line = &line;
-		ret = pipeline(group);
+		local->child_pid = ft_calloc(data_len(local->data), sizeof(int));
+		ret = pipeline(local);
 		if (ret == -1)
 		{
-			free(group->child_pid);
-			free(group);
+			free(local->child_pid);
 			return ;
 		}
-		while (i < data_len(line))
-			waitpid(group->child_pid[i++], &ret, 0);
-		free(group->child_pid);
-		free(group);
+		while (i < data_len(local->data))
+			waitpid(local->child_pid[i++], &ret, 0);
+		free(local->child_pid);
 		if (WIFEXITED(ret))
 			ret = WEXITSTATUS(ret);
 	}
 	else
 	{
-		ret = no_pipe(line);
+		ret = no_pipe(local);
 		if (WIFEXITED(ret))
 			ret = WEXITSTATUS(ret);
 	}

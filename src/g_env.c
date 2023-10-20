@@ -12,30 +12,28 @@
 
 #include "minishell.h"
 
-char	**g_env;
-
-int	unset_env(char *unset)
+int	unset_env(t_local *local, char *unset)
 {
 	char	**new_env;
 	int		i;
 
 	if (!unset)
 		return (0);
-	new_env = ft_calloc(ft_tabstrlen(g_env), sizeof(char *));
+	new_env = ft_calloc(ft_tabstrlen(local->env), sizeof(char *));
 	i = -1;
-	while (new_env != NULL && g_env[++i])
+	while (new_env != NULL && local->env[++i])
 	{
-		if (ft_strncmp(g_env[i], unset, ft_strlen(g_env[i]) - ft_strlen(ft_strchr(g_env[i], '='))))
-			new_env[i] = ft_strdup(g_env[i]);
+		if (ft_strncmp(local->env[i], unset, ft_strlen(local->env[i]) - ft_strlen(ft_strchr(local->env[i], '='))))
+			new_env[i] = ft_strdup(local->env[i]);
 		if (new_env == NULL)
 		{
-			freetab(g_env);
+			freetab(local->env);
 			freetab(new_env);
 			return (1);
 		}
 	}
-	freetab(g_env);
-	g_env = new_env;
+	freetab(local->env);
+	local->env = new_env;
 	return (0);
 }
 
@@ -86,7 +84,7 @@ char	*ft_getenv(t_local *local, char *name)
 	return (ret_val);
 }
 
-int	print_env(char **arg)
+int	print_env(t_local *local, char **arg)
 {
 	int	i;
 
@@ -96,7 +94,7 @@ int	print_env(char **arg)
 		ft_putendl_fd("minishell: env: too many arguments", STDERR_FILENO);
 		return (7);
 	}
-	while (g_env[++i])
-		ft_putendl_fd(g_env[i], STDOUT_FILENO);
+	while (local->env[++i])
+		ft_putendl_fd(local->env[i], STDOUT_FILENO);
 	return (0);
 }

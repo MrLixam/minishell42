@@ -85,9 +85,9 @@ int	main(int argc, char **argv, char **envp)
 		parser(local, str);
 		if (local->data == NULL)
 			return (1);
-	//	if (local->data->command != NULL)
-	//		exec(local->data);
-	//	show_data(local->data, 0);
+		if (local->data->command != NULL)
+			exec(local);
+		//show_data(local->data, 0);
 		clear_data(local->data);
 	}
 	clear_local(local);

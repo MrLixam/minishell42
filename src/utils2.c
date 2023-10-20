@@ -20,14 +20,13 @@ void	close_pipe(int pipes[2])
 	close(pipes[1]);
 }
 
-void	clean_child(t_group *group, t_data *curr, int pipes[2], int fd)
+void	clean_child(t_local *local, t_data *curr, int pipes[2], int fd)
 {
 	close_pipe(pipes);
-	if (curr != *group->line)
+	if (curr != local->data)
 		close(fd);
-	clear_data(*group->line);
-	free(group->child_pid);
-	free(group);
+	clear_data(local->data);
+	free(local->child_pid);
 	exit(errno);
 }
 
@@ -73,11 +72,10 @@ int	fix_path(t_data **line)
 	return (1);
 }
 
-int	ft_error(char *message, t_group *group)
+int	ft_error(char *message, t_local *local)
 {
 	perror(message);
-	clear_data(*group->line);
-	free(group);
-	free(group->child_pid);
+	clear_data(local->data);
+	free(local->child_pid);
 	return (-1);
 }

@@ -85,21 +85,21 @@ void	redirect(int in, int out, t_data *curr, int redir[2])
 	redir[1] = redir_out(curr, out);
 }
 
-void	link_redir(int pipes[2], int fd, t_data *curr, t_group *group)
+void	link_redir(int pipes[2], int fd, t_data *curr, t_local *local)
 {
 	int	redir[2];
 
 	redirect(fd, pipes[1], curr, redir);
 	if (redir[0] == -1 || redir[1] == -1)
-		clean_child(group, curr, pipes, fd);
-	if (curr != *group->line && curr->next != NULL)
+		clean_child(local, curr, pipes, fd);
+	if (curr != local->data && curr->next != NULL)
 	{
 		dup2(redir[0], STDIN_FILENO);
 		dup2(redir[1], STDOUT_FILENO);
 		close(redir[0]);
 		close_pipe(pipes);
 	}
-	else if (curr == *group->line)
+	else if (curr == local->data)
 	{
 		dup2(redir[1], STDOUT_FILENO);
 		close(redir[1]);

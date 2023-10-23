@@ -23,7 +23,8 @@ int	unset_env(t_local *local, char *unset)
 	i = -1;
 	while (new_env != NULL && local->env[++i])
 	{
-		if (ft_strncmp(local->env[i], unset, ft_strlen(local->env[i]) - ft_strlen(ft_strchr(local->env[i], '='))))
+		if (ft_strncmp(local->env[i], unset, ft_strlen(local->env[i]) \
+			- ft_strlen(ft_strchr(local->env[i], '='))))
 			new_env[i] = ft_strdup(local->env[i]);
 		if (new_env == NULL)
 		{
@@ -72,7 +73,8 @@ char	*ft_getenv(t_local *local, char *name)
 	{
 		if (!ft_strncmp(tmp, local->env[i], ft_strlen(tmp)))
 		{
-			ret_val = ft_substr(local->env[i], ft_strlen(tmp), ft_strlen(local->env[i]));
+			ret_val = ft_substr(local->env[i], ft_strlen(tmp), \
+						ft_strlen(local->env[i]));
 			if (ret_val == NULL)
 				return (NULL);
 			break ;

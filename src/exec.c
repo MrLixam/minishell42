@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/18 03:48:38 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/23 15:14:46 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	redir_single(t_data *line, int save[2])
 	}
 }
 
-void fix_fd(int save[2])
+void	fix_fd(int save[2])
 {
 	dup2(save[0], STDIN_FILENO);
 	dup2(save[1], STDOUT_FILENO);
@@ -46,7 +46,7 @@ static int	no_pipe(t_local *local)
 {
 	char	**str;
 	int		var[2];
-	int 	save[2];
+	int		save[2];
 
 	str = lst_to_str(local->data->arg, local->data->command);
 	if (is_builtin(local->data->command))
@@ -75,7 +75,6 @@ static int	no_pipe(t_local *local)
 	else
 		waitpid(var[0], &var[1], 0);
 	freetab(str);
-
 	return (var[1]);
 }
 
@@ -106,5 +105,5 @@ void	exec(t_local *local)
 		if (WIFEXITED(ret))
 			ret = WEXITSTATUS(ret);
 	}
-	g_exit = ret;
+	local->exit_code = ret;
 }

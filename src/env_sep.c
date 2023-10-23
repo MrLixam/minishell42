@@ -13,17 +13,13 @@
 #include "minishell.h"
 #include "../libft/libft.h"
 
-static int	cut(char const *s)
+static int	cut(char const *s, int s_quote, int d_quote)
 {
 	int	i;
 	int	nb_arg;
-	int	s_quote;
-	int	d_quote;
 
 	i = -1;
 	nb_arg = 1;
-	s_quote = 1;
-	d_quote = 1;
 	if (!*s)
 		return (0);
 	while (s[++i])
@@ -86,7 +82,7 @@ char	**env_sep(char const *s)
 	j = 0;
 	if (!s)
 		return (0);
-	args = ft_calloc(cut(s) + 1, sizeof(char *));
+	args = ft_calloc(cut(s, 1, 1) + 1, sizeof(char *));
 	if (!args)
 		return (args);
 	while (s[i] && s)

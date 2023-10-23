@@ -6,100 +6,100 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:28:26 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/17 13:30:06 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/23 15:25:37 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_quote(char *readline)
+static int	elem_exit(t_local *local, char *new)
 {
-	int	one;
-	int	two;
-	int	i;
+	char	*tmp;
 
-	i = -1;
-	one = 1;
-	two = 1;
-	while (readline[++i])
-	{
-		if (readline[i] == 39 && two > 0)
-			one *= -1;
-		else if (readline[i] == 34 && one > 0)
-			two *= -1;
-	}
-	if (one < 0 || two < 0)
+	tmp = ft_itoa(local->exit_code);
+	if (!tmp)
 		return (1);
+	ft_strlcat(new, tmp, ft_strlen(new) + ft_strlen(tmp) + 1);
+	free(tmp);
 	return (0);
 }
 
-char	*ft_strmerge(char *s1, char *s2)
+static int	elem_add(t_local *local, char **split, char **new, int i)
 {
 	char	*tmp;
+	char	*tmp2;
 
-	tmp = ft_strjoin(s1, s2);
-	free(s1);
-	free(s2);
-	return (tmp);
+	tmp2 = ft_substr(split[i], 1, ft_strlen(split[i]) + 1);
+	tmp = ft_getenv(local, tmp2);
+	free (tmp2);
+	if (!tmp)
+	{
+		freetab(split);
+		free(new);
+		return (1);
+	}
+	*new = ft_strmerge(*new, tmp);
+	if (!*new)
+	{
+		freetab(split);
+		return (1);
+	}
+	return (0);
 }
 
-static char	*format_env_var(t_local *local, char *var)
+static char	*elem_first(t_local *local, char **split, int *i)
 {
-	char	**split;
-	char	*new;
-	char	*tmp2;
 	char	*tmp;
-	int		i;
+	char	*new;
 
-	i = 0 + ft_strncmp(var, "$", 1) != 0;
-	split = env_sep(var);
-	if (!split)
-		return (NULL);
-	if (i)
+	if (*i)
+	{
 		new = ft_strdup(split[0]);
+		*i -= 1;
+	}
+	else if (!ft_strncmp(split[*i], "$?", 2))
+		new = ft_itoa(local->exit_code);
 	else
 	{
-		tmp2 = ft_substr(split[i], 1, ft_strlen(split[i]) + 1);
-		new = ft_getenv(local, tmp2);
-		free (tmp2);
-		i++;
+		tmp = ft_substr(split[*i], 1, ft_strlen(split[*i]) + 1);
+		new = ft_getenv(local, tmp);
+		free (tmp);
 	}
 	if (!new)
 	{
 		freetab(split);
 		return (NULL);
 	}
-	while (split[i])
+	return (new);
+}
+
+static char	*format_env_var(t_local *local, char *var)
+{
+	char	**split;
+	char	*new;
+	int		i;
+
+	i = 0 + ft_strncmp(var, "$", 1) != 0;
+	split = env_sep(var);
+	if (!split)
+		return (NULL);
+	new = elem_first(local, split, &i);
+	if (!new)
+		return (NULL);
+	while (split[++i])
 	{
 		if (!ft_strncmp(split[i], "$?", 2))
 		{
-			tmp = ft_itoa(g_exit);
-			if (!tmp)
+			if (elem_exit(local, new))
 				return (NULL);
-			ft_strlcat(new, tmp, ft_strlen(new) + ft_strlen(tmp) + 1);
-			free(tmp);
 		}
 		else if (split[i][0] == '$')
 		{
-			tmp2 = ft_substr(split[i], 1, ft_strlen(split[i]) + 1);
-			tmp = ft_getenv(local, tmp2);
-			free (tmp2);
-			if (!tmp)
-			{
-				freetab(split);
-				free(new);
+			if (elem_add(local, split, &new, i))
 				return (NULL);
-			}
-			new = ft_strmerge(new, tmp);
-			if (!new)
-			{
-				freetab(split);
-				return (NULL);
-			}
 		}
 		else
 			ft_strlcat(new, split[i], ft_strlen(new) + ft_strlen(split[i]) + 1);
-		i++;
 	}
 	freetab(split);
 	return (new);

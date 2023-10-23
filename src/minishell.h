@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/18 16:17:34 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/23 15:09:26 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,14 @@ typedef struct s_local
 {
 	char			**env;
 	struct s_data	*data;
-	int		*child_pid;
+	int				*child_pid;
+	int				exit_code;
 }	t_local;
 
 typedef struct s_data
 {
 	char			*command;
-	t_list			*redirection;
+	t_list			*redir;
 	t_list			*input;
 	t_list			*output;
 	t_list			*arg;
@@ -40,6 +41,7 @@ typedef struct s_data
 
 /*			prototype		*/
 void	freetab(char **tab);
+char	*ft_strmerge(char *s1, char *s2);
 int		ft_strmcmp(char *s1, char *s2);
 
 /*			data			*/
@@ -50,6 +52,7 @@ void	clear_data(t_data *data);
 int		new_arg(t_list **lst, char *arg);
 
 /*			parser			*/
+int		check_quote(char *readline);
 int		parser(t_local *local, char *lexer);
 int		swap_env_var(t_local *local, char **lex);
 int		check_quote(char *readline);

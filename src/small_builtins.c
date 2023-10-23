@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
+#include <readline/readline.h>
 
 int	ft_pwd(void)
 {
@@ -87,6 +88,21 @@ int	ft_unset(char **arg)
 
 void	ft_exit(t_data *line)
 {
+	int	exit_code;
+
+	exit_code = 0;
+	if (line->arg)
+	{
+		if (ft_lstsize(line->arg) > 1)
+		{
+			ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
+			return ;
+		}
+		exit_code = ft_atoi(line->arg->content);
+		if (exit_code < 0)
+			exit_code = 256 + exit_code;
+	}
 	clear_data(line);
-	exit(0);
+	rl_clear_history();
+	exit(exit_code);
 }

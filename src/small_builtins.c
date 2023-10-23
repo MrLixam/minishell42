@@ -93,6 +93,21 @@ void	ft_exit(t_data *line)
 	exit_code = 0;
 	if (line->arg)
 	{
+		while (line->arg)
+		{
+			while (line->arg->content)
+			{
+				if (!ft_isdigit(*(char *)line->arg->content))
+				{
+					ft_putendl_fd("minishell: exit: numeric argument required", STDERR_FILENO);
+					clear_data(line);
+					rl_clear_history();
+					exit(2);
+				}
+				line->arg->content++;
+			}
+			line->arg = line->arg->next;
+		}
 		if (ft_lstsize(line->arg) > 1)
 		{
 			ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);

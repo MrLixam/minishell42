@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/17 14:33:41 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/23 09:26:06 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 #include <readline/history.h>
 #include "minishell.h"
 #include <fcntl.h>
-
+#include <signal.h>
 int	g_exit;
 
-/*void	show_data(t_data *data, int i)
+void	show_data(t_data *data, int i)
 {
 	int	j;
 	t_list *tmp;
@@ -56,7 +56,22 @@ int	g_exit;
 	}
 	if (data->next != NULL)
 		show_data(data->next, ++i);
-}*/
+}
+
+void	signal_handler(int sig)
+{
+	if (sig == SIGINT)
+	{
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+	if (sig == SIGQUIT)
+	{
+		printf("PLACEHOLDER\n");
+	}
+}
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -68,6 +83,8 @@ int	main(int argc, char **argv, char **envp)
 	g_exit = 0;
 	(void) argc;
 	(void) argv;
+	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, signal_handler);
 	while (1)
 	{
 		str = readline("\e[94mminishell\e[0m$ ");

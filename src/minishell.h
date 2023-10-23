@@ -18,7 +18,6 @@
 # include "../libft/get_next_line.h"
 
 /*			global			*/
-extern char		**g_env;
 extern int		g_exit;
 /*			struct			*/
 
@@ -26,6 +25,7 @@ typedef struct s_local
 {
 	char			**env;
 	struct s_data	*data;
+	int		*child_pid;
 }	t_local;
 
 typedef struct s_data
@@ -37,12 +37,6 @@ typedef struct s_data
 	t_list			*arg;
 	struct s_data	*next;
 }	t_data;
-
-typedef struct s_group
-{
-	int		*child_pid;
-	t_data	**line;
-}	t_group;
 
 /*			prototype		*/
 void	freetab(char **tab);
@@ -66,38 +60,38 @@ t_data	*switch_elem(char **lexer);
 char	*ft_strmerge(char *s1, char *s2);
 
 /*			exec			*/
-void	exec(t_data *line);
+void	exec(t_local *local);
 
 /*			builtins		*/
 int		ft_pwd(void);
-int		ft_cd(char **arg);
+int		ft_cd(t_local *local, char **arg);
 int		ft_echo(t_list *arg);
-int		ft_export(char **arg);
-int		ft_unset(char **arg);
+int		ft_export(t_local *local, char **arg);
+int		ft_unset(t_local *local, char **arg);
 void	ft_exit(t_data *line);
 
 /*			env_modif		*/
 char	*ft_getenv(t_local *local, char *name);
 int		create_env(t_local *local, char **envp);
-int		unset_env(char *unset);
-int		export_env(char *env);
-int		print_env(char **arg);
+int		unset_env(t_local *local, char *unset);
+int		export_env(t_local *local, char *env);
+int		print_env(t_local *local, char **arg);
 
 /*			error			*/
 int		perror_filename(char *command, char *filename);
-int		ft_error(char *message, t_group *group);
+int		ft_error(char *message, t_local *local);
 
 /*			execution		*/
-void	link_redir(int pipes[2], int fd, t_data *curr, t_group *group);
+void	link_redir(int pipes[2], int fd, t_data *curr, t_local *local);
 int		is_builtin(char *command);
 int		file_access(char *path);
 char	**lst_to_str(t_list *lst, char *command);
 int		redir_present(t_data *command);
-int		exec_builtin(char **str, t_data *line);
+int		exec_builtin(t_local *local, char **str, t_data *line);
 int		fix_path(t_data **line);
-void	clean_child(t_group *group, t_data *curr, int pipes[2], int fd);
+void	clean_child(t_local *local, t_data *curr, int pipes[2], int fd);
 void	close_pipe(int pipes[2]);
 void	redirect(int in, int out, t_data *curr, int redir[2]);
-int		pipeline(t_group *group);
+int		pipeline(t_local *local);
 
 #endif

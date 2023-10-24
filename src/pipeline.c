@@ -37,7 +37,7 @@ static void	do_logic(int pipes[2], int fd, t_data *curr, t_local *local)
 	if (i)
 	{
 		freetab(str);
-		exit_command(local, curr, fd, pipes, str);
+		exit_command(local, curr, fd, pipes);
 	}
 	execve(curr->command, str, local->env);
 	perror("minishell");

@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
+#include <readline/readline.h>
 
 int	ft_pwd(void)
 {
@@ -85,8 +86,35 @@ int	ft_unset(t_local *local, char **arg)
 	return (0);
 }
 
-void	ft_exit(t_data *line)
+void	ft_exit(t_local *local)
 {
-	clear_data(line);
-	exit(0);
+	int	exit_code;
+
+	exit_code = 0;
+	if (local->data->arg)
+	{
+		while (local->data->arg)
+		{
+			while (local->data->arg->content)
+			{
+				if (!ft_isdigit(*(char *)local->data->arg->content))
+				{
+					ft_putendl_fd("minishell: exit: numeric argument required", STDERR_FILENO);
+					exit(clear_local(local, 2));
+				}
+				local->data->arg->content++;
+			}
+			local->data->arg = local->data->arg->next;
+		}
+		if (ft_lstsize(local->data->arg) > 1)
+		{
+			ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
+			return ;
+		}
+		exit_code = ft_atoi(local->data->arg->content);
+		if (exit_code < 0)
+			exit_code = 256 + exit_code;
+	}
+	rl_clear_history();
+	exit(clear_local(local, exit_code));
 }

@@ -22,6 +22,7 @@ void	close_pipe(int pipes[2])
 
 void	clean_child(t_local *local, t_data *curr, int pipes[2], int fd)
 {
+	freetab(local->env);
 	close_pipe(pipes);
 	if (curr != local->data)
 		close(fd);
@@ -40,15 +41,15 @@ int	perror_filename(char *command, char *filename)
 	return (-1);
 }
 
-int	fix_path(t_data **line)
+int	fix_path(t_local *local, t_data *curr)
 {
 	char	*path;
 	char	**path_tab;
 	char	*tmp;
 	int		i;
 
-	path = getenv("PATH");
-	if (path == NULL || file_access((*line)->command) == 0)
+	path = ft_getenv(local, "PATH");
+	if (path == NULL || file_access(curr->command) == 0)
 		return (0);
 	path_tab = ft_split(path, ':');
 	i = -1;
@@ -56,19 +57,18 @@ int	fix_path(t_data **line)
 	{
 		tmp = ft_strjoin(path_tab[i], "/");
 		free(path_tab[i]);
-		path_tab[i] = ft_strjoin(tmp, (*line)->command);
+		path_tab[i] = ft_strjoin(tmp, curr->command);
 		free(tmp);
 		if (!file_access(path_tab[i]))
 		{
-			free((*line)->command);
-			(*line)->command = ft_strdup(path_tab[i]);
+			free(curr->command);
+			curr->command = ft_strdup(path_tab[i]);
 			freetab(path_tab);
 			return (0);
 		}
 	}
 	freetab(path_tab);
-	ft_putstr_fd((*line)->command, 2);
-	ft_putendl_fd(": command not found", 2);
+	path_error(curr->command);
 	return (1);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/23 15:09:26 by r                ###   ########.fr       */
+/*   Updated: 2023/10/24 15:37:51 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,8 @@ typedef struct s_data
 }	t_data;
 
 /*			prototype		*/
-void	freetab(char **tab);
-char	*ft_strmerge(char *s1, char *s2);
 int		ft_strmcmp(char *s1, char *s2);
+int		clear_local(t_local	*local, int exit_code);
 
 /*			data			*/
 t_data	*new_data(void);
@@ -71,7 +70,7 @@ int		ft_cd(t_local *local, char **arg);
 int		ft_echo(t_list *arg);
 int		ft_export(t_local *local, char **arg);
 int		ft_unset(t_local *local, char **arg);
-void	ft_exit(t_data *line);
+void	ft_exit(t_local *local);
 
 /*			env_modif		*/
 char	*ft_getenv(t_local *local, char *name);
@@ -83,6 +82,7 @@ int		print_env(t_local *local, char **arg);
 /*			error			*/
 int		perror_filename(char *command, char *filename);
 int		ft_error(char *message, t_local *local);
+void	path_error(char *filename);
 
 /*			execution		*/
 void	link_redir(int pipes[2], int fd, t_data *curr, t_local *local);
@@ -91,7 +91,7 @@ int		file_access(char *path);
 char	**lst_to_str(t_list *lst, char *command);
 int		redir_present(t_data *command);
 int		exec_builtin(t_local *local, char **str, t_data *line);
-int		fix_path(t_data **line);
+int		fix_path(t_local *local, t_data *curr);
 void	clean_child(t_local *local, t_data *curr, int pipes[2], int fd);
 void	close_pipe(int pipes[2]);
 void	redirect(int in, int out, t_data *curr, int redir[2]);

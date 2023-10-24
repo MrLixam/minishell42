@@ -37,13 +37,10 @@ int	file_access(char *path)
 
 int	is_builtin(char *command)
 {
-	int	l;
-
-	l = ft_strlen(command);
-	return (!ft_strncmp(command, "echo", l) || !ft_strncmp(command, "cd", l)
-		|| !ft_strncmp(command, "pwd", l) || !ft_strncmp(command, "export", l)
-		|| !ft_strncmp(command, "unset", l) || !ft_strncmp(command, "env", l)
-		|| !ft_strncmp(command, "exit", l));
+	return (!ft_strmcmp(command, "echo") || !ft_strmcmp(command, "cd")
+		|| !ft_strmcmp(command, "pwd") || !ft_strmcmp(command, "export")
+		|| !ft_strmcmp(command, "unset") || !ft_strmcmp(command, "env")
+		|| !ft_strmcmp(command, "exit"));
 }
 
 int	redir_present(t_data *command)
@@ -56,19 +53,22 @@ int	exec_builtin(t_local *local, char **str, t_data *line)
 	int	len;
 
 	len = ft_strlen(line->command);
-	if (!ft_strncmp(line->command, "echo", len))
+	if (!ft_strmcmp(line->command, "echo"))
 		return (ft_echo(line->arg));
-	else if (!ft_strncmp(line->command, "cd", len))
+	else if (!ft_strmcmp(line->command, "cd"))
 		return (ft_cd(local, str));
-	else if (!ft_strncmp(line->command, "pwd", len))
+	else if (!ft_strmcmp(line->command, "pwd"))
 		return (ft_pwd());
-	else if (!ft_strncmp(line->command, "export", len))
+	else if (!ft_strmcmp(line->command, "export"))
 		return (ft_export(local, str));
-	else if (!ft_strncmp(line->command, "unset", len))
+	else if (!ft_strmcmp(line->command, "unset"))
 		return (ft_unset(local, str));
-	else if (!ft_strncmp(line->command, "env", len))
+	else if (!ft_strmcmp(line->command, "env"))
 		return (print_env(local, str));
-	else if (!ft_strncmp(line->command, "exit", len))
-		ft_exit(line);
+	else if (!ft_strmcmp(line->command, "exit"))
+	{
+		freetab(str);
+		ft_exit(local);
+	}
 	return (-1);
 }

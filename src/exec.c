@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/23 15:14:46 by r                ###   ########.fr       */
+/*   Updated: 2023/10/24 15:37:24 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,15 +62,14 @@ static int	no_pipe(t_local *local)
 	else if (!var[0])
 	{
 		redir_single(local->data, save);
-		var[1] = fix_path(&local->data);
-		if (var[1])
+		if (fix_path(local, local->data))
 		{
-			clear_data(local->data);
-			exit(127);
+			freetab(str);
+			exit(clear_local(local, 127));
 		}
 		execve(local->data->command, str, local->env);
 		perror_filename("minishell: execve ", local->data->command);
-		clear_data(local->data);
+		clear_local(local, 0);
 	}
 	else
 		waitpid(var[0], &var[1], 0);
@@ -96,14 +95,10 @@ void	exec(t_local *local)
 		while (i < data_len(local->data))
 			waitpid(local->child_pid[i++], &ret, 0);
 		free(local->child_pid);
-		if (WIFEXITED(ret))
-			ret = WEXITSTATUS(ret);
 	}
 	else
-	{
 		ret = no_pipe(local);
-		if (WIFEXITED(ret))
-			ret = WEXITSTATUS(ret);
-	}
+	if (WIFEXITED(ret))
+	ret = WEXITSTATUS(ret);
 	local->exit_code = ret;
 }

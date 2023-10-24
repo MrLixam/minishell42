@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/23 15:10:04 by r                ###   ########.fr       */
+/*   Updated: 2023/10/24 15:09:54 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,23 @@
 #include "minishell.h"
 #include <fcntl.h>
 
-static void	clear_local(t_local	*local)
+static void	init_local(t_local *local, char **envp)
 {
+	local->child_pid = NULL;
+	local->env = NULL;
+	local->exit_code = 0;
+	create_env(local, envp);
+}
+
+int	clear_local(t_local	*local, int exit_code)
+{
+	if (local->env)
+		freetab(local->env);
+	clear_data(local->data);
+	if (local->child_pid)
+		free(local->child_pid);
 	free(local);
+	return (exit_code);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -29,8 +43,7 @@ int	main(int argc, char **argv, char **envp)
 	local = ft_calloc(1, sizeof(t_local));
 	if (!local)
 		return (1);
-	create_env(local, envp);
-	local->exit_code = 0;
+	init_local(local, envp);
 	(void) argc;
 	(void) argv;
 	while (1)
@@ -46,6 +59,6 @@ int	main(int argc, char **argv, char **envp)
 		if (local->data->command != NULL)
 			exec(local);
 		clear_data(local->data);
+		local->child_pid = NULL;
 	}
-	clear_local(local);
 }

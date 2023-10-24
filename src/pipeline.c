@@ -19,9 +19,7 @@ static void	exit_command(t_local *local, t_data *curr, int fd, int pipes[2])
 	close_pipe(pipes);
 	if (curr != local->data)
 		close(fd);
-	clear_data(local->data);
-	free(local->child_pid);
-	exit(127);
+	exit(clear_local(local, 127));
 }
 
 static void	do_logic(int pipes[2], int fd, t_data *curr, t_local *local)
@@ -32,8 +30,12 @@ static void	do_logic(int pipes[2], int fd, t_data *curr, t_local *local)
 	link_redir(pipes, fd, curr, local);
 	str = lst_to_str(curr->arg, curr->command);
 	if (is_builtin(curr->command))
-		exit(exec_builtin(local, str, curr));
-	i = fix_path(&curr);
+	{
+		i = exec_builtin(local, str, curr);
+		freetab(str);
+		exit(i);
+	}
+	i = fix_path(local, curr);
 	if (i)
 	{
 		freetab(str);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:23 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/24 13:51:35 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/24 16:49:51 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ int	parser(t_local *local, char *lexer)
 	local->data = new_data();
 	if (!local->data)
 		return (1);
-	if (switch_elem(tmp, local->data))
+	if (!switch_elem(tmp, local->data))
 		return (1);
 	freetab(tmp);
 	return (0);

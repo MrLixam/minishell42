@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 16:12:41 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/18 16:13:05 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/24 12:19:25 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	clear_data(t_data *data)
 {
 	ft_lstclear(&data->input, *free);
 	ft_lstclear(&data->output, *free);
+	ft_lstclear(&data->redir, *free);
 	free(data->command);
 	ft_lstclear(&data->arg, *free);
 	if (data->next != NULL)

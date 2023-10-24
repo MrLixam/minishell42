@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:28:26 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/23 15:25:37 by r                ###   ########.fr       */
+/*   Updated: 2023/10/24 13:58:06 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,16 +89,12 @@ static char	*format_env_var(t_local *local, char *var)
 	while (split[++i])
 	{
 		if (!ft_strncmp(split[i], "$?", 2))
-		{
 			if (elem_exit(local, new))
 				return (NULL);
-		}
-		else if (split[i][0] == '$')
-		{
+		if (ft_strncmp(split[i], "$?", 2) && (split[i][0] == '$'))
 			if (elem_add(local, split, &new, i))
 				return (NULL);
-		}
-		else
+		if (ft_strncmp(split[i], "$?", 2) && !(split[i][0] == '$'))
 			ft_strlcat(new, split[i], ft_strlen(new) + ft_strlen(split[i]) + 1);
 	}
 	freetab(split);

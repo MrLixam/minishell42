@@ -6,7 +6,7 @@
 /*   By: gpouzet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 16:51:08 by gpouzet           #+#    #+#             */
-/*   Updated: 2022/11/22 16:44:56 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/24 11:36:05 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_printf.h"
@@ -37,7 +37,7 @@ int	ft_int(int i, int pad[3], int btwo[3])
 	if (btwo[1] && i >= 0 && !btwo[2])
 		size += ft_space(1, ' ');
 	if ((i < 0 && pad[1] > (int)size && i != -2147483648) || btwo[1] || btwo[2])
-			pad[0]--;
+		pad[0]--;
 	size += ft_phase_one(size, pad[0], pad[1], pad[2]);
 	if (i < 0 && pad[2] == 1 && pad[1] > 0 && i != -2147483648)
 		size--;

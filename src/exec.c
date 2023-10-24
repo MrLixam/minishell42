@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/24 17:12:21 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/24 18:40:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <sys/wait.h>
+#include <signal.h>
 
 static void	redir_single(t_data *line, int save[2])
 {
@@ -44,6 +45,7 @@ void	fix_fd(int save[2])
 
 static void	fork_logic(t_local *local, int save[2], char **str)
 {
+	signal(SIGQUIT, signal_handler);
 	redir_single(local->data, save);
 	if (fix_path(local, local->data))
 	{
@@ -102,6 +104,6 @@ void	exec(t_local *local)
 	else
 		ret = no_pipe(local);
 	if (WIFEXITED(ret))
-	ret = WEXITSTATUS(ret);
+		ret = WEXITSTATUS(ret);
 	local->exit_code = ret;
 }

@@ -50,9 +50,6 @@ int	redir_present(t_data *command)
 
 int	exec_builtin(t_local *local, char **str, t_data *line)
 {
-	int	len;
-
-	len = ft_strlen(line->command);
 	if (!ft_strmcmp(line->command, "echo"))
 		return (ft_echo(line->arg));
 	else if (!ft_strmcmp(line->command, "cd"))

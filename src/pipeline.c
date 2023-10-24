@@ -13,6 +13,7 @@
 #include "minishell.h"
 #include <stdio.h>
 #include <errno.h>
+#include <signal.h>
 
 static void	exit_command(t_local *local, t_data *curr, int fd, int pipes[2])
 {
@@ -41,6 +42,7 @@ static void	do_logic(int pipes[2], int fd, t_data *curr, t_local *local)
 		freetab(str);
 		exit_command(local, curr, fd, pipes);
 	}
+	signal(SIGQUIT, signal_handler);
 	execve(curr->command, str, local->env);
 	perror("minishell");
 	freetab(str);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/24 15:42:41 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/24 18:39:47 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_data
 /*			prototype		*/
 int		ft_strmcmp(char *s1, char *s2);
 int		clear_local(t_local	*local, int exit_code);
+void	signal_handler(int sig);
 
 /*			data			*/
 t_data	*new_data(void);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/24 15:09:54 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/24 18:39:32 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <readline/history.h>
 #include "minishell.h"
 #include <fcntl.h>
+#include <signal.h>
 
 static void	init_local(t_local *local, char **envp)
 {
@@ -35,6 +36,21 @@ int	clear_local(t_local	*local, int exit_code)
 	return (exit_code);
 }
 
+void	signal_handler(int sig)
+{
+	if (sig == SIGINT)
+	{
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+	if (sig == SIGQUIT)
+	{
+		printf("Quit\n");
+	}
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char	*str;
@@ -46,6 +62,8 @@ int	main(int argc, char **argv, char **envp)
 	init_local(local, envp);
 	(void) argc;
 	(void) argv;
+	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
 		str = readline("\e[94mminishell\e[0m$ ");

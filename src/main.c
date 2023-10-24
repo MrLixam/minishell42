@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/23 09:26:06 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/23 15:40:49 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include "minishell.h"
 #include <fcntl.h>
 #include <signal.h>
+#include <termios.h>
+
 int	g_exit;
 
 void	show_data(t_data *data, int i)
@@ -69,20 +71,25 @@ void	signal_handler(int sig)
 	}
 	if (sig == SIGQUIT)
 	{
-		printf("PLACEHOLDER\n");
+		return ;
 	}
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	char	*str;
-	char	**lexer;
-	t_data	*data;
+	char			*str;
+	char			**lexer;
+	t_data			*data;
+	struct termios	term[2];
 
 	create_env(envp);
 	g_exit = 0;
 	(void) argc;
 	(void) argv;
+	tcgetattr(STDIN_FILENO, &term[0]);
+	tcgetattr(STDIN_FILENO, &term[1]);
+	term.c_lflag &= ~(ICANON | ECHO);
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, signal_handler);
 	while (1)

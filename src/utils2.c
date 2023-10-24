@@ -44,30 +44,28 @@ int	perror_filename(char *command, char *filename)
 int	fix_path(t_local *local, t_data *curr)
 {
 	char	*path;
-	char	**path_tab;
+	char	**tab;
 	char	*tmp;
 	int		i;
 
 	path = ft_getenv(local, "PATH");
 	if (path == NULL || file_access(curr->command) == 0)
 		return (0);
-	path_tab = ft_split(path, ':');
+	tab = ft_split(path, ':');
 	i = -1;
-	while (path_tab[++i])
+	while (tab[++i])
 	{
-		tmp = ft_strjoin(path_tab[i], "/");
-		free(path_tab[i]);
-		path_tab[i] = ft_strjoin(tmp, curr->command);
-		free(tmp);
-		if (!file_access(path_tab[i]))
+		tmp = ft_strmerge(ft_strjoin(tab[i], "/"), ft_strdup(curr->command));
+		if (!file_access(tmp))
 		{
 			free(curr->command);
-			curr->command = ft_strdup(path_tab[i]);
-			freetab(path_tab);
+			curr->command = tmp;
+			freetab(tab);
 			return (0);
 		}
+		free(tmp);
 	}
-	freetab(path_tab);
+	freetab(tab);
 	path_error(curr->command);
 	return (1);
 }

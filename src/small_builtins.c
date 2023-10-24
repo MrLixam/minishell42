@@ -84,4 +84,3 @@ int	ft_unset(t_local *local, char **arg)
 		unset_env(local, arg[i]);
 	return (0);
 }
-

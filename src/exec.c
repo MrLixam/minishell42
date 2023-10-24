@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/24 15:37:24 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/24 17:12:21 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,19 @@ void	fix_fd(int save[2])
 	close(save[1]);
 }
 
+static void	fork_logic(t_local *local, int save[2], char **str)
+{
+	redir_single(local->data, save);
+	if (fix_path(local, local->data))
+	{
+		freetab(str);
+		exit(clear_local(local, 127));
+	}
+	execve(local->data->command, str, local->env);
+	perror_filename("minishell: execve ", local->data->command);
+	clear_local(local, 0);
+}
+
 static int	no_pipe(t_local *local)
 {
 	char	**str;
@@ -60,17 +73,7 @@ static int	no_pipe(t_local *local)
 	if (var[0] < 0)
 		perror("minishell: fork failed");
 	else if (!var[0])
-	{
-		redir_single(local->data, save);
-		if (fix_path(local, local->data))
-		{
-			freetab(str);
-			exit(clear_local(local, 127));
-		}
-		execve(local->data->command, str, local->env);
-		perror_filename("minishell: execve ", local->data->command);
-		clear_local(local, 0);
-	}
+		fork_logic(local, save, str);
 	else
 		waitpid(var[0], &var[1], 0);
 	freetab(str);

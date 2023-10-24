@@ -6,49 +6,13 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:23 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/23 15:57:10 by r                ###   ########.fr       */
+/*   Updated: 2023/10/24 13:51:35 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	redir(t_list **redir, char *lexer, int i, int j)
-{
-	t_list	*tmp;
-
-	ft_lstadd_back(redir, ft_lstnew(ft_substr(lexer, j, i - j)));
-	tmp = ft_lstlast(*redir);
-	if (tmp == NULL)
-		return (1);
-	return (0);
-}
-
-int	redirection(char *lexer, t_data *data)
-{
-	int		i;
-	int		j;
-
-	i = 0;
-	while (lexer[i])
-	{
-		j = i;
-		while (lexer[i] == '<' || lexer[i] == '>')
-			i++;
-		if (i - j > 2 && ft_strncmp(lexer + j, "<<<", i - j))
-			return (1);
-		if (redir(&data->redir, lexer, i, j))
-			return (1);
-		j = i;
-		while (lexer[i] && lexer[i] != '<' && lexer[i] != '>')
-			i++;
-		if (i - j > 0)
-			if (redir(&data->redir, lexer, i, j))
-				return (1);
-	}
-	return (0);
-}
-
-int	switcher(t_data *data, t_list *src)
+static int	switcher(t_data *data, t_list *src)
 {
 	while (src != NULL)
 	{
@@ -77,42 +41,65 @@ int	switcher(t_data *data, t_list *src)
 	return (0);
 }
 
-t_data	*switch_elem(char **lexer)
+static int	elem_dispatch(t_data *curent, char *lex, int ret)
 {
-	t_data	*first;
-	t_data	*curent;
 	t_list	*tmp;
+
+	tmp = ft_lstlast(curent->redir);
+	if (tmp && (!ft_strncmp(tmp->content, ">", 1)
+			|| !ft_strncmp(tmp->content, "<", 1)))
+	{
+		ret = 2;
+		if (lex[0] == '<' || lex[0] == '>' || new_arg(&curent->redir, lex))
+			return (1);
+	}
+	else if (lex[0] == '<' || lex[0] == '>')
+	{
+		ret = 2;
+		if (redirection(lex, curent))
+			return (1);
+	}
+	else if (curent->command == NULL)
+	{
+		ret = 2;
+		curent->command = ft_strdup(lex);
+		if (curent->command == NULL)
+			return (1);
+	}
+	return (ret);
+}
+
+static int	next_data(t_data **curent)
+{
+	if (switcher(*curent, (*curent)->redir))
+		return (1);
+	(*curent)->next = new_data();
+	if ((*curent)->next == NULL)
+		return (1);
+	*curent = (*curent)->next;
+	return (0);
+}
+
+t_data	*switch_elem(char **lexer, t_data *first)
+{
+	t_data	*curent;
 	int		i;
+	int		cmp;
 
 	i = -1;
-	first = new_data();
 	curent = first;
 	while (lexer[++i])
 	{
-		tmp = ft_lstlast(curent->redir);
-		if (tmp && (!ft_strncmp(tmp->content, ">", 1) || !ft_strncmp(tmp->content, "<", 1)))
+		cmp = elem_dispatch(curent, lexer[i], 0);
+		if (cmp)
 		{
-			if (lexer[i][0] == '<' || lexer[i][0] == '>' || new_arg(&curent->redir, lexer[i]))
-				return (NULL);
-		}
-		else if (lexer[i][0] == '<' || lexer[i][0] == '>')
-		{
-			if (redirection(lexer[i], curent))
-				return (NULL);
-		}
-		else if (curent->command == NULL)
-		{
-			curent->command = ft_strdup(lexer[i]);
-			if (curent->command == NULL)
+			if (cmp == 1)
 				return (NULL);
 		}
 		else if (!ft_strncmp(lexer[i], "|", ft_strlen(lexer[i])))
 		{
-			switcher(curent, curent->redir);
-			curent->next = new_data();
-			if (curent->next == NULL)
+			if (next_data(&curent))
 				return (NULL);
-			curent = curent->next;
 		}
 		else
 			if (new_arg(&curent->arg, lexer[i]))
@@ -139,7 +126,11 @@ int	parser(t_local *local, char *lexer)
 		return (1);
 	if (tmp == NULL)
 		return (1);
-	local->data = switch_elem(tmp);
+	local->data = new_data();
+	if (!local->data)
+		return (1);
+	if (switch_elem(tmp, local->data))
+		return (1);
 	freetab(tmp);
 	return (0);
 }

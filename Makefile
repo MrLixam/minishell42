@@ -6,7 +6,7 @@
 #    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/07 16:02:47 by gpouzet           #+#    #+#              #
-#    Updated: 2023/10/23 12:21:23 by r                ###   ########.fr        #
+#    Updated: 2023/10/24 14:02:22 by gpouzet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,8 +17,9 @@ FLAGS 	=	-Wall -Wextra -Werror -g
 NAME 	=	minishell
 
 SRC 	=	src/small_builtins.c src/g_env.c src/ft_echo.c src/main.c src/parserv2.c\
-			src/parser.c src/arg_sep.c src/t_data.c src/env_sep.c src/exec.c src/export.c\
-			src/redirections.c src/utils.c src/utils2.c src/utils3.c src/pipeline.c 
+			src/parser.c src/pars_redir.c src/arg_sep.c src/t_data.c src/env_sep.c \
+			src/exec.c src/export.c src/redirections.c src/pipeline.c\
+			src/utils.c src/utils2.c src/utils3.c
 
 OBJ	= $(SRC:.c=.o)
 

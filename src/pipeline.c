@@ -14,9 +14,8 @@
 #include <stdio.h>
 #include <errno.h>
 
-static void	exit_command(t_local *local, t_data *curr, int fd, int pipes[2], char **str)
+static void	exit_command(t_local *local, t_data *curr, int fd, int pipes[2])
 {
-	freetab(str);
 	close_pipe(pipes);
 	if (curr != local->data)
 		close(fd);
@@ -36,7 +35,10 @@ static void	do_logic(int pipes[2], int fd, t_data *curr, t_local *local)
 		exit(exec_builtin(local, str, curr));
 	i = fix_path(&curr);
 	if (i)
+	{
+		freetab(str);
 		exit_command(local, curr, fd, pipes, str);
+	}
 	execve(curr->command, str, local->env);
 	perror("minishell");
 	freetab(str);

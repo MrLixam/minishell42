@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 16:12:41 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/24 12:19:25 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/25 09:04:44 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ t_data	*new_data(void)
 	create = ft_calloc(1, sizeof(t_data));
 	if (create == NULL)
 		return (NULL);
+	create->doc = NULL;
 	create->input = NULL;
 	create->output = NULL;
 	create->command = NULL;

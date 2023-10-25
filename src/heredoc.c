@@ -6,45 +6,11 @@
 /*   By: gpouzet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 14:11:43 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/24 17:26:54 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/25 10:42:38 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static t_doc	*new_doc(t_list *start)
-{
-	t_doc	*new;
-
-	new = (t_doc *)ft_calloc(1, sizeof(t_doc));
-	if (!new)
-		return (0);
-	new->here = start;
-	new->next = NULL;
-	return (new);
-}
-
-static t_doc	*last_doc(t_doc *doc)
-{
-	if (doc == NULL)
-		return (0);
-	while (doc->next != NULL)
-		doc = doc->next;
-	return (doc);
-}
-
-static void	add_doc(t_doc **doc, t_doc *new)
-{
-	t_doc	*tmp;
-
-	if (*doc == NULL)
-		*doc = new;
-	else
-	{
-		tmp = last_doc(*doc);
-		tmp->next = new;
-	}
-}
 
 static t_list *new_here(char *word)
 {
@@ -53,6 +19,7 @@ static t_list *new_here(char *word)
 	t_list	*new;
 
 	i = 1;
+	new = NULL;
 	while (i)
 	{
 		str = readline("> ");
@@ -63,15 +30,35 @@ static t_list *new_here(char *word)
 		}
 		if (!ft_strncmp(word, str, ft_strlen(word) + 1))
 			i = 0;
-		if (new_arg(&new, str))
-			return (NULL);
+		if (i)
+			if (new_arg(&new, str))
+				return (NULL);
 	}
 	return (new);
+}
+
+static void	showdoc(t_list	*doc)
+{
+	t_list	*tmp;
+	t_list	*bigtmp;
+
+	bigtmp = doc;
+	while (bigtmp)
+	{
+		tmp = bigtmp->content;
+		while (tmp)
+		{
+			ft_printf("%s\n", tmp->content);
+			tmp = tmp->next;
+		}
+		bigtmp = bigtmp->next;
+	}
 }
 
 int	heredoc(t_data *curent)
 {
 	t_list	*tmp;
+	char	*move;
 
 	tmp = curent->input ;
 	while (tmp)
@@ -79,10 +66,15 @@ int	heredoc(t_data *curent)
 		if (!ft_strncmp("<<", tmp->content, 3))
 		{
 			tmp = tmp->next;
+			move = ft_strdup(tmp->content);
+			if (!move)
+				return (1);
 			if (tmp)
-				add_doc(&curent->doc, new_doc(new_here(tmp->content)));
+				ft_lstadd_back(&curent->doc, ft_lstnew(new_here((move))));
+			free(move);
 		}
 		tmp = tmp->next;
+		showdoc(curent->doc);
 	}
 	return (0);
 }

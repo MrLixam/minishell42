@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:23 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/25 08:52:32 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/25 09:29:06 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ static int	next_data(t_data **curent)
 {
 	if (switcher(*curent, (*curent)->redir))
 		return (1);
+	if (heredoc(*curent))
+		return (1);
 	(*curent)->next = new_data();
 	if ((*curent)->next == NULL)
 		return (1);
@@ -91,21 +93,19 @@ t_data	*switch_elem(char **lexer, t_data *first)
 	while (lexer[++i])
 	{
 		cmp = elem_dispatch(curent, lexer[i], 0);
-		if (cmp)
-		{
-			if (cmp == 1)
-				return (NULL);
-		}
-		else if (!ft_strncmp(lexer[i], "|", ft_strlen(lexer[i])))
-		{
+		if (cmp == 1)
+			return (NULL);
+		if (!cmp && !ft_strncmp(lexer[i], "|", ft_strlen(lexer[i])))
 			if (next_data(&curent))
 				return (NULL);
-		}
-		else
+		if (!cmp && ft_strncmp(lexer[i], "|", ft_strlen(lexer[i])))
 			if (new_arg(&curent->arg, lexer[i]))
 				return (NULL);
 	}
-	switcher(curent, curent->redir);
+	if (switcher(curent, curent->redir))
+		return (NULL);
+	if (heredoc(curent))
+		return (NULL);
 	return (first);
 }
 

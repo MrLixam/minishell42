@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/25 08:48:13 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/25 09:24:39 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_local
 typedef struct s_data
 {
 	char			*command;
+	t_list			*doc;
 	t_list			*redir;
 	t_list			*input;
 	t_list			*output;
@@ -65,6 +66,7 @@ int		parser(t_local *local, char *lexer);
 int		swap_env_var(t_local *local, char **lex);
 int		check_quote(char *readline);
 int		redirection(char *lexer, t_data *data);
+int		heredoc(t_data *curent);
 char	**pre_parser(char *lexer);
 char	**arg_sep(char const *s);
 char	**env_sep(char const *s);

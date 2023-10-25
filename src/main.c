@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/25 13:58:32 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/25 16:57:08 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ int	main(int argc, char **argv, char **envp)
 			return (1);
 		if (ft_strncmp(str, "\0", 2))
 			add_history(str);
-		parser(local, str);
+		if (parser(local, str))
+			return (1);
 		if (local->data == NULL)
 			return (1);
 		if (local->data->command != NULL)

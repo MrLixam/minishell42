@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:23 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/25 11:20:42 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/25 16:55:36 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ static int	next_data(t_data **curent)
 {
 	if (switcher(*curent, (*curent)->redir))
 		return (1);
+	if (format_quote(*curent))
+		return (1);
 	(*curent)->next = new_data();
 	if ((*curent)->next == NULL)
 		return (1);
@@ -101,6 +103,8 @@ t_data	*switch_elem(char **lexer, t_data *first)
 				return (NULL);
 	}
 	if (switcher(curent, curent->redir))
+		return (NULL);
+	if (format_quote(curent))
 		return (NULL);
 	return (first);
 }

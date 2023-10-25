@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/25 08:26:04 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/25 12:47:43 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,9 @@ void	exec(t_local *local)
 	int		i;
 	int		ret;
 
-	i = 0;
+	i = parse_heredoc(&local->data);
+	if (i)
+		return ;
 	if (data_len(local->data) > 1)
 	{
 		local->child_pid = ft_calloc(data_len(local->data), sizeof(int));

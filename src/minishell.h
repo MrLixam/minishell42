@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/25 09:24:39 by r                ###   ########.fr       */
+/*   Updated: 2023/10/25 12:52:38 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ typedef struct s_local
 typedef struct s_data
 {
 	char			*command;
-	t_list			*doc;
 	t_list			*redir;
 	t_list			*input;
 	t_list			*output;
@@ -66,15 +65,13 @@ int		parser(t_local *local, char *lexer);
 int		swap_env_var(t_local *local, char **lex);
 int		check_quote(char *readline);
 int		redirection(char *lexer, t_data *data);
-int		heredoc(t_data *curent);
 char	**pre_parser(char *lexer);
 char	**arg_sep(char const *s);
 char	**env_sep(char const *s);
 t_data	*switch_elem(char **lexer, t_data *first);
 char	*ft_strmerge(char *s1, char *s2);
 
-/*			exec			*/
-void	exec(t_local *local);
+int		parse_heredoc(t_data **line);
 
 /*			builtins		*/
 int		ft_pwd(void);
@@ -97,6 +94,7 @@ int		ft_error(char *message, t_local *local);
 void	path_error(char *filename);
 
 /*			execution		*/
+void	exec(t_local *local);
 void	link_redir(int pipes[2], int fd, t_data *curr, t_local *local);
 int		is_builtin(char *command);
 int		file_access(char *path);

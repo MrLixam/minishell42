@@ -3,78 +3,89 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gpouzet <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 14:11:43 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/25 10:42:38 by r                ###   ########.fr       */
+/*   Updated: 2023/10/25 13:01:47 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_list *new_here(char *word)
+static void	get_input(int fd, char *delim)
 {
+	char	*line;
+
+	while (1)
+	{
+		line = readline("> ");
+		if (!line)
+		{
+			free(line);
+			continue ;
+		}
+		if (!ft_strmcmp(line, delim))
+		{
+			free(line);
+			break ;
+		}
+		line = ft_strmerge(line, ft_strdup("\n"));
+		write(fd, line, ft_strlen(line));
+		free(line);
+	}
+}
+
+static int	create_heredoc_file(char *delim, t_list *curr)
+{
+	int		fd;
+	char	*tmp;
 	int		i;
-	char	*str;
-	t_list	*new;
 
-	i = 1;
-	new = NULL;
-	while (i)
+	i = 0;
+	tmp = ft_strjoin("/tmp/.heredoc", ft_itoa(i));
+	while (!access(tmp, F_OK))
 	{
-		str = readline("> ");
-		if (!str)
-		{
-			ft_printf("error msg");
-			break;
-		}
-		if (!ft_strncmp(word, str, ft_strlen(word) + 1))
-			i = 0;
-		if (i)
-			if (new_arg(&new, str))
-				return (NULL);
+		free(tmp);
+		tmp = ft_strjoin("/tmp/.heredoc", ft_itoa(++i));
 	}
-	return (new);
+	fd = open(tmp, O_CREAT | O_RDWR | O_TRUNC, 0644);
+	free(curr->content);
+	curr->content = tmp;
+	if (fd == -1)
+	{
+		perror("minishell : error while parsing heredoc");
+		return (1);
+	}
+	get_input(fd, delim);
+	close(fd);
+	return (0);
 }
 
-static void	showdoc(t_list	*doc)
+int	parse_heredoc(t_data **line)
 {
-	t_list	*tmp;
-	t_list	*bigtmp;
+	t_list	*curr;
+	t_data	*local;
+	char	*delim;
+	int		i;
 
-	bigtmp = doc;
-	while (bigtmp)
+	local = *line;
+	while (local)
 	{
-		tmp = bigtmp->content;
-		while (tmp)
+		curr = local->input;
+		while (curr)
 		{
-			ft_printf("%s\n", tmp->content);
-			tmp = tmp->next;
+			if (ft_strncmp(curr->content, "<<", 2) == 0)
+			{
+				curr = curr->next;
+				delim = ft_strdup(curr->content);
+				i = create_heredoc_file(delim, curr);
+				free(delim);
+				if (i)
+					return (1);
+			}
+			curr = curr->next;
 		}
-		bigtmp = bigtmp->next;
-	}
-}
-
-int	heredoc(t_data *curent)
-{
-	t_list	*tmp;
-	char	*move;
-
-	tmp = curent->input ;
-	while (tmp)
-	{
-		if (!ft_strncmp("<<", tmp->content, 3))
-		{
-			tmp = tmp->next;
-			move = ft_strdup(tmp->content);
-			if (!move)
-				return (1);
-			if (tmp)
-				ft_lstadd_back(&curent->doc, ft_lstnew(new_here((move))));
-			free(move);
-		}
-		tmp = tmp->next;
-		showdoc(curent->doc);
+		local = local->next;
 	}
 	return (0);
 }

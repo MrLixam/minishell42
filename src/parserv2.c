@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:28:26 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/25 19:58:30 by r                ###   ########.fr       */
+/*   Updated: 2023/10/25 21:28:45 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static char	*format_env_var(t_local *local, char *var)
 	char	*new;
 	int		i;
 
-	i = 0 + ft_strncmp(var, "$", 1) != 0;
+	i = 0 + (ft_strncmp(var, "$", 1) != 0);
 	split = env_sep(var);
 	if (!split)
 		return (NULL);
@@ -95,9 +95,8 @@ static char	*format_env_var(t_local *local, char *var)
 			if (elem_add(local, split, &new, i))
 				return (NULL);
 		if (ft_strncmp(split[i], "$?", 2) && !(split[i][0] == '$'))
-			ft_strlcat(new, split[i], ft_strlen(new) + ft_strlen(split[i]) + 1);
+			new = ft_strmerge(new, ft_strdup(split[i]));
 	}
-	i = -1;
 	freetab(split);
 	return (new);
 }

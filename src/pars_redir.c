@@ -6,7 +6,7 @@
 /*   By: gpouzet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 13:39:40 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/24 13:40:51 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/25 16:48:00 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,9 @@ int	redirection(char *lexer, t_data *data)
 		j = i;
 		while (lexer[i] == '<' || lexer[i] == '>')
 			i++;
-		if (i - j > 2 && ft_strncmp(lexer + j, "<<<", i - j))
+		if (!ft_strncmp(lexer, "<>", 2) || !ft_strncmp(lexer, "><", 2))
+			return (1);
+		if (i - j > 2)
 			return (1);
 		if (redir(&data->redir, lexer, i, j))
 			return (1);

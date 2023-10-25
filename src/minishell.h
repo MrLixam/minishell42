@@ -6,7 +6,11 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/10/25 17:39:58 by marvin           ###   ########.fr       */
+=======
+/*   Updated: 2023/10/25 16:53:33 by r                ###   ########.fr       */
+>>>>>>> e31e7e07a32332de6db655a823e342335d462fd5
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +29,6 @@
 # include <readline/history.h>
 # include <fcntl.h>
 # include <unistd.h>
-
 
 /*			struct			*/
 typedef struct s_local
@@ -69,6 +72,7 @@ int		check_quote(char *readline);
 int		parser(t_local *local, char *lexer);
 int		swap_env_var(t_local *local, char **lex);
 int		check_quote(char *readline);
+int		format_quote(t_data *current);
 int		redirection(char *lexer, t_data *data);
 char	**pre_parser(char *lexer);
 char	**arg_sep(char const *s);

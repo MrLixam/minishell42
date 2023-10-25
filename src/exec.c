@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/24 18:40:05 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/25 08:26:04 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,8 @@ static void	redir_single(t_data *line, int save[2])
 	}
 }
 
-void	fix_fd(int save[2])
-{
-	dup2(save[0], STDIN_FILENO);
-	dup2(save[1], STDOUT_FILENO);
-	close(save[0]);
-	close(save[1]);
-}
-
 static void	fork_logic(t_local *local, int save[2], char **str)
 {
-	signal(SIGQUIT, signal_handler);
 	redir_single(local->data, save);
 	if (fix_path(local, local->data))
 	{
@@ -55,6 +46,15 @@ static void	fork_logic(t_local *local, int save[2], char **str)
 	execve(local->data->command, str, local->env);
 	perror_filename("minishell: execve ", local->data->command);
 	clear_local(local, 0);
+}
+
+static void	parent_wait(int *ret, int pid)
+{
+	signal(SIGINT, sig_child);
+	signal(SIGQUIT, sig_child);
+	waitpid(pid, ret, 0);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, sig_parent);
 }
 
 static int	no_pipe(t_local *local)
@@ -75,9 +75,12 @@ static int	no_pipe(t_local *local)
 	if (var[0] < 0)
 		perror("minishell: fork failed");
 	else if (!var[0])
+	{
+		signal(SIGQUIT, sig_child);
 		fork_logic(local, save, str);
+	}
 	else
-		waitpid(var[0], &var[1], 0);
+		parent_wait(&var[1], var[0]);
 	freetab(str);
 	return (var[1]);
 }

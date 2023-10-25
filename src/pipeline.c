@@ -28,6 +28,8 @@ static void	do_logic(int pipes[2], int fd, t_data *curr, t_local *local)
 	char	**str;
 	int		i;
 
+	signal(SIGINT, sig_child);
+	signal(SIGQUIT, sig_child);
 	link_redir(pipes, fd, curr, local);
 	str = lst_to_str(curr->arg, curr->command);
 	if (is_builtin(curr->command))
@@ -42,7 +44,6 @@ static void	do_logic(int pipes[2], int fd, t_data *curr, t_local *local)
 		freetab(str);
 		exit_command(local, curr, fd, pipes);
 	}
-	signal(SIGQUIT, signal_handler);
 	execve(curr->command, str, local->env);
 	perror("minishell");
 	freetab(str);

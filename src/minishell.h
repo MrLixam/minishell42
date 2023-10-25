@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/24 18:39:47 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/25 08:23:15 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,7 @@
 # include "../libft/list.h"
 # include "../libft/get_next_line.h"
 
-/*			global			*/
-extern int		g_exit;
 /*			struct			*/
-
 typedef struct s_local
 {
 	char			**env;
@@ -42,7 +39,9 @@ typedef struct s_data
 /*			prototype		*/
 int		ft_strmcmp(char *s1, char *s2);
 int		clear_local(t_local	*local, int exit_code);
-void	signal_handler(int sig);
+void	sig_parent(int sig);
+void	sig_child(int sig);
+void	fix_fd(int save[2]);
 
 /*			data			*/
 t_data	*new_data(void);

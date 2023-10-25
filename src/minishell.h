@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/25 12:52:38 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/25 15:42:58 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <readline/history.h>
 # include <fcntl.h>
 # include <unistd.h>
+
 
 /*			struct			*/
 typedef struct s_local
@@ -48,9 +49,13 @@ typedef struct s_data
 /*			prototype		*/
 int		ft_strmcmp(char *s1, char *s2);
 int		clear_local(t_local	*local, int exit_code);
+void	fix_fd(int save[2]);
+
+/*			signals			*/
 void	sig_parent(int sig);
 void	sig_child(int sig);
-void	fix_fd(int save[2]);
+void	sig_heredoc(int sig);
+int 	*getfd(void);
 
 /*			data			*/
 t_data	*new_data(void);
@@ -71,7 +76,7 @@ char	**env_sep(char const *s);
 t_data	*switch_elem(char **lexer, t_data *first);
 char	*ft_strmerge(char *s1, char *s2);
 
-int		parse_heredoc(t_data **line);
+int		heredoc(t_data **line);
 
 /*			builtins		*/
 int		ft_pwd(void);
@@ -90,7 +95,7 @@ int		print_env(t_local *local, char **arg);
 
 /*			error			*/
 int		perror_filename(char *command, char *filename);
-int		ft_error(char *message, t_local *local);
+int		ft_error(char *message);
 void	path_error(char *filename);
 
 /*			execution		*/
@@ -100,7 +105,7 @@ int		is_builtin(char *command);
 int		file_access(char *path);
 char	**lst_to_str(t_list *lst, char *command);
 int		redir_present(t_data *command);
-int		exec_builtin(t_local *local, char **str, t_data *line);
+int		exec_builtin(t_local *local, char **str, t_data *line, int save[2]);
 int		fix_path(t_local *local, t_data *curr);
 void	clean_child(t_local *local, t_data *curr, int pipes[2], int fd);
 void	close_pipe(int pipes[2]);

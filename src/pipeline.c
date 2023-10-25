@@ -34,7 +34,7 @@ static void	do_logic(int pipes[2], int fd, t_data *curr, t_local *local)
 	str = lst_to_str(curr->arg, curr->command);
 	if (is_builtin(curr->command))
 	{
-		i = exec_builtin(local, str, curr);
+		i = exec_builtin(local, str, curr, pipes);
 		freetab(str);
 		exit(i);
 	}
@@ -75,16 +75,20 @@ int	pipeline(t_local *local)
 	while (curr)
 	{
 		if (pipe(pipes) == -1)
-			return (ft_error("minishell: pipe failed", local));
+			return (ft_error("minishell: pipe failed"));
 		fd_pid[1] = fork();
 		if (fd_pid[1] < 0)
-			return (ft_error("minishell: fork failed", local));
+			return (ft_error("minishell: fork failed"));
 		else if (!fd_pid[1])
 			do_logic(pipes, fd_pid[0], curr, local);
 		else
 		{
+			signal(SIGINT, sig_child);
+			signal(SIGQUIT, sig_child);
 			p_pass(local, &curr, &fd_pid[0], pipes);
 			local->child_pid[i++] = fd_pid[1];
+			signal(SIGINT, sig_child);
+			signal(SIGQUIT, sig_child);
 		}
 	}
 	close_pipe(pipes);

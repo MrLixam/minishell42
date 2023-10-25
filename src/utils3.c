@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 12:26:14 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/25 08:23:00 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/25 15:38:14 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ void	path_error(char *filename)
 
 void	fix_fd(int save[2])
 {
-	dup2(save[0], STDIN_FILENO);
-	dup2(save[1], STDOUT_FILENO);
+	dup2(save[0], 0);
+	dup2(save[1], 1);
 	close(save[0]);
 	close(save[1]);
 }

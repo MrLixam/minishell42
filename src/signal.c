@@ -30,3 +30,13 @@ void	sig_child(int sig)
 	else if (sig == SIGQUIT)
 		printf("Quit\n");
 }
+
+void	sig_heredoc(int sig)
+{
+	if (sig == SIGINT)
+	{
+		if (*getfd() != -1)
+			close(*getfd());
+		exit(1);
+	}
+}

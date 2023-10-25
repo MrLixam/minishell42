@@ -70,10 +70,8 @@ int	fix_path(t_local *local, t_data *curr)
 	return (1);
 }
 
-int	ft_error(char *message, t_local *local)
+int	ft_error(char *message)
 {
 	perror(message);
-	clear_data(local->data);
-	free(local->child_pid);
 	return (-1);
 }

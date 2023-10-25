@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/25 12:47:43 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/25 16:10:32 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,15 @@
 #include <sys/wait.h>
 #include <signal.h>
 
-static void	redir_single(t_data *line, int save[2])
+static int	redir_single(t_data *line, int save[2])
 {
 	int	redir[2];
 
-	save[0] = dup(STDIN_FILENO);
-	save[1] = dup(STDOUT_FILENO);
+	save[0] = dup(0);
+	save[1] = dup(1);
 	redirect(STDIN_FILENO, STDOUT_FILENO, line, redir);
+	if (redir[0] == -1 || redir[1] == -1)
+		return (1);
 	if (redir[0] != STDIN_FILENO)
 	{
 		dup2(redir[0], STDIN_FILENO);
@@ -33,11 +35,16 @@ static void	redir_single(t_data *line, int save[2])
 		dup2(redir[1], STDOUT_FILENO);
 		close(redir[1]);
 	}
+	return (0);
 }
 
 static void	fork_logic(t_local *local, int save[2], char **str)
 {
-	redir_single(local->data, save);
+	if (redir_single(local->data, save))
+	{
+		freetab(str);
+		exit(clear_local(local, 1));
+	}
 	if (fix_path(local, local->data))
 	{
 		freetab(str);
@@ -66,8 +73,8 @@ static int	no_pipe(t_local *local)
 	str = lst_to_str(local->data->arg, local->data->command);
 	if (is_builtin(local->data->command))
 	{
-		redir_single(local->data, save);
-		var[1] = exec_builtin(local, str, local->data);
+		if (!redir_single(local->data, save))
+			var[1] = exec_builtin(local, str, local->data, save);
 		fix_fd(save);
 		return (var[1]);
 	}
@@ -90,23 +97,19 @@ void	exec(t_local *local)
 	int		i;
 	int		ret;
 
-	i = parse_heredoc(&local->data);
-	if (i)
-		return ;
-	if (data_len(local->data) > 1)
+	ret = heredoc(&local->data);
+	if (data_len(local->data) > 1 && !ret)
 	{
 		local->child_pid = ft_calloc(data_len(local->data), sizeof(int));
 		ret = pipeline(local);
 		if (ret == -1)
-		{
-			free(local->child_pid);
 			return ;
-		}
+		i = 0;
 		while (i < data_len(local->data))
 			waitpid(local->child_pid[i++], &ret, 0);
 		free(local->child_pid);
 	}
-	else
+	else if (!ret)
 		ret = no_pipe(local);
 	if (WIFEXITED(ret))
 		ret = WEXITSTATUS(ret);

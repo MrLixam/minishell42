@@ -6,11 +6,17 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 14:11:43 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/25 13:01:47 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/25 16:19:16 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int *getfd(void)
+{
+	static int	fd = -1;
+	return (&fd);
+}
 
 static void	get_input(int fd, char *delim)
 {
@@ -19,20 +25,55 @@ static void	get_input(int fd, char *delim)
 	while (1)
 	{
 		line = readline("> ");
-		if (!line)
+		if (line == NULL || !ft_strmcmp(line, delim))
+		{
+			if (line == NULL)
+			{
+				ft_putstr_fd("minishell: warn: heredoc end by EOF (want `", 2);
+				ft_putstr_fd(delim, 2);
+				ft_putstr_fd("')\n", 2);
+			}
+			free(line);
+			break ;
+		}
+		if (line[0] == '\0')
 		{
 			free(line);
 			continue ;
-		}
-		if (!ft_strmcmp(line, delim))
-		{
-			free(line);
-			break ;
 		}
 		line = ft_strmerge(line, ft_strdup("\n"));
 		write(fd, line, ft_strlen(line));
 		free(line);
 	}
+}
+
+static int	fork_heredoc(int fd, char *delim)
+{
+	int		pid;
+	int		i;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("minishell : error while parsing heredoc");
+		return (1);
+	}
+	else if (!pid)
+	{
+		signal(SIGINT, sig_heredoc);
+		*getfd() = fd;
+		get_input(fd, delim);
+		close(fd);
+		*getfd() = -1;
+		exit(0);
+	}
+	else
+	{
+		signal(SIGINT, sig_child);
+		waitpid(pid, &i, 0);
+		signal(SIGINT, sig_parent);
+	}
+	return (i);
 }
 
 static int	create_heredoc_file(char *delim, t_list *curr)
@@ -50,18 +91,19 @@ static int	create_heredoc_file(char *delim, t_list *curr)
 	}
 	fd = open(tmp, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	free(curr->content);
-	curr->content = tmp;
+	curr->content = ft_strdup(tmp);
+	free(tmp);
 	if (fd == -1)
 	{
 		perror("minishell : error while parsing heredoc");
 		return (1);
 	}
-	get_input(fd, delim);
+	i = fork_heredoc(fd, delim);
 	close(fd);
-	return (0);
+	return (i);
 }
 
-int	parse_heredoc(t_data **line)
+int	heredoc(t_data **line)
 {
 	t_list	*curr;
 	t_data	*local;
@@ -81,7 +123,7 @@ int	parse_heredoc(t_data **line)
 				i = create_heredoc_file(delim, curr);
 				free(delim);
 				if (i)
-					return (1);
+					return (i);
 			}
 			curr = curr->next;
 		}

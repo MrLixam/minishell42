@@ -48,7 +48,7 @@ int	redir_present(t_data *command)
 	return (command->output != NULL || command->input != NULL);
 }
 
-int	exec_builtin(t_local *local, char **str, t_data *line)
+int	exec_builtin(t_local *local, char **str, t_data *line, int save[2])
 {
 	if (!ft_strmcmp(line->command, "echo"))
 		return (ft_echo(line->arg));
@@ -65,6 +65,8 @@ int	exec_builtin(t_local *local, char **str, t_data *line)
 	else if (!ft_strmcmp(line->command, "exit"))
 	{
 		freetab(str);
+		if (save)
+			fix_fd(save);
 		ft_exit(local);
 	}
 	return (-1);

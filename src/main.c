@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/25 16:57:08 by r                ###   ########.fr       */
+/*   Updated: 2023/10/25 20:28:16 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,6 @@ int	main(int argc, char **argv, char **envp)
 			exec(local);
 		clear_data(local->data);
 		local->child_pid = NULL;
+		str = NULL;
 	}
 }

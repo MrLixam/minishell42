@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 11:52:19 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/25 08:28:27 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/25 20:05:44 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,12 @@ static int	cut(char const *s, int s_quote, int d_quote)
 		if (s[i] == '$' && s_quote > 0)
 		{
 			nb_arg++;
-			i++;
-			if (s[i] != '?')
-				while (s[i] && (!ft_isalnum(s[i]) && s[i] == '_'))
+			if (s[i + 1] != '?')
+				while (s[i + 1] && (!ft_isalnum(s[i + 1]) || s[i + 1] == '_'))
 					i++;
 		}
-		if (s[i] == '$' && s_quote > 0)
-			nb_arg++;
 	}
+	nb_arg++;
 	return (nb_arg);
 }
 

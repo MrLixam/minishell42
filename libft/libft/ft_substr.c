@@ -6,7 +6,7 @@
 /*   By: gpouzet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 13:10:00 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/25 16:43:36 by r                ###   ########.fr       */
+/*   Updated: 2023/10/25 19:37:22 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../libft.h"
@@ -23,7 +23,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		len = ft_strlen(s) - start;
 	sub = ft_calloc(len + 1, 1);
 	if (!sub)
-		return (malloc(0));
+		return (NULL);
 	ft_strlcpy(sub, s + start, len + 1);
 	return (sub);
 }

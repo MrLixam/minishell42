@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <fcntl.h>
 
 static int	redir_in(t_data *command, int in)
 {

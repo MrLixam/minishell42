@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <signal.h>
-#include <readline/readline.h>
 
 void	sig_parent(int sig)
 {
@@ -22,7 +20,6 @@ void	sig_parent(int sig)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-	
 	}
 }
 

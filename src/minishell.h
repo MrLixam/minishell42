@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/25 08:23:15 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/25 08:48:13 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,15 @@
 # include "../libft/printf.h"
 # include "../libft/list.h"
 # include "../libft/get_next_line.h"
+# include <stdio.h>
+# include <errno.h>
+# include <sys/wait.h>
+# include <signal.h>
+# include <stdlib.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <fcntl.h>
+# include <unistd.h>
 
 /*			struct			*/
 typedef struct s_local

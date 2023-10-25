@@ -6,14 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/24 19:03:40 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/25 08:28:48 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include "minishell.h"
 #include <fcntl.h>
 #include <signal.h>
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:23 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/24 16:49:51 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/25 08:52:32 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	switcher(t_data *data, t_list *src)
 				return (1);
 			src = src->next;
 			if (!src)
-				return (write(1, "invalide syntax\n", 16));
+				return (write(1, "invalid syntax\n", 16));
 			if (new_arg(&data->output, src->content))
 				return (1);
 		}
@@ -32,7 +32,7 @@ static int	switcher(t_data *data, t_list *src)
 				return (1);
 			src = src->next;
 			if (!src)
-				return (write(1, "invalide syntax\n", 16));
+				return (write(1, "invalid syntax\n", 16));
 			if (new_arg(&data->input, src->content))
 				return (1);
 		}

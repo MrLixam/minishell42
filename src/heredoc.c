@@ -6,17 +6,11 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 14:11:43 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/25 16:19:16 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/25 18:30:58 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int *getfd(void)
-{
-	static int	fd = -1;
-	return (&fd);
-}
 
 static void	get_input(int fd, char *delim)
 {
@@ -45,6 +39,7 @@ static void	get_input(int fd, char *delim)
 		write(fd, line, ft_strlen(line));
 		free(line);
 	}
+	write(fd, "\n", 1);
 }
 
 static int	fork_heredoc(int fd, char *delim)

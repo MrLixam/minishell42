@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:23 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/25 20:15:50 by r                ###   ########.fr       */
+/*   Updated: 2023/10/25 22:07:46 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ int	parser(t_local *local, char *lexer)
 	if (tmp == NULL)
 		return (1);
 	if (swap_env_var(local, tmp))
-		return (1);
+			return (1);
 	if (tmp == NULL)
 		return (1);
 	local->data = new_data();

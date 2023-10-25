@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 11:52:19 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/25 20:05:44 by r                ###   ########.fr       */
+/*   Updated: 2023/10/25 22:12:38 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,11 @@ static int	cut(char const *s, int s_quote, int d_quote)
 		{
 			nb_arg++;
 			if (s[i + 1] != '?')
+			{
 				while (s[i + 1] && (!ft_isalnum(s[i + 1]) || s[i + 1] == '_'))
 					i++;
+				nb_arg++;
+			}
 		}
 	}
 	nb_arg++;

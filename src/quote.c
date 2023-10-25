@@ -6,7 +6,7 @@
 /*   By: r <marvin@42.fr>                           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 16:48:12 by r                 #+#    #+#             */
-/*   Updated: 2023/10/25 20:20:40 by r                ###   ########.fr       */
+/*   Updated: 2023/10/25 21:17:35 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int	remove_quote(t_list	*src, int s_quote, int d_quote)
 	i = -1;
 	j = 0;
 	tmp = (char *)src->content;
-	dest = ft_calloc(ft_strlen(tmp) + 1 - quote_to_remove(tmp), sizeof(char *));
+	dest = ft_calloc(ft_strlen(tmp) + 1 - quote_to_remove(tmp), 1);
 	if (!dest)
 		return (1);
 	while (tmp[++i])

@@ -6,21 +6,22 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:28:26 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/25 21:28:45 by r                ###   ########.fr       */
+/*   Updated: 2023/10/25 22:02:48 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	elem_exit(t_local *local, char *new)
+static int	elem_exit(t_local *local, char **new)
 {
 	char	*tmp;
 
 	tmp = ft_itoa(local->exit_code);
 	if (!tmp)
 		return (1);
-	ft_strlcat(new, tmp, ft_strlen(new) + ft_strlen(tmp) + 1);
-	free(tmp);
+	*new = ft_strmerge(*new,  tmp);
+	if (!*new)
+		return (1);
 	return (0);
 }
 
@@ -84,12 +85,12 @@ static char	*format_env_var(t_local *local, char *var)
 	if (!split)
 		return (NULL);
 	new = elem_first(local, split, &i);
-	if (!new)
-		return (NULL);
 	while (split[++i])
 	{
+		if (!new)
+			return (NULL);
 		if (!ft_strncmp(split[i], "$?", 2))
-			if (elem_exit(local, new))
+			if (elem_exit(local, &new))
 				return (NULL);
 		if (ft_strncmp(split[i], "$?", 2) && (split[i][0] == '$'))
 			if (elem_add(local, split, &new, i))

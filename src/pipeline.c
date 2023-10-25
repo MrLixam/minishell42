@@ -83,12 +83,8 @@ int	pipeline(t_local *local)
 			do_logic(pipes, fd_pid[0], curr, local);
 		else
 		{
-			signal(SIGINT, sig_child);
-			signal(SIGQUIT, sig_child);
 			p_pass(local, &curr, &fd_pid[0], pipes);
 			local->child_pid[i++] = fd_pid[1];
-			signal(SIGINT, sig_child);
-			signal(SIGQUIT, sig_child);
 		}
 	}
 	close_pipe(pipes);

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/25 16:10:32 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/25 18:54:36 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,12 +101,16 @@ void	exec(t_local *local)
 	if (data_len(local->data) > 1 && !ret)
 	{
 		local->child_pid = ft_calloc(data_len(local->data), sizeof(int));
+		signal(SIGINT, sig_child);
+		signal(SIGQUIT, sig_child);
 		ret = pipeline(local);
 		if (ret == -1)
 			return ;
 		i = 0;
 		while (i < data_len(local->data))
 			waitpid(local->child_pid[i++], &ret, 0);
+		signal(SIGINT, sig_parent);
+		signal(SIGQUIT, SIG_IGN);
 		free(local->child_pid);
 	}
 	else if (!ret)

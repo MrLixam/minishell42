@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/25 16:53:33 by r                ###   ########.fr       */
+/*   Updated: 2023/10/25 19:18:40 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ void	fix_fd(int save[2]);
 /*			signals			*/
 void	sig_parent(int sig);
 void	sig_child(int sig);
-void	sig_heredoc(int sig);
 int 	*getfd(void);
+void	sig_heredoc(int sig);
 
 /*			data			*/
 t_data	*new_data(void);

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/25 20:28:16 by r                ###   ########.fr       */
+/*   Updated: 2023/10/25 21:36:58 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ int	main(int argc, char **argv, char **envp)
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		str = readline("\e[94mminishell\e[0m$ ");
+		rl_reset_terminal(NULL);
+		str = readline("minishell$ ");
 		if (str == NULL)
 			return (1);
 		if (ft_strncmp(str, "\0", 2))

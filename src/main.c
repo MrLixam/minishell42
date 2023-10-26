@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/26 17:38:48 by r                ###   ########.fr       */
+/*   Updated: 2023/10/26 18:07:43 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ static int	wspace(char *c)
 
 int	clear_local(t_local	*local, int exit_code)
 {
+	clear_heredoc(local);
 	if (local->env)
 		freetab(local->env);
 	clear_data(local->data);
@@ -54,8 +55,6 @@ void	minishell_loop(t_local *local)
 
 	while (1)
 	{
-		signal(SIGINT, sig_parent);
-		signal(SIGQUIT, SIG_IGN);
 		str = readline("minishell$ ");
 		if (str == NULL || str[0] == '\0')
 			return ;

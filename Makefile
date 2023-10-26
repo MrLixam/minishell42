@@ -6,13 +6,13 @@
 #    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/07 16:02:47 by gpouzet           #+#    #+#              #
-#    Updated: 2023/10/26 16:50:01 by marvin           ###   ########.fr        #
+#    Updated: 2023/10/26 17:30:25 by marvin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC 		=	clang
 
-FLAGS 	=	-Wall -Wextra -Werror -g
+FLAGS 	=	-Wall -Wextra -Werror
 
 NAME 	=	minishell
 

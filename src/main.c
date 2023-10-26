@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/26 12:07:17 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 12:35:08 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	minishell_loop(t_local *local)
 			exit(clear_local(local, 1));
 		if (local->data == NULL)
 			exit(clear_local(local, 1));
-		if ( local->data->command != NULL && *local->data->command != '\0')
+		if (local->data->command != NULL && *local->data->command != '\0')
 			exec(local);
 		clear_data(local->data);
 		local->child_pid = NULL;

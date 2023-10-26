@@ -59,9 +59,9 @@ int	ft_cd(t_local *local, char **arg)
 	return (0);
 }
 
-static int check_export(char *str)
+static int	check_export(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (str[0] == '=' || ft_isdigit(str[0]))
@@ -80,7 +80,7 @@ static int check_export(char *str)
 int	ft_export(t_local *local, char **arg)
 {
 	int	i;
-	int err;
+	int	err;
 
 	i = 0;
 	if (ft_tabstrlen(arg) == 1)
@@ -95,7 +95,7 @@ int	ft_export(t_local *local, char **arg)
 			err = 1;
 		else if (check_export(arg[i]) == 2)
 			err = 0;
-		else 
+		else
 			err = export_env(local, arg[i]);
 		if (err == 1)
 		{

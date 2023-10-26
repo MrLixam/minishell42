@@ -14,13 +14,13 @@
 
 static int	redir_in(char *file)
 {
-	char *cut_path;
-	int	fd;
+	char	*cut_path;
+	int		fd;
 
 	cut_path = ft_strcut(file, "./");
 	fd = -1;
 	if (!access(cut_path, R_OK))
-		if(!access(cut_path, F_OK))
+		if (!access(cut_path, F_OK))
 			fd = open(cut_path, O_RDONLY);
 	free(cut_path);
 	if (fd == -1)
@@ -30,8 +30,8 @@ static int	redir_in(char *file)
 
 static int	redir_out(char *file, char *tmp)
 {
-	char *cut_path;
-	int	fd;
+	char	*cut_path;
+	int		fd;
 
 	cut_path = ft_strcut(file, "./");
 	fd = -1;
@@ -53,7 +53,7 @@ int	redirect_loop_logic(t_list *local_redir, char *tmp, int redir[2], int i)
 		tmp = ft_strdup(local_redir->content);
 		local_redir = local_redir->next;
 		i++;
-		return 0;
+		return (0);
 	}
 	else
 	{
@@ -64,22 +64,21 @@ int	redirect_loop_logic(t_list *local_redir, char *tmp, int redir[2], int i)
 	}
 	if (redir[0] == -1 || redir[1] == -1)
 		return (1);
-	if (local_redir->next)
-	{
-		if (redir[0] != STDIN_FILENO)
+	if (redir[0] != STDIN_FILENO)
+		if (!is_last(local_redir, 0))
 			close(redir[0]);
-		if (redir[1] != STDOUT_FILENO)
+	if (redir[1] != STDOUT_FILENO)
+		if (!is_last(local_redir, 1))
 			close(redir[1]);
-	}
 	return (0);
 }
 
 void	redirect(int in, int out, t_data *curr, int redir[2])
 {
-	int i;
-	t_list *local_redir;
-	char *tmp;
-	int err;
+	int		i;
+	t_list	*local_redir;
+	char	*tmp;
+	int		err;
 
 	redir[0] = in;
 	redir[1] = out;
@@ -101,7 +100,7 @@ void	redirect(int in, int out, t_data *curr, int redir[2])
 void	link_redir(int pipes[2], int fd, t_data *curr, t_local *local)
 {
 	int	redir[2];
-	int fds[3];
+	int	fds[3];
 
 	fds[0] = pipes[0];
 	fds[1] = pipes[1];

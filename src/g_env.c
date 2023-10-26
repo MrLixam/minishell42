@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 14:11:44 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/26 03:54:12 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 13:46:06 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,14 @@ int	unset_env(t_local *local, char *unset)
 		return (0);
 	}
 	new_env = ft_calloc(ft_tabstrlen(local->env), sizeof(char *));
+	if (!new_env)
+		return (1);
 	i = -1;
 	j = -1;
 	while (new_env != NULL && local->env[++i])
-	{
 		if (ft_strncmp(local->env[i], unset, ft_strlen(local->env[i]) \
 			- ft_strlen(ft_strchr(local->env[i], '='))))
 			new_env[++j] = ft_strdup(local->env[i]);
-		if (new_env == NULL)
-		{
-			freetab(local->env);
-			freetab(new_env);
-			return (1);
-		}
-	}
 	freetab(local->env);
 	local->env = new_env;
 	return (0);

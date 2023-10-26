@@ -6,16 +6,17 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 14:11:43 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/26 10:34:36 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 12:34:19 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int *getfd(void)
+void	heredoc_interrupt(char *delim)
 {
-	static int	fd = -1;
-	return (&fd);
+	ft_putstr_fd("minishell: warn: heredoc end by EOF (want `", 2);
+	ft_putstr_fd(delim, 2);
+	ft_putstr_fd("')\n", 2);
 }
 
 static void	get_input(int fd, char *delim)
@@ -28,11 +29,7 @@ static void	get_input(int fd, char *delim)
 		if (line == NULL || !ft_strmcmp(line, delim))
 		{
 			if (line == NULL)
-			{
-				ft_putstr_fd("minishell: warn: heredoc end by EOF (want `", 2);
-				ft_putstr_fd(delim, 2);
-				ft_putstr_fd("')\n", 2);
-			}
+				heredoc_interrupt(delim);
 			free(line);
 			break ;
 		}

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 12:26:14 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/26 02:43:57 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 13:45:29 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,33 @@ void	fix_fd(int save[2])
 	dup2(save[1], 1);
 	close(save[0]);
 	close(save[1]);
+}
+
+int	is_last(t_list *redir, int mode)
+{
+	t_list	*tmp;
+
+	tmp = redir;
+	if (mode)
+	{
+		while (tmp)
+		{
+			if (!ft_strmcmp(tmp->content, ">")
+				|| !ft_strmcmp(tmp->content, ">>"))
+				return (0);
+			tmp = tmp->next;
+		}
+		return (1);
+	}
+	else
+	{
+		while (tmp)
+		{
+			if (!ft_strmcmp(tmp->content, "<")
+				|| !ft_strmcmp(tmp->content, "<<"))
+				return (0);
+			tmp = tmp->next;
+		}
+		return (1);
+	}
 }

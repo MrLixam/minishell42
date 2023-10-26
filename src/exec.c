@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/26 11:47:45 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 13:15:47 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,15 +79,6 @@ static void	fork_logic(t_local *local, int save[2], char **str)
 	clear_local(local, 0);
 }
 
-static void	parent_wait(int *ret, int pid)
-{
-	signal(SIGINT, sig_child);
-	signal(SIGQUIT, sig_child);
-	waitpid(pid, ret, 0);
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, sig_parent);
-}
-
 static int	no_pipe(t_local *local)
 {
 	char	**str;
@@ -112,7 +103,7 @@ static int	no_pipe(t_local *local)
 		fork_logic(local, save, str);
 	}
 	else
-		parent_wait(&var[1], var[0]);
+		waitpid(var[0], &var[1], 0);
 	freetab(str);
 	return (var[1]);
 }
@@ -122,20 +113,20 @@ void	exec(t_local *local)
 	int		ret;
 
 	ret = heredoc(&local->data);
+	signal(SIGINT, sig_child);
+	signal(SIGQUIT, sig_child);
 	if (data_len(local->data) > 1 && !ret)
 	{
 		local->child_pid = ft_calloc(data_len(local->data), sizeof(int));
-		signal(SIGINT, sig_child);
-		signal(SIGQUIT, sig_child);
 		ret = pipeline(local);
 		if (ret == -1)
 			return ;
-		signal(SIGINT, sig_parent);
-		signal(SIGQUIT, SIG_IGN);
 		free(local->child_pid);
 	}
 	else if (!ret)
 		ret = no_pipe(local);
+	signal(SIGINT, sig_parent);
+	signal(SIGQUIT, SIG_IGN);
 	if (WIFEXITED(ret))
 		ret = WEXITSTATUS(ret);
 	local->exit_code = ret;

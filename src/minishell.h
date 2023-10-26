@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/26 12:16:27 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 13:42:23 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,6 @@ typedef struct s_data
 	struct s_data	*next;
 }	t_data;
 
-typedef struct s_bundle
-{
-
-
-} t_bundle;
-
 /*			utils		*/
 int		ft_strmcmp(char *s1, char *s2);
 int		clear_local(t_local	*local, int exit_code);
@@ -84,7 +78,7 @@ char	*ft_strmerge(char *s1, char *s2);
 
 /*			heredoc			*/
 int		heredoc(t_data **line);
-int 	*getfd(void);
+int		*getfd(void);
 
 /*			builtins		*/
 int		ft_pwd(void);
@@ -118,6 +112,7 @@ int		exec_builtin(t_local *local, char **str, t_data *line, int save[2]);
 void	redirect(int in, int out, t_data *curr, int redir[2]);
 int		redir_present(t_data *command);
 void	link_redir(int pipes[2], int fd, t_data *curr, t_local *local);
+int		is_last(t_list *redir, int mode);
 
 int		pipeline(t_local *local);
 void	exit_command(t_local *local, t_data *curr, int fd[3], int code);

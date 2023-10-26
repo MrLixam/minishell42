@@ -15,7 +15,7 @@
 char	*ft_strcut(char *str, char *set)
 {
 	if (!ft_strncmp(str, set, ft_strlen(set)))
-		return(ft_substr(str, ft_strlen(set), ft_strlen(str)));
+		return (ft_substr(str, ft_strlen(set), ft_strlen(str)));
 	return (ft_strdup(str));
 }
 

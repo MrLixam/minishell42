@@ -53,11 +53,17 @@ int	fix_path(t_local *local, t_data *c)
 		{
 			free(c->command);
 			c->command = tmp;
-			freetab(tab);
-			return (0);
+			break ;
 		}
 		free(tmp);
 	}
 	freetab(tab);
-	return (1);
+	return (c->command[0] != '/');
+}
+
+int	*getfd(void)
+{
+	static int	fd = -1;
+	
+	return (&fd);
 }

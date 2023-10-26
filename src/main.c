@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/26 21:08:13 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/26 23:16:32 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	minishell_loop(t_local *local)
 		str = readline("minishell$ ");
 		if (str == NULL)
 			return ;
-		if (wspace(str) || check_quote(str))
+		if (wspace(str))
 			continue ;
 		if (ft_strncmp(str, "\0", 2))
 			add_history(str);

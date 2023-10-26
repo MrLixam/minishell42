@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:23 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/26 21:46:30 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/26 23:18:00 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,10 @@ int	parser(t_local *local, char *lexer)
 	int		err;
 
 	err = 0;
+	if (check_quote(lexer))
+		ft_putendl_fd("minishell : syntax error unresolved quote", 2);
+	if (check_quote(lexer))
+		return (1);
 	tmp = arg_sep(lexer);
 	free(lexer);
 	if (tmp == NULL)

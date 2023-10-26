@@ -6,7 +6,7 @@
 /*   By: r <marvin@42.fr>                           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 16:48:12 by r                 #+#    #+#             */
-/*   Updated: 2023/10/25 21:17:35 by r                ###   ########.fr       */
+/*   Updated: 2023/10/26 12:24:23 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,7 @@ int	format_quote(t_data *current)
 	tmp = current->arg;
 	if (quote(tmp))
 		return (1);
-	tmp = current->input;
-	if (quote(tmp))
-		return (1);
-	tmp = current->output;
+	tmp = current->redir;
 	if (quote(tmp))
 		return (1);
 	return (0);

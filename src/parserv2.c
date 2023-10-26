@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:28:26 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/25 22:02:48 by r                ###   ########.fr       */
+/*   Updated: 2023/10/26 12:01:01 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ static char	*elem_first(t_local *local, char **split, int *i)
 		new = ft_strdup(split[0]);
 		*i -= 1;
 	}
+	else if (!ft_strncmp(split[*i], "$", 2))
+		new = ft_strdup("$");
 	else if (!ft_strncmp(split[*i], "$?", 2))
 		new = ft_itoa(local->exit_code);
 	else
@@ -92,10 +94,10 @@ static char	*format_env_var(t_local *local, char *var)
 		if (!ft_strncmp(split[i], "$?", 2))
 			if (elem_exit(local, &new))
 				return (NULL);
-		if (ft_strncmp(split[i], "$?", 2) && (split[i][0] == '$'))
+		if (ft_strncmp(split[i], "$?", 2) && split[i][0] == '$' && ft_strncmp(split[i], "$", 2))
 			if (elem_add(local, split, &new, i))
 				return (NULL);
-		if (ft_strncmp(split[i], "$?", 2) && !(split[i][0] == '$'))
+		if (ft_strncmp(split[i], "$?", 2) && (split[i][0] != '$' || !ft_strncmp(split[i], "$", 2)))
 			new = ft_strmerge(new, ft_strdup(split[i]));
 	}
 	freetab(split);

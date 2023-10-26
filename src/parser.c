@@ -6,40 +6,11 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:23 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/25 22:07:46 by r                ###   ########.fr       */
+/*   Updated: 2023/10/26 12:26:16 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int	switcher(t_data *data, t_list *src)
-{
-	while (src != NULL)
-	{
-		if (!ft_strncmp(src->content, ">", 1))
-		{
-			if (new_arg(&data->output, src->content))
-				return (1);
-			src = src->next;
-			if (!src)
-				return (write(1, "invalid syntax\n", 16));
-			if (new_arg(&data->output, src->content))
-				return (1);
-		}
-		if (!ft_strncmp(src->content, "<", 1))
-		{
-			if (new_arg(&data->input, src->content))
-				return (1);
-			src = src->next;
-			if (!src)
-				return (write(1, "invalid syntax\n", 16));
-			if (new_arg(&data->input, src->content))
-				return (1);
-		}
-		src = src->next;
-	}
-	return (0);
-}
 
 static int	elem_dispatch(t_data *curent, char *lex, int ret)
 {
@@ -71,8 +42,6 @@ static int	elem_dispatch(t_data *curent, char *lex, int ret)
 
 static int	next_data(t_data **curent)
 {
-	if (switcher(*curent, (*curent)->redir))
-		return (1);
 	if (format_quote(*curent))
 		return (1);
 	(*curent)->next = new_data();
@@ -92,7 +61,9 @@ t_data	*switch_elem(char **lexer, t_data *first)
 	curent = first;
 	while (lexer[++i])
 	{
-		cmp = elem_dispatch(curent, lexer[i], 0);
+		cmp = 2;
+		if (ft_strlen(lexer[i]))
+			cmp = elem_dispatch(curent, lexer[i], 0);
 		if (cmp == 1)
 			return (NULL);
 		if (!cmp && !ft_strncmp(lexer[i], "|", ft_strlen(lexer[i])))
@@ -102,8 +73,6 @@ t_data	*switch_elem(char **lexer, t_data *first)
 			if (new_arg(&curent->arg, lexer[i]))
 				return (NULL);
 	}
-	if (switcher(curent, curent->redir))
-		return (NULL);
 	if (format_quote(curent))
 		return (NULL);
 	return (first);

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/26 01:47:20 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 11:47:45 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,6 @@ static int	no_pipe(t_local *local)
 
 void	exec(t_local *local)
 {
-	int		i;
 	int		ret;
 
 	ret = heredoc(&local->data);
@@ -131,9 +130,6 @@ void	exec(t_local *local)
 		ret = pipeline(local);
 		if (ret == -1)
 			return ;
-		i = 0;
-		while (i < data_len(local->data))
-			waitpid(local->child_pid[i++], &ret, 0);
 		signal(SIGINT, sig_parent);
 		signal(SIGQUIT, SIG_IGN);
 		free(local->child_pid);

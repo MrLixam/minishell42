@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/26 02:43:26 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 12:16:27 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@ typedef struct s_data
 {
 	char			*command;
 	t_list			*redir;
-	t_list			*input;
-	t_list			*output;
 	t_list			*arg;
 	struct s_data	*next;
 }	t_data;
@@ -57,6 +55,7 @@ typedef struct s_bundle
 int		ft_strmcmp(char *s1, char *s2);
 int		clear_local(t_local	*local, int exit_code);
 void	fix_fd(int save[2]);
+char	*ft_strcut(char *str, char *set);
 
 /*			signals			*/
 void	sig_parent(int sig);

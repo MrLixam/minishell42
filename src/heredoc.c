@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 14:11:43 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/26 02:38:03 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 10:34:36 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ int	heredoc(t_data **line)
 	local = *line;
 	while (local)
 	{
-		curr = local->input;
+		curr = local->redir;
 		while (curr)
 		{
 			if (ft_strncmp(curr->content, "<<", 2) == 0)

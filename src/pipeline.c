@@ -75,8 +75,8 @@ static void	p_pass(t_local *local, t_data **curr, int *fd, int pipes[2])
 		close(*fd);
 	if ((*curr)->next != NULL)
 	{
-		*fd = pipes[0];
-		close(pipes[1]);
+		*fd = dup(pipes[0]);
+		close_pipe(pipes);
 	}
 	*curr = (*curr)->next;
 }
@@ -106,6 +106,10 @@ int	pipeline(t_local *local)
 			local->child_pid[i++] = fd_pid[1];
 		}
 	}
+	i = 0;
+	while (i < data_len(local->data))
+			waitpid(local->child_pid[i++], &local->exit_code, 0);
+	close(fd_pid[0]);
 	close_pipe(pipes);
-	return (0);
+	return (local->exit_code);
 }

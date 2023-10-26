@@ -12,6 +12,13 @@
 
 #include "minishell.h"
 
+char	*ft_strcut(char *str, char *set)
+{
+	if (!ft_strncmp(str, set, ft_strlen(set)))
+		return(ft_substr(str, ft_strlen(set), ft_strlen(str)));
+	return (ft_strdup(str));
+}
+
 char	**lst_to_str(t_list *lst, char *command)
 {
 	char	**str;
@@ -40,7 +47,7 @@ int	is_builtin(char *command)
 
 int	redir_present(t_data *command)
 {
-	return (command->output != NULL || command->input != NULL);
+	return (command->redir != NULL);
 }
 
 int	exec_builtin(t_local *local, char **str, t_data *line, int save[2])

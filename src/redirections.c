@@ -12,95 +12,90 @@
 
 #include "minishell.h"
 
-static char *ft_strcut(char *str, char *set)
+static int	redir_in(char *file)
 {
-	if (!ft_strncmp(str, set, ft_strlen(set)))
-		return(ft_substr(str, ft_strlen(set), ft_strlen(str)));
-	return (ft_strdup(str));
+	char *cut_path;
+	int	fd;
+
+	cut_path = ft_strcut(file, "./");
+	fd = -1;
+	if (!access(cut_path, R_OK))
+		if(!access(cut_path, F_OK))
+			fd = open(cut_path, O_RDONLY);
+	free(cut_path);
+	if (fd == -1)
+		return (perror_filename("minishell : ", file));
+	return (fd);
 }
 
-static int	redir_in(t_data *command, int in)
+static int	redir_out(char *file, char *tmp)
 {
-	t_list	*input;
-	int		i;
-	char	*tmp;
+	char *cut_path;
+	int	fd;
 
-	input = command->input;
-	if (!input)
-		return (in);
-	i = 0;
-	while (input->next)
-	{	
-		tmp = ft_strcut(input->content, "./");
-		if (i % 2 != 0 && access(tmp, F_OK | R_OK))
-		{
-			free(tmp);
-			return (perror_filename("minishell : ", input->content));
-		}
+	cut_path = ft_strcut(file, "./");
+	fd = -1;
+	if (ft_strlen(tmp) == 1)
+		fd = open(cut_path, O_CREAT | O_TRUNC | O_RDWR, 0644);
+	else
+		fd = open(cut_path, O_CREAT | O_APPEND | O_RDWR, 0644);
+	free(cut_path);
+	if (fd == -1)
+		return (perror_filename("minishell : ", file));
+	return (fd);
+}
+
+int	redirect_loop_logic(t_list *local_redir, char *tmp, int redir[2], int i)
+{
+	if (i % 2 == 0 || i == 0)
+	{
 		free(tmp);
-		input = input->next;
+		tmp = ft_strdup(local_redir->content);
+		local_redir = local_redir->next;
 		i++;
-	}
-	tmp = ft_strcut(input->content, "./");
-	if (!access(tmp, F_OK | R_OK))
-	{
-		i = open(tmp, O_RDONLY);
-		free(tmp);
-		return (i);
-	}
-	free(tmp);
-	return (perror_filename("minishell : ", input->content));
-}
-
-static int	outfile_logic(int *fd, int *i, t_list **output, char **tmp)
-{
-	if (*i % 2 != 0)
-	{
-		if (ft_strlen(*tmp) == 1)
-			*fd = open((*output)->content, O_CREAT | O_TRUNC | O_RDWR, 0644);
-		else
-			*fd = open((*output)->content, O_CREAT | O_APPEND | O_RDWR, 0644);
-		if (*fd == -1)
-			return (1);
-		if ((*output)->next)
-			close(*fd);
+		return 0;
 	}
 	else
 	{
-		free(*tmp);
-		*tmp = ft_strdup((*output)->content);
+		if (tmp[0] == '<')
+			redir[0] = redir_in(local_redir->content);
+		else
+			redir[1] = redir_out(local_redir->content, tmp);
 	}
-	*output = (*output)->next;
-	(*i)++;
-	return (0);
-}
-
-static int	redir_out(t_data *command, int out)
-{
-	t_list	*output;
-	int		i;
-	int		fd;
-	char	*tmp;
-
-	output = command->output;
-	if (!output)
-		return (out);
-	i = 1;
-	tmp = ft_strdup(output->content);
-	output = output->next;
-	while (output)
+	if (redir[0] == -1 || redir[1] == -1)
+		return (1);
+	if (local_redir->next)
 	{
-		if (outfile_logic(&fd, &i, &output, &tmp))
-			return (perror_filename("minishell : ", output->content));
+		if (redir[0] != STDIN_FILENO)
+			close(redir[0]);
+		if (redir[1] != STDOUT_FILENO)
+			close(redir[1]);
 	}
-	free(tmp);
-	return (fd);
+	return (0);
 }
 
 void	redirect(int in, int out, t_data *curr, int redir[2])
 {
-	redir[0] = redir_in(curr, in);
-	redir[1] = redir_out(curr, out);
+	int i;
+	t_list *local_redir;
+	char *tmp;
+	int err;
+
+	redir[0] = in;
+	redir[1] = out;
+	if (!curr->redir)
+		return ;
+	i = 0;
+	local_redir = curr->redir;
+	tmp = ft_strdup("");
+	while (local_redir)
+	{
+		err = redirect_loop_logic(local_redir, tmp, redir, i);
+		if (err)
+			return ;
+		local_redir = local_redir->next;
+		i++;
+	}
 }
 
 void	link_redir(int pipes[2], int fd, t_data *curr, t_local *local)
@@ -114,26 +109,14 @@ void	link_redir(int pipes[2], int fd, t_data *curr, t_local *local)
 	redirect(fd, pipes[1], curr, redir);
 	if (redir[0] == -1 || redir[1] == -1)
 		exit_command(local, curr, fds, 1);
-	if (curr->next != NULL)
+	if (curr->next != NULL || redir[1] != pipes[1])
 	{
-		if (redir[0] != STDIN_FILENO)
-		{
-			dup2(redir[0], STDIN_FILENO);
-			close(redir[0]);
-			close(pipes[0]);
-		}
 		dup2(redir[1], STDOUT_FILENO);
 		close(redir[1]);
 		close(pipes[1]);
 	}
-	if (curr != local->data)
+	if (curr != local->data || redir[0] != STDIN_FILENO)
 	{
-		if (redir[1] != pipes[1])
-		{
-			dup2(redir[1], STDOUT_FILENO);
-			close(redir[1]);
-			close(pipes[1]);
-		}
 		dup2(redir[0], STDIN_FILENO);
 		close(redir[0]);
 		close(pipes[0]);

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/26 03:35:20 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 12:07:17 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,33 @@ int	clear_local(t_local	*local, int exit_code)
 	return (exit_code);
 }
 
-int	main(int argc, char **argv, char **envp)
+void	minishell_loop(t_local *local)
 {
 	char	*str;
+
+	while (1)
+	{
+		signal(SIGINT, sig_parent);
+		signal(SIGQUIT, SIG_IGN);
+		str = readline("minishell$ ");
+		if (str == NULL)
+			exit(clear_local(local, 1));
+		if (ft_strncmp(str, "\0", 2))
+			add_history(str);
+		if (parser(local, str))
+			exit(clear_local(local, 1));
+		if (local->data == NULL)
+			exit(clear_local(local, 1));
+		if ( local->data->command != NULL && *local->data->command != '\0')
+			exec(local);
+		clear_data(local->data);
+		local->child_pid = NULL;
+		str = NULL;
+	}
+}
+
+int	main(int argc, char **argv, char **envp)
+{
 	t_local	*local;
 
 	local = ft_calloc(1, sizeof(t_local));
@@ -47,23 +71,6 @@ int	main(int argc, char **argv, char **envp)
 	init_local(local, envp);
 	(void) argc;
 	(void) argv;
-	signal(SIGINT, sig_parent);
-	signal(SIGQUIT, SIG_IGN);
-	while (1)
-	{
-		str = readline("minishell$ ");
-		if (str == NULL)
-			return (1);
-		if (ft_strncmp(str, "\0", 2))
-			add_history(str);
-		if (parser(local, str))
-			return (1);
-		if (local->data == NULL)
-			return (1);
-		if ( local->data->command != NULL && *local->data->command != '\0')
-			exec(local);
-		clear_data(local->data);
-		local->child_pid = NULL;
-		str = NULL;
-	}
+	minishell_loop(local);
+	return (0);
 }

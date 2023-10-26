@@ -45,22 +45,20 @@ static int	redir_out(char *file, char *tmp)
 	return (fd);
 }
 
-int	redirect_loop_logic(t_list *local_redir, char *tmp, int redir[2], int i)
+int	redirect_loop_logic(t_list *local_redir, char **tmp, int redir[2], int i)
 {
-	if (i % 2 == 0 || i == 0)
+	if (i == 0 || i % 2 == 0)
 	{
-		free(tmp);
-		tmp = ft_strdup(local_redir->content);
-		local_redir = local_redir->next;
-		i++;
+		free(*tmp);
+		*tmp = ft_strdup(local_redir->content);
 		return (0);
 	}
 	else
 	{
-		if (tmp[0] == '<')
+		if (**tmp == '<')
 			redir[0] = redir_in(local_redir->content);
-		else
-			redir[1] = redir_out(local_redir->content, tmp);
+		else if (**tmp == '>')
+			redir[1] = redir_out(local_redir->content, *tmp);
 	}
 	if (redir[0] == -1 || redir[1] == -1)
 		return (1);
@@ -89,12 +87,16 @@ void	redirect(int in, int out, t_data *curr, int redir[2])
 	tmp = ft_strdup("");
 	while (local_redir)
 	{
-		err = redirect_loop_logic(local_redir, tmp, redir, i);
+		err = redirect_loop_logic(local_redir, &tmp, redir, i);
 		if (err)
+		{
+			free(tmp);
 			return ;
+		}
 		local_redir = local_redir->next;
 		i++;
 	}
+	free(tmp);
 }
 
 void	link_redir(int pipes[2], int fd, t_data *curr, t_local *local)

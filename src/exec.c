@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/26 15:19:39 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 15:52:04 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ static int	no_pipe(t_local *local)
 		if (!redir_single(local->data))
 			var[1] = exec_builtin(local, str, local->data, save);
 		fix_fd(save);
+		freetab(str);
 		return (var[1]);
 	}
 	var[0] = fork();

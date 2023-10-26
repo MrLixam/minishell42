@@ -45,6 +45,7 @@ int	fix_path(t_local *local, t_data *c)
 		return (1);
 	tab = ft_split(pat, ':');
 	i = -1;
+	free(pat);
 	while (tab[++i])
 	{
 		tmp = ft_strmerge(ft_strjoin(tab[i], "/"), ft_strdup(c->command));

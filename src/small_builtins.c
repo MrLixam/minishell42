@@ -64,17 +64,13 @@ static int	check_export(char *str)
 	int	i;
 
 	i = 0;
-	if (str[0] == '=' || ft_isdigit(str[0]))
-		return (1);
 	while (str[i] && str[i] != '=')
 	{
 		if (!ft_isalpha(str[i]) && str[i] != '_')
 			return (1);
 		i++;
 	}
-	if (str[i] == '=')
-		return (0);
-	return (2);
+	return (0);
 }
 
 int	ft_export(t_local *local, char **arg)
@@ -93,15 +89,10 @@ int	ft_export(t_local *local, char **arg)
 		err = 0;
 		if (check_export(arg[i]) == 1)
 			err = 1;
-		else if (check_export(arg[i]) == 2)
-			err = 0;
 		else
 			err = export_env(local, arg[i]);
 		if (err == 1)
-		{
 			ft_builtin_error("export", arg[i], "not a valid identifier");
-			return (1);
-		}
 	}
 	return (0);
 }

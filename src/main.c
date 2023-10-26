@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/26 18:45:03 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 21:08:13 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ int	clear_local(t_local	*local, int exit_code)
 void	minishell_loop(t_local *local)
 {
 	char	*str;
-	int		err;
 
 	while (1)
 	{
@@ -62,11 +61,11 @@ void	minishell_loop(t_local *local)
 			continue ;
 		if (ft_strncmp(str, "\0", 2))
 			add_history(str);
-		err = parser(local, str);
-		if (err)
-			local->exit_code = err;
+		local->exit_code = parser(local, str);
 		if (local->data == NULL)
 			continue ;
+		if (local->data->command == NULL)
+			local->exit_code = 0;
 		if (local->data->command != NULL && *local->data->command != '\0')
 			exec(local);
 		clear_data(local->data);

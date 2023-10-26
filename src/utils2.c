@@ -20,14 +20,21 @@ void	close_pipe(int pipes[2])
 	close(pipes[1]);
 }
 
-void	exit_command(t_local *local, int fd[3], int code)
+void	hard_close(int in_child)
 {
-	int	pipes[2];
+	int	i;
 
-	pipes[0] = fd[0];
-	pipes[1] = fd[1];
-	close_pipe(pipes);
-	close(fd[2]);
+	if (in_child)
+		i = 0;
+	else
+		i = 3;
+	while (i <1024)
+		close(i++);
+}
+
+void	exit_command(t_local *local, int code)
+{
+	hard_close(1);
 	exit(clear_local(local, code));
 }
 
@@ -66,34 +73,3 @@ int	*getfd(void)
 
 	return (&fd);
 }
-
-/*int	fix_path(t_local *local, t_data *c)
-{
-	char	*pat;
-	char	**tab;
-	char	*tmp;
-	int		i;
-
-	if ((c->command[0] == '.' && c->command[1] == '/') || c->command[0] == '/')
-		return (0);
-	pat = ft_getenv(local, "PATH");
-	if (!pat)
-		return (1);
-	tab = ft_split(pat, ':');
-	i = -1;
-	free(pat);
-	while (tab[++i])
-	{
-		tmp = ft_strmerge(ft_strjoin(tab[i], "/"), ft_strdup(c->command));
-		if (!access(tmp, F_OK))
-		{
-			free(c->command);
-			c->command = tmp;
-			break ;
-		}
-		free(tmp);
-	}
-	freetab(tab);
-	return (c->command[0] != '/');
-}
-*/

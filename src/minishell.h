@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/26 16:30:56 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 18:29:39 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,8 @@ void	link_redir(int pipes[2], int fd, t_data *curr, t_local *local);
 int		is_last(t_list *redir, int mode);
 
 int		pipeline(t_local *local);
-void	exit_command(t_local *local, int fd[3], int code);
+void	exit_command(t_local *local, int code);
 void	close_pipe(int pipes[2]);
+void	hard_close(int in_child);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:23 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/26 18:03:06 by r                ###   ########.fr       */
+/*   Updated: 2023/10/26 18:48:27 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@ static int	err_dispatch(char *lex)
 {
 	if (lex[0] == '<' || lex[0] == '>' || lex[0] == '|')
 	{
-		ft_putstr_fd(" syntax error near unexpected token `", 2);
+		ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
 		if (lex[0] == '>')
 			ft_putstr_fd(lex, 2);
 		if (lex[0] == '<')
 			ft_putstr_fd(lex, 2);
 		if (lex[0] == '|')
 			ft_putstr_fd(lex, 2);
-		ft_putstr_fd("'", 2);
+		ft_putendl_fd("'", 2);
 		return (2);
 	}
 	return (0);
@@ -52,7 +52,7 @@ static int	next_data(t_data **curent)
 {
 	if ((*curent)->command == NULL)
 	{
-		ft_putstr_fd(" syntax error near unexpected token `|'", 2);
+		ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
 		return (2);
 	}
 	if (format_quote(*curent))
@@ -77,7 +77,8 @@ static int	error_redir(t_data *current)
 	tmp2 = (char *)tmp->content;
 	if (tmp2[0] == '<' || tmp2[0] == '>')
 	{
-		ft_putstr_fd(" syntax error near unexpected token `newline'", 2);
+		ft_putstr_fd("minishell:", 2);
+		ft_putendl_fd(" syntax error near unexpected token `newline'", 2);
 		return (2);
 	}
 	return (0);

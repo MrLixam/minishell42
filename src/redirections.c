@@ -109,7 +109,7 @@ void	link_redir(int pipes[2], int fd, t_data *curr, t_local *local)
 	fds[2] = fd;
 	redirect(fd, pipes[1], curr, redir);
 	if (redir[0] == -1 || redir[1] == -1)
-		exit_command(local, fds, 1);
+		exit_command(local, 1);
 	if (curr->next != NULL || redir[1] != pipes[1])
 	{
 		dup2(redir[1], STDOUT_FILENO);

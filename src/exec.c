@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/26 18:08:32 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 18:35:14 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,11 +124,10 @@ void	exec(t_local *local)
 	}
 	else if (!ret)
 		ret = no_pipe(local);
-	signal(SIGINT, sig_parent);
-	signal(SIGQUIT, SIG_IGN);
 	if (WIFEXITED(ret))
 		ret = WEXITSTATUS(ret);
 	local->exit_code = ret;
+	hard_close(0);
 	clear_heredoc(local);
 	signal(SIGINT, sig_parent);
 	signal(SIGQUIT, SIG_IGN);

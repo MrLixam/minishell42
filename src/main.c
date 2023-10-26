@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/26 18:19:53 by r                ###   ########.fr       */
+/*   Updated: 2023/10/26 18:45:03 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,9 @@ void	minishell_loop(t_local *local)
 			add_history(str);
 		err = parser(local, str);
 		if (err)
-			exit(clear_local(local, err));
+			local->exit_code = err;
 		if (local->data == NULL)
-			exit(clear_local(local, 1));
+			continue ;
 		if (local->data->command != NULL && *local->data->command != '\0')
 			exec(local);
 		clear_data(local->data);

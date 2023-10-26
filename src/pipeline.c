@@ -15,7 +15,7 @@
 #include <errno.h>
 #include <signal.h>
 
-static void	test_perms_and_type(t_data *cmd, t_local *l, char **str, int fd[3])
+static void	test_perms_and_type(t_data *cmd, t_local *l, char **str)
 {
 	int	cond;
 
@@ -24,22 +24,22 @@ static void	test_perms_and_type(t_data *cmd, t_local *l, char **str, int fd[3])
 	if (fix_path(l, cmd))
 	{
 		ft_cmd_error(cmd->command, "command not found", str);
-		exit_command(l, fd, 127);
+		exit_command(l, 127);
 	}
 	if (cond && !closedir(opendir(cmd->command)))
 	{
 		ft_cmd_error(cmd->command, "Is a directory", str);
-		exit_command(l, fd, 126);
+		exit_command(l, 126);
 	}
 	if (cond && access(cmd->command, F_OK))
 	{
 		ft_cmd_error(cmd->command, "No such file or directory", str);
-		exit_command(l, fd, 127);
+		exit_command(l, 127);
 	}
 	if (access(cmd->command, X_OK))
 	{
 		ft_cmd_error(cmd->command, "Permission denied", str);
-		exit_command(l, fd, 126);
+		exit_command(l, 126);
 	}
 }
 
@@ -47,7 +47,6 @@ static void	do_logic(int pipes[2], int fd, t_data *curr, t_local *local)
 {
 	char	**str;
 	int		i;
-	int		fds[3];
 
 	signal(SIGINT, sig_child);
 	signal(SIGQUIT, sig_child);
@@ -59,14 +58,11 @@ static void	do_logic(int pipes[2], int fd, t_data *curr, t_local *local)
 		freetab(str);
 		exit(i);
 	}
-	fds[0] = pipes[0];
-	fds[1] = pipes[1];
-	fds[2] = fd;
-	test_perms_and_type(curr, local, str, pipes);
+	test_perms_and_type(curr, local, str);
 	execve(curr->command, str, local->env);
 	perror("minishell: execve: ");
 	freetab(str);
-	exit_command(local, fds, errno);
+	exit_command(local, errno);
 }
 
 static void	p_pass(t_local *local, t_data **curr, int *fd, int pipes[2])

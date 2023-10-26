@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils4 .c                                          :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 02:32:40 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/26 02:32:40 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 20:53:11 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,21 @@ int	perror_filename(char *command, char *filename)
 	perror(err);
 	free(err);
 	return (-1);
+}
+
+int	err_dispatch(char *lex)
+{
+	if (lex[0] == '<' || lex[0] == '>' || lex[0] == '|')
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+		if (lex[0] == '>')
+			ft_putstr_fd(lex, 2);
+		if (lex[0] == '<')
+			ft_putstr_fd(lex, 2);
+		if (lex[0] == '|')
+			ft_putstr_fd(lex, 2);
+		ft_putendl_fd("'", 2);
+		return (2);
+	}
+	return (0);
 }

@@ -33,6 +33,42 @@ void	exit_command(t_local *local, int fd[3], int code)
 
 int	fix_path(t_local *local, t_data *c)
 {
+	char	*pat[2];
+	char	**tab;
+	int		i;
+
+	if ((c->command[0] == '.' && c->command[1] == '/') || c->command[0] == '/')
+		return (0);
+	pat[0] = ft_getenv(local, "PATH");
+	if (!pat[0])
+		return (1);
+	tab = ft_split(pat[0], ':');
+	i = -1;
+	free(pat[0]);
+	while (tab[++i])
+	{
+		pat[1] = ft_strmerge(ft_strjoin(tab[i], "/"), ft_strdup(c->command));
+		if (!access(pat[1], F_OK))
+		{
+			free(c->command);
+			c->command = pat[1];
+			break ;
+		}
+		free(pat[1]);
+	}
+	freetab(tab);
+	return (c->command[0] != '/');
+}
+
+int	*getfd(void)
+{
+	static int	fd = -1;
+
+	return (&fd);
+}
+
+/*int	fix_path(t_local *local, t_data *c)
+{
 	char	*pat;
 	char	**tab;
 	char	*tmp;
@@ -60,10 +96,4 @@ int	fix_path(t_local *local, t_data *c)
 	freetab(tab);
 	return (c->command[0] != '/');
 }
-
-int	*getfd(void)
-{
-	static int	fd = -1;
-
-	return (&fd);
-}
+*/

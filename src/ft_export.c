@@ -59,7 +59,7 @@ static int check_export(char *str)
 int	ft_export(t_local *local, char **arg)
 {
 	int	i;
-	int err;
+	int	err;
 
 	i = 0;
 	if (!arg[1])
@@ -71,10 +71,10 @@ int	ft_export(t_local *local, char **arg)
 			err = 0;
 		if (check_export(arg[i]) == 1)
 			err = 1;
-		else 
+		else
 			err = export_env(local, arg[i]);
 		if (err == 1)
-		ft_builtin_error("export", arg[i], "not a valid identifier");
+			ft_builtin_error("export", arg[i], "not a valid identifier");
 	}
 	return (err);
 }

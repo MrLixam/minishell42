@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 12:26:14 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/26 16:24:15 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 17:33:37 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,17 +87,22 @@ void	clear_heredoc(t_local *local)
 	t_data *curr;
 
 	curr = local->data;
+	if (!curr)
+		return ;
 	while (curr)
 	{
 		tmp = curr->redir;
-		while (tmp)
+		if (tmp != NULL)
 		{
-			if (!ft_strmcmp(tmp->content, "<<"))
+			while (tmp)
 			{
+				if (!ft_strmcmp(tmp->content, "<<"))
+				{
+					tmp = tmp->next;
+					unlink(tmp->content);
+				}
 				tmp = tmp->next;
-				unlink(tmp->content);
 			}
-			tmp = tmp->next;
 		}
 		curr = curr->next;
 	}

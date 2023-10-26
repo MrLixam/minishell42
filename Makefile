@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+         #
+#    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/07 16:02:47 by gpouzet           #+#    #+#              #
-#    Updated: 2023/10/25 16:58:51 by r                ###   ########.fr        #
+#    Updated: 2023/10/26 02:38:16 by marvin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,8 @@ NAME 	=	minishell
 SRC 	=	src/small_builtins.c src/g_env.c src/ft_echo.c src/main.c src/parserv2.c\
 			src/parser.c src/pars_redir.c src/arg_sep.c src/t_data.c src/env_sep.c \
 			src/exec.c src/export.c src/redirections.c src/pipeline.c src/heredoc.c\
-			src/utils.c src/utils2.c src/utils3.c src/ft_exit.c src/signal.c src/quote.c
+			src/utils.c src/utils2.c src/utils3.c src/ft_exit.c src/signal.c src/quote.c\
+			 src/error.c
 
 OBJ	= $(SRC:.c=.o)
 

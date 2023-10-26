@@ -6,7 +6,7 @@
 /*   By: gpouzet <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 13:39:40 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/25 16:48:00 by r                ###   ########.fr       */
+/*   Updated: 2023/10/26 17:49:34 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,30 @@ static int	redir(t_list **redir, char *lexer, int i, int j)
 	return (0);
 }
 
+static int	redir_size(char *lexer)
+{
+	int	i;
+
+	i = 0;
+	if (lexer[i] == '<')
+	{
+		while (lexer[i] == '<')
+			i++;
+		if (i > 2)
+			ft_putstr_fd(" syntax error near unexpected token `<'", 2);
+	}
+	else if (lexer[i] == '>')
+	{
+		while (lexer[i] == '>')
+			i++;
+		if (i > 2)
+			ft_putstr_fd(" syntax error near unexpected token `>'", 2);
+	}
+	if (i > 2)
+		return (-1);
+	return (i);
+}
+
 int	redirection(char *lexer, t_data *data)
 {
 	int		i;
@@ -32,12 +56,11 @@ int	redirection(char *lexer, t_data *data)
 	while (lexer[i])
 	{
 		j = i;
-		while (lexer[i] == '<' || lexer[i] == '>')
-			i++;
 		if (!ft_strncmp(lexer, "<>", 2) || !ft_strncmp(lexer, "><", 2))
 			return (1);
-		if (i - j > 2)
-			return (1);
+		i += redir_size(lexer);
+		if (i < 0)
+			return (2);
 		if (redir(&data->redir, lexer, i, j))
 			return (1);
 		j = i;

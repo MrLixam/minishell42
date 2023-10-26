@@ -6,14 +6,14 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:12:58 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/26 16:00:37 by r                ###   ########.fr       */
+/*   Updated: 2023/10/26 16:47:56 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "../libft/libft.h"
 
-static int	wspace(char c)
+static int	wspac(char c)
 {
 	if ((c >= '\t' && c <= '\r') || c == 32)
 		return (1);
@@ -39,12 +39,12 @@ static int	cut(char const *s)
 			s_quote *= -1;
 		else if (s[i] == 34 && s_quote > 0)
 			d_quote *= -1;
-		if (i > 0 && wspace(s[i]) && !wspace(s[i - 1]) && (s_quote + d_quote) > 0)
+		if (i > 0 && wspac(s[i]) && !wspac(s[i - 1]) && (s_quote + d_quote) > 0)
 			nb_arg++;
 		if (s[i] == '|' && (s_quote + d_quote) > 0)
 			nb_arg += 2;
 	}
-	if (wspace(s[ft_strlen(s) - 1]))
+	if (wspac(s[ft_strlen(s) - 1]))
 		nb_arg--;
 	return (nb_arg);
 }
@@ -66,7 +66,7 @@ static int	next_arg(char const *s)
 			s_quote *= -1;
 		else if (s[i] == 34 && s_quote > 0)
 			d_quote *= -1;
-		if ((wspace(s[i]) || s[i] == '|') && s_quote > 0 && d_quote > 0)
+		if ((wspac(s[i]) || s[i] == '|') && s_quote > 0 && d_quote > 0)
 			return (i);
 	}
 	return (i);
@@ -88,12 +88,12 @@ char	**arg_sep(char const *s)
 		return (args);
 	while (s[i] && s)
 	{
-		while (s[i] && wspace(s[i]))
+		while (s[i] && wspac(s[i]))
 			i++;
 		next = next_arg(s + i);
-		if (s[i] || wspace(s[i - 1]))
+		if (s[i] || wspac(s[i - 1]))
 			args[j++] = ft_substr(s + i, 0, next);
-		i += next + (wspace(s[i + next]));
+		i += next + (wspac(s[i + next]));
 	}
 	args[j] = 0;
 	return (args);

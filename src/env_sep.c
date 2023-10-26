@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 11:52:19 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/25 22:12:38 by r                ###   ########.fr       */
+/*   Updated: 2023/10/26 17:56:08 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ static int	cut(char const *s, int s_quote, int d_quote)
 			}
 		}
 	}
-	nb_arg++;
 	return (nb_arg);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/26 21:41:48 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/27 00:35:20 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int		ft_cd(t_local *local, char **arg);
 int		ft_echo(t_list *arg);
 int		ft_export(t_local *local, char **arg);
 int		ft_unset(t_local *local, char **arg);
-void	ft_exit(t_local *local, char **tab);
+void	ft_exit(t_local *local, t_data *curr, char **tab);
 
 /*			env_modif		*/
 char	*ft_getenv(t_local *local, char *name);
@@ -107,10 +107,13 @@ int		err_dispatch(char *lex);
 void	exec(t_local *local);
 char	**lst_to_str(t_list *lst, char *command);
 int		fix_path(t_local *local, t_data *curr);
+int		fix_single(int save[2], char **str, int retval);
+int		no_command(t_data *line, int save[2]);
 
 int		is_builtin(char *command);
 int		exec_builtin(t_local *local, char **str, t_data *line, int save[2]);
 
+int		redir_single(t_data *line);
 void	redirect(int in, int out, t_data *curr, int redir[2]);
 int		redir_present(t_data *command);
 void	link_redir(int pipes[2], int fd, t_data *curr, t_local *local);

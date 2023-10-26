@@ -18,7 +18,6 @@ static int	check_n(t_list *arg)
 	int		j;
 	char	*str;
 
-
 	j = 0;
 	while (arg)
 	{

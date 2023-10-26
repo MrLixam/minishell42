@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 15:58:14 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/26 16:37:07 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/27 00:34:40 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,15 @@ void	ft_exit_error(char *str)
 	free(str);
 }
 
-void	ft_exit(t_local *local, char **tab)
+void	ft_exit(t_local *local, t_data *curr, char **tab)
 {
 	int		exit_code;
 	char	*str;
 
 	exit_code = 0;
-	if (local->data->arg)
+	if (curr->arg)
 	{
-		str = check_numeric(local->data->arg);
+		str = check_numeric(curr->arg);
 		if (str != NULL)
 		{
 			ft_putstr_fd("minishell: exit: ", 2);
@@ -53,12 +53,12 @@ void	ft_exit(t_local *local, char **tab)
 			freetab(tab);
 			exit(clear_local(local, 2));
 		}
-		if (ft_lstsize(local->data->arg) > 1)
+		if (ft_lstsize(curr->arg) > 1)
 		{
 			ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
 			return ;
 		}
-		exit_code = ft_atoi(local->data->arg->content);
+		exit_code = ft_atoi(curr->arg->content);
 		if (exit_code < 0)
 			exit_code = 256 + exit_code;
 	}

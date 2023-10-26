@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/26 23:16:32 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/27 00:11:10 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,9 @@ static int	wspace(char *c)
 
 int	clear_local(t_local	*local, int exit_code)
 {
-	clear_heredoc(local);
+	if (data_len(local->data) <= 1)
+		clear_heredoc(local);
+	hard_close(1);
 	if (local->env)
 		freetab(local->env);
 	clear_data(local->data);
@@ -62,11 +64,11 @@ void	minishell_loop(t_local *local)
 		if (ft_strncmp(str, "\0", 2))
 			add_history(str);
 		local->exit_code = parser(local, str);
-		if (local->data == NULL)
+		if (local->data == NULL || local->exit_code)
 			continue ;
-		if (local->data->command == NULL)
+		if (empty_data(local->data))
 			local->exit_code = 0;
-		if (local->data->command != NULL && *local->data->command != '\0')
+		if (empty_data(local->data))
 			exec(local);
 		clear_data(local->data);
 		local->child_pid = NULL;
@@ -88,5 +90,6 @@ int	main(int argc, char **argv, char **envp)
 	(void) argv;
 	minishell_loop(local);
 	freetab(local->env);
+	free(local);
 	return (0);
 }

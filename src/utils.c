@@ -68,7 +68,7 @@ int	exec_builtin(t_local *local, char **str, t_data *line, int save[2])
 	{
 		if (save)
 			fix_fd(save);
-		ft_exit(local, str);
+		ft_exit(local, line, str);
 		return (1);
 	}
 	return (-1);

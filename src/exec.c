@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/26 18:35:14 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/27 00:30:06 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <sys/wait.h>
 #include <signal.h>
 
-static int	redir_single(t_data *line)
+int	redir_single(t_data *line)
 {
 	int	redir[2];
 
@@ -73,7 +73,9 @@ static void	fork_logic(t_local *local, char **str)
 		exit(clear_local(local, 1));
 	}
 	test_perms_and_type(local->data, local, str);
+	hard_close(0);
 	execve(local->data->command, str, local->env);
+	hard_close(1);
 	perror_filename("minishell: execve :", local->data->command);
 	clear_local(local, 0);
 }
@@ -84,17 +86,17 @@ static int	no_pipe(t_local *local)
 	int		var[2];
 	int		save[2];
 
+	save[0] = dup(STDIN_FILENO);
+	save[1] = dup(STDOUT_FILENO);
+	if (local->data->command == NULL)
+		return (no_command(local->data, save));
 	str = lst_to_str(local->data->arg, local->data->command);
 	if (is_builtin(local->data->command))
 	{
 		var[1] = 1;
-		save[0] = dup(STDIN_FILENO);
-		save[1] = dup(STDOUT_FILENO);
 		if (!redir_single(local->data))
 			var[1] = exec_builtin(local, str, local->data, save);
-		fix_fd(save);
-		freetab(str);
-		return (var[1]);
+		return (fix_single(save, str, var[1]));
 	}
 	var[0] = fork();
 	if (var[0] < 0)
@@ -127,8 +129,8 @@ void	exec(t_local *local)
 	if (WIFEXITED(ret))
 		ret = WEXITSTATUS(ret);
 	local->exit_code = ret;
-	hard_close(0);
 	clear_heredoc(local);
+	hard_close(0);
 	signal(SIGINT, sig_parent);
 	signal(SIGQUIT, SIG_IGN);
 }

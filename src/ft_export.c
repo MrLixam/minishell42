@@ -51,9 +51,7 @@ static int	check_export(char *str)
 			return (1);
 		i++;
 	}
-	if (str[i] == '=')
-		return (0);
-	return (2);
+	return (0);
 }
 
 int	ft_export(t_local *local, char **arg)
@@ -67,8 +65,6 @@ int	ft_export(t_local *local, char **arg)
 	while (arg[++i])
 	{
 		err = 0;
-		if (check_export(arg[i]) == 2)
-			err = 0;
 		if (check_export(arg[i]) == 1)
 			err = 1;
 		else

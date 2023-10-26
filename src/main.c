@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/26 14:59:43 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 15:02:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +75,6 @@ int	main(int argc, char **argv, char **envp)
 	(void) argc;
 	(void) argv;
 	minishell_loop(local);
+	freetab(local->env);
 	return (0);
 }

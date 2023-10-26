@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/26 13:15:47 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 15:19:39 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,10 @@
 #include <sys/wait.h>
 #include <signal.h>
 
-static int	redir_single(t_data *line, int save[2])
+static int	redir_single(t_data *line)
 {
 	int	redir[2];
 
-	save[0] = dup(0);
-	save[1] = dup(1);
 	redirect(STDIN_FILENO, STDOUT_FILENO, line, redir);
 	if (redir[0] == -1 || redir[1] == -1)
 		return (1);
@@ -66,9 +64,10 @@ static void	test_perms_and_type(t_data *line, t_local *local, char **str)
 	}
 }
 
-static void	fork_logic(t_local *local, int save[2], char **str)
+static void	fork_logic(t_local *local, char **str)
 {
-	if (redir_single(local->data, save))
+	signal(SIGQUIT, sig_child);
+	if (redir_single(local->data))
 	{
 		freetab(str);
 		exit(clear_local(local, 1));
@@ -89,7 +88,9 @@ static int	no_pipe(t_local *local)
 	if (is_builtin(local->data->command))
 	{
 		var[1] = 1;
-		if (!redir_single(local->data, save))
+		save[0] = dup(STDIN_FILENO);
+		save[1] = dup(STDOUT_FILENO);
+		if (!redir_single(local->data))
 			var[1] = exec_builtin(local, str, local->data, save);
 		fix_fd(save);
 		return (var[1]);
@@ -98,10 +99,7 @@ static int	no_pipe(t_local *local)
 	if (var[0] < 0)
 		perror("minishell: fork failed");
 	else if (!var[0])
-	{
-		signal(SIGQUIT, sig_child);
-		fork_logic(local, save, str);
-	}
+		fork_logic(local, str);
 	else
 		waitpid(var[0], &var[1], 0);
 	freetab(str);

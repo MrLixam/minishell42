@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/26 15:02:05 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 17:38:48 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,17 @@ static void	init_local(t_local *local, char **envp)
 	create_env(local, envp);
 }
 
+static int	wspace(char *c)
+{
+	int	i;
+
+	i = -1;
+	while (c[++i])
+		if (!(c[i] >= '\t' && c[i] <= '\r') && c[i] != 32)
+			return (0);
+	return (1);
+}
+
 int	clear_local(t_local	*local, int exit_code)
 {
 	if (local->env)
@@ -39,8 +50,8 @@ int	clear_local(t_local	*local, int exit_code)
 void	minishell_loop(t_local *local)
 {
 	char	*str;
+	int		err;
 
-	rl_outstream = stderr;
 	while (1)
 	{
 		signal(SIGINT, sig_parent);
@@ -48,10 +59,13 @@ void	minishell_loop(t_local *local)
 		str = readline("minishell$ ");
 		if (str == NULL || str[0] == '\0')
 			return ;
+		if (wspace(str) || check_quote(str))
+			continue ;
 		if (ft_strncmp(str, "\0", 2))
 			add_history(str);
-		if (parser(local, str))
-			exit(clear_local(local, 1));
+		err = parser(local, str);
+		if (err)
+			exit(clear_local(local, err));
 		if (local->data == NULL)
 			exit(clear_local(local, 1));
 		if (local->data->command != NULL && *local->data->command != '\0')

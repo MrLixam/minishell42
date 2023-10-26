@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:23 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/26 23:18:00 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/27 00:21:49 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,11 @@ static int	error_redir(t_data *current)
 	t_list	*tmp;
 	char	*tmp2;
 
+	if (!empty_data(current))
+	{
+		ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
+		return (2);
+	}
 	if (format_quote(current))
 		return (1);
 	if (current->redir == NULL)

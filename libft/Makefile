@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gpouzet <marvin@42.fr>                     +#+  +:+       +#+         #
+#    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/03 16:01:39 by gpouzet           #+#    #+#              #
-#    Updated: 2023/04/14 13:26:39 by gpouzet          ###   ########.fr        #
+#    Updated: 2023/10/26 02:45:24 by marvin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ SRC 	=	libft/ft_isalpha.c libft/ft_isdigit.c libft/ft_isalnum.c libft/ft_isascii
 			libft/ft_strmapi.c libft/ft_striteri.c \
 			libft/ft_putchar_fd.c libft/ft_putstr_fd.c \
 			libft/ft_putendl_fd.c libft/ft_putnbr_fd.c \
-			libft/ft_tabstrlen.c \
+			libft/ft_tabstrlen.c libft/ft_strmerge.c\
 
 SRC 	+=	lst/ft_lstnew.c lst/ft_lstadd_front.c lst/ft_lstsize.c \
 			lst/ft_lstlast.c lst/ft_lstadd_back.c lst/ft_lstdelone.c \

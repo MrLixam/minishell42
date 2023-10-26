@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 12:26:14 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/26 13:45:29 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 16:24:15 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,5 +78,27 @@ int	is_last(t_list *redir, int mode)
 			tmp = tmp->next;
 		}
 		return (1);
+	}
+}
+
+void	clear_heredoc(t_local *local)
+{
+	t_list *tmp;
+	t_data *curr;
+
+	curr = local->data;
+	while (curr)
+	{
+		tmp = curr->redir;
+		while (tmp)
+		{
+			if (!ft_strmcmp(tmp->content, "<<"))
+			{
+				tmp = tmp->next;
+				unlink(tmp->content);
+			}
+			tmp = tmp->next;
+		}
+		curr = curr->next;
 	}
 }

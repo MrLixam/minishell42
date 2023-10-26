@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 20:51:06 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/26 03:10:43 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 17:08:24 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,13 @@ static int	check_env(t_local *local, char *find)
 	int	i;
 
 	i = -1;
+	if (!ft_strchr(find, '='))
+	{
+		while (local->env[++i])
+			if (!ft_strmcmp(local->env[i], find))
+				return (1);
+		return (0);
+	}
 	while (local->env[++i])
 	{
 		if (!ft_strncmp(local->env[i], find, ft_strlen(find) \
@@ -58,7 +65,7 @@ static int	add_env(t_local *local, char *add, int i)
 {
 	char	**new_env;
 
-	if (!add || !ft_strchr(add, '='))
+	if (!add)
 		return (0);
 	new_env = ft_calloc(ft_tabstrlen(local->env) + 2, sizeof(char *));
 	while (new_env != NULL && local->env[++i])

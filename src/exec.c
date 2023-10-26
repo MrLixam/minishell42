@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/26 15:52:04 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 16:18:45 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,4 +129,5 @@ void	exec(t_local *local)
 	if (WIFEXITED(ret))
 		ret = WEXITSTATUS(ret);
 	local->exit_code = ret;
+	clear_heredoc(local);
 }

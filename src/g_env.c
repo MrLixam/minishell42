@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 14:11:44 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/26 13:46:06 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 17:10:12 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,9 @@ int	print_env(t_local *local, char **arg)
 		return (7);
 	}
 	while (local->env[++i])
-		ft_putendl_fd(local->env[i], STDOUT_FILENO);
+	{
+		if (ft_strchr(local->env[i], '='))
+			ft_putendl_fd(local->env[i], STDOUT_FILENO);
+	}
 	return (0);
 }

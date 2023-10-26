@@ -66,10 +66,9 @@ int	exec_builtin(t_local *local, char **str, t_data *line, int save[2])
 		return (print_env(local, str));
 	else if (!ft_strmcmp(line->command, "exit"))
 	{
-		freetab(str);
 		if (save)
 			fix_fd(save);
-		ft_exit(local);
+		ft_exit(local, str);
 		return (1);
 	}
 	return (-1);

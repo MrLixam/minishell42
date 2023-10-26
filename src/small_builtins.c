@@ -59,44 +59,6 @@ int	ft_cd(t_local *local, char **arg)
 	return (0);
 }
 
-static int	check_export(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] && str[i] != '=')
-	{
-		if (!ft_isalpha(str[i]) && str[i] != '_')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-int	ft_export(t_local *local, char **arg)
-{
-	int	i;
-	int	err;
-
-	i = 0;
-	if (ft_tabstrlen(arg) == 1)
-	{
-		print_env(local, arg);
-		return (0);
-	}
-	while (arg[++i])
-	{
-		err = 0;
-		if (check_export(arg[i]) == 1)
-			err = 1;
-		else
-			err = export_env(local, arg[i]);
-		if (err == 1)
-			ft_builtin_error("export", arg[i], "not a valid identifier");
-	}
-	return (0);
-}
-
 int	ft_unset(t_local *local, char **arg)
 {
 	int	i;

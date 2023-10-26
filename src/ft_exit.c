@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 15:58:14 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/26 03:44:01 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 16:37:07 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,14 @@ static char	*check_numeric(t_list *arg)
 	return (NULL);
 }
 
-void	ft_exit(t_local *local)
+void	ft_exit_error(char *str)
+{
+	ft_putstr_fd("minishell: exit: ", 2);
+	ft_putendl_fd(str, 2);
+	free(str);
+}
+
+void	ft_exit(t_local *local, char **tab)
 {
 	int		exit_code;
 	char	*str;
@@ -43,7 +50,7 @@ void	ft_exit(t_local *local)
 		{
 			ft_putstr_fd("minishell: exit: ", 2);
 			ft_putendl_fd(str, 2);
-			free(str);
+			freetab(tab);
 			exit(clear_local(local, 2));
 		}
 		if (ft_lstsize(local->data->arg) > 1)
@@ -55,5 +62,6 @@ void	ft_exit(t_local *local)
 		if (exit_code < 0)
 			exit_code = 256 + exit_code;
 	}
+	freetab(tab);
 	exit(clear_local(local, exit_code));
 }

@@ -56,11 +56,13 @@ static void	do_logic(int pipes[2], int fd, t_data *curr, t_local *local)
 	{
 		i = exec_builtin(local, str, curr, pipes);
 		freetab(str);
-		exit(i);
+		exit_command(local, i);
 	}
 	test_perms_and_type(curr, local, str);
+	hard_close(0);
 	execve(curr->command, str, local->env);
 	perror("minishell: execve: ");
+	hard_close(1);
 	freetab(str);
 	exit_command(local, errno);
 }
@@ -77,13 +79,12 @@ static void	p_pass(t_local *local, t_data **curr, int *fd, int pipes[2])
 	*curr = (*curr)->next;
 }
 
-void	wait_and_close(t_local *local, int pipes[2], int fd)
+void	wait_and_close(t_local *local)
 {
 	int	i;
 
 	i = 0;
-	close_pipe(pipes);
-	close(fd);
+	hard_close(0);
 	while (i < data_len(local->data))
 	{
 		waitpid(local->child_pid[i], &local->exit_code, 0);
@@ -116,6 +117,6 @@ int	pipeline(t_local *local)
 			local->child_pid[i++] = fd_pid[1];
 		}
 	}
-	wait_and_close(local, pipes, fd_pid[0]);
+	wait_and_close(local);
 	return (local->exit_code);
 }

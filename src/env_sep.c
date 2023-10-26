@@ -3,22 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   env_sep.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 11:52:19 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/26 19:07:39 by r                ###   ########.fr       */
+/*   Updated: 2023/10/27 01:21:41 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	cut(char const *s, int s_quote, int d_quote)
+static int	cut(char const *s, int s_quote, int d_quote, int nb_args)
 {
 	int	i;
-	int	nb_arg;
 
 	i = -1;
-	nb_arg = 1;
 	if (!*s)
 		return (0);
 	while (s[++i])
@@ -29,16 +27,17 @@ static int	cut(char const *s, int s_quote, int d_quote)
 			d_quote *= -1;
 		if (s[i] == '$' && s_quote > 0)
 		{
-			nb_arg++;
-			if (s[i + 1] != '?')
+			nb_args++;
+			if (s[i + 1] != '?' && s[i + 1] != '$')
 			{
 				while (s[i + 1] && (ft_isalnum(s[i + 1]) || s[i + 1] == '_'))
 					i++;
-				nb_arg++;
+				if (s[i + 1] != '$')
+					nb_args++;
 			}
 		}
 	}
-	return (nb_arg);
+	return (nb_args);
 }
 
 static int	next_arg(char const *s)
@@ -81,7 +80,7 @@ char	**env_sep(char const *s)
 	j = 0;
 	if (!s)
 		return (0);
-	args = ft_calloc(cut(s, 1, 1) + 1, sizeof(char *));
+	args = ft_calloc(cut(s, 1, 1, 1) + 1, sizeof(char *));
 	if (!args)
 		return (args);
 	while (s[i] && s)
@@ -90,6 +89,5 @@ char	**env_sep(char const *s)
 		args[j++] = ft_substr(s + i, 0, next);
 		i += next;
 	}
-	args[j] = 0;
 	return (args);
 }

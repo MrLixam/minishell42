@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/26 15:42:34 by r                ###   ########.fr       */
+/*   Updated: 2023/10/26 16:30:56 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ char	*ft_strmerge(char *s1, char *s2);
 /*			heredoc			*/
 int		heredoc(t_data **line);
 int		*getfd(void);
+void	clear_heredoc(t_local *local);
 
 /*			builtins		*/
 int		ft_pwd(void);
@@ -85,7 +86,7 @@ int		ft_cd(t_local *local, char **arg);
 int		ft_echo(t_list *arg);
 int		ft_export(t_local *local, char **arg);
 int		ft_unset(t_local *local, char **arg);
-void	ft_exit(t_local *local);
+void	ft_exit(t_local *local, char **tab);
 
 /*			env_modif		*/
 char	*ft_getenv(t_local *local, char *name);

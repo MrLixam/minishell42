@@ -24,22 +24,22 @@ static void	test_perms_and_type(t_data *cmd, t_local *l, char **str, int fd[3])
 	if (fix_path(l, cmd))
 	{
 		ft_cmd_error(cmd->command, "command not found", str);
-		exit_command(l, cmd, fd, 127);
+		exit_command(l, fd, 127);
 	}
 	if (cond && !closedir(opendir(cmd->command)))
 	{
 		ft_cmd_error(cmd->command, "Is a directory", str);
-		exit_command(l, cmd, fd, 126);
+		exit_command(l, fd, 126);
 	}
 	if (cond && access(cmd->command, F_OK))
 	{
 		ft_cmd_error(cmd->command, "No such file or directory", str);
-		exit_command(l, cmd, fd, 127);
+		exit_command(l, fd, 127);
 	}
 	if (access(cmd->command, X_OK))
 	{
 		ft_cmd_error(cmd->command, "Permission denied", str);
-		exit_command(l, cmd, fd, 126);
+		exit_command(l, fd, 126);
 	}
 }
 
@@ -51,6 +51,7 @@ static void	do_logic(int pipes[2], int fd, t_data *curr, t_local *local)
 
 	signal(SIGINT, sig_child);
 	signal(SIGQUIT, sig_child);
+	signal(SIGPIPE, SIG_DFL);
 	link_redir(pipes, fd, curr, local);
 	str = lst_to_str(curr->arg, curr->command);
 	if (is_builtin(curr->command))
@@ -66,7 +67,7 @@ static void	do_logic(int pipes[2], int fd, t_data *curr, t_local *local)
 	execve(curr->command, str, local->env);
 	perror("minishell: execve: ");
 	freetab(str);
-	exit_command(local, curr, fds, errno);
+	exit_command(local, fds, errno);
 }
 
 static void	p_pass(t_local *local, t_data **curr, int *fd, int pipes[2])
@@ -86,13 +87,13 @@ void	wait_and_close(t_local *local, int pipes[2], int fd)
 	int	i;
 
 	i = 0;
+	close_pipe(pipes);
+	close(fd);
 	while (i < data_len(local->data))
 	{
 		waitpid(local->child_pid[i], &local->exit_code, 0);
 		i++;
 	}
-	close_pipe(pipes);
-	close(fd);
 }
 
 int	pipeline(t_local *local)

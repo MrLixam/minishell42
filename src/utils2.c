@@ -20,15 +20,14 @@ void	close_pipe(int pipes[2])
 	close(pipes[1]);
 }
 
-void	exit_command(t_local *local, t_data *curr, int fd[3], int code)
+void	exit_command(t_local *local, int fd[3], int code)
 {
 	int	pipes[2];
 
 	pipes[0] = fd[0];
 	pipes[1] = fd[1];
 	close_pipe(pipes);
-	if (curr != local->data)
-		close(fd[2]);
+	close(fd[2]);
 	exit(clear_local(local, code));
 }
 
@@ -64,6 +63,6 @@ int	fix_path(t_local *local, t_data *c)
 int	*getfd(void)
 {
 	static int	fd = -1;
-	
+
 	return (&fd);
 }

@@ -18,12 +18,13 @@ static int	check_n(t_list *arg)
 	int		j;
 	char	*str;
 
+
 	j = 0;
 	while (arg)
 	{
 		str = (char *)arg->content;
 		i = 0;
-		if (str[i] != '-')
+		if (str[i] != '-' || (str[i] == '-' && str[i + 1] != 'n'))
 			return (j);
 		while (str[++i] == 'n')
 			;
@@ -39,7 +40,7 @@ int	ft_echo(t_list *arg)
 {
 	t_list	*curr;
 	int		option;
-	int		i;
+	int		i;	
 
 	curr = arg;
 	option = check_n(curr);

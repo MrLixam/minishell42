@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/26 19:23:01 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 20:53:51 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ int		perror_filename(char *command, char *filename);
 int		ft_error(char *message);
 void	ft_cmd_error(char *cmd, char *error, char **str);
 void	ft_builtin_error(char *command, char *file, char *error);
+int		err_dispatch(char *lex);
 
 /*			execution			*/
 void	exec(t_local *local);

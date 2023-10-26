@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 16:12:41 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/26 19:16:15 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 21:46:28 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,17 @@ int	data_len(t_data *line)
 		line = line->next;
 	}
 	return (i);
+}
+
+int	empty_data(t_data *data)
+{
+	if (data->redir != NULL)
+		return (1);
+	if (data->command != NULL)
+		return (1);
+	if (data->arg != NULL)
+		return (1);
+	return (0);
 }
 
 void	freetab(char **tab)

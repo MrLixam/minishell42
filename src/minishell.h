@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/26 20:53:51 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/26 21:41:48 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	sig_heredoc(int sig);
 /*			data			*/
 t_data	*new_data(void);
 int		data_len(t_data *line);
+int		empty_data(t_data *data);
 void	freetab(char **tab);
 void	clear_data(t_data *data);
 int		new_arg(t_list **lst, char *arg);

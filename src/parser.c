@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:23 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/26 20:56:00 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/26 21:46:30 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	elem_dispatch(t_data *curent, char *lex, int ret)
 
 static int	next_data(t_data **curent)
 {
-	if ((*curent)->command == NULL)
+	if (!empty_data(*curent))
 	{
 		ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
 		return (2);

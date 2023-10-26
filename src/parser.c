@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:23 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/26 20:52:57 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/26 20:56:00 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static int	error_redir(t_data *current)
 	t_list	*tmp;
 	char	*tmp2;
 
-	if (format_quote(curent))
+	if (format_quote(current))
 		return (1);
 	if (current->redir == NULL)
 		return (0);

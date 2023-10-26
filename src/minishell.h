@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/25 19:18:40 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 02:43:26 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # include <readline/history.h>
 # include <fcntl.h>
 # include <unistd.h>
+# include <sys/types.h>
+# include <dirent.h>
 
 /*			struct			*/
 typedef struct s_local
@@ -45,7 +47,13 @@ typedef struct s_data
 	struct s_data	*next;
 }	t_data;
 
-/*			prototype		*/
+typedef struct s_bundle
+{
+
+
+} t_bundle;
+
+/*			utils		*/
 int		ft_strmcmp(char *s1, char *s2);
 int		clear_local(t_local	*local, int exit_code);
 void	fix_fd(int save[2]);
@@ -53,7 +61,6 @@ void	fix_fd(int save[2]);
 /*			signals			*/
 void	sig_parent(int sig);
 void	sig_child(int sig);
-int 	*getfd(void);
 void	sig_heredoc(int sig);
 
 /*			data			*/
@@ -76,7 +83,9 @@ char	**env_sep(char const *s);
 t_data	*switch_elem(char **lexer, t_data *first);
 char	*ft_strmerge(char *s1, char *s2);
 
+/*			heredoc			*/
 int		heredoc(t_data **line);
+int 	*getfd(void);
 
 /*			builtins		*/
 int		ft_pwd(void);
@@ -96,20 +105,23 @@ int		print_env(t_local *local, char **arg);
 /*			error			*/
 int		perror_filename(char *command, char *filename);
 int		ft_error(char *message);
-void	path_error(char *filename);
+void	ft_cmd_error(char *cmd, char *error, char **str);
+void	ft_builtin_error(char *command, char *file, char *error);
 
-/*			execution		*/
+/*			execution			*/
 void	exec(t_local *local);
-void	link_redir(int pipes[2], int fd, t_data *curr, t_local *local);
-int		is_builtin(char *command);
-int		file_access(char *path);
 char	**lst_to_str(t_list *lst, char *command);
-int		redir_present(t_data *command);
-int		exec_builtin(t_local *local, char **str, t_data *line, int save[2]);
 int		fix_path(t_local *local, t_data *curr);
-void	clean_child(t_local *local, t_data *curr, int pipes[2], int fd);
-void	close_pipe(int pipes[2]);
+
+int		is_builtin(char *command);
+int		exec_builtin(t_local *local, char **str, t_data *line, int save[2]);
+
 void	redirect(int in, int out, t_data *curr, int redir[2]);
+int		redir_present(t_data *command);
+void	link_redir(int pipes[2], int fd, t_data *curr, t_local *local);
+
 int		pipeline(t_local *local);
+void	exit_command(t_local *local, t_data *curr, int fd[3], int code);
+void	close_pipe(int pipes[2]);
 
 #endif

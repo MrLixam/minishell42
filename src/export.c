@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 20:51:06 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/23 12:15:41 by r                ###   ########.fr       */
+/*   Updated: 2023/10/26 03:10:43 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,9 @@ static int	add_env(t_local *local, char *add, int i)
 			break ;
 		}
 	}
-	freetab(local->env);
 	if (!new_env)
 		return (1);
+	freetab(local->env);
 	new_env[i] = ft_strdup(add);
 	if (new_env[i] == NULL)
 	{

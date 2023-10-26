@@ -12,24 +12,43 @@
 
 #include "minishell.h"
 
+static char *ft_strcut(char *str, char *set)
+{
+	if (!ft_strncmp(str, set, ft_strlen(set)))
+		return(ft_substr(str, ft_strlen(set), ft_strlen(str)));
+	return (ft_strdup(str));
+}
+
 static int	redir_in(t_data *command, int in)
 {
 	t_list	*input;
 	int		i;
+	char	*tmp;
 
 	input = command->input;
 	if (!input)
 		return (in);
 	i = 0;
 	while (input->next)
-	{
-		if (i % 2 != 0 && file_access(input->content))
+	{	
+		tmp = ft_strcut(input->content, "./");
+		if (i % 2 != 0 && access(tmp, F_OK | R_OK))
+		{
+			free(tmp);
 			return (perror_filename("minishell : ", input->content));
+		}
+		free(tmp);
 		input = input->next;
 		i++;
 	}
-	if (!file_access(input->content))
-		return (open(input->content, O_RDONLY));
+	tmp = ft_strcut(input->content, "./");
+	if (!access(tmp, F_OK | R_OK))
+	{
+		i = open(tmp, O_RDONLY);
+		free(tmp);
+		return (i);
+	}
+	free(tmp);
 	return (perror_filename("minishell : ", input->content));
 }
 
@@ -87,10 +106,14 @@ void	redirect(int in, int out, t_data *curr, int redir[2])
 void	link_redir(int pipes[2], int fd, t_data *curr, t_local *local)
 {
 	int	redir[2];
+	int fds[3];
 
+	fds[0] = pipes[0];
+	fds[1] = pipes[1];
+	fds[2] = fd;
 	redirect(fd, pipes[1], curr, redir);
 	if (redir[0] == -1 || redir[1] == -1)
-		clean_child(local, curr, pipes, fd);
+		exit_command(local, curr, fds, 1);
 	if (curr->next != NULL)
 	{
 		if (redir[0] != STDIN_FILENO)

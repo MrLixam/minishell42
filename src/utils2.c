@@ -20,58 +20,44 @@ void	close_pipe(int pipes[2])
 	close(pipes[1]);
 }
 
-void	clean_child(t_local *local, t_data *curr, int pipes[2], int fd)
+void	exit_command(t_local *local, t_data *curr, int fd[3], int code)
 {
-	freetab(local->env);
+	int	pipes[2];
+
+	pipes[0] = fd[0];
+	pipes[1] = fd[1];
 	close_pipe(pipes);
 	if (curr != local->data)
-		close(fd);
-	clear_data(local->data);
-	free(local->child_pid);
-	exit(errno);
+		close(fd[2]);
+	exit(clear_local(local, code));
 }
 
-int	perror_filename(char *command, char *filename)
+int	fix_path(t_local *local, t_data *c)
 {
-	char	*err;
-
-	err = ft_strjoin(command, filename);
-	perror(err);
-	free(err);
-	return (-1);
-}
-
-int	fix_path(t_local *local, t_data *curr)
-{
-	char	*path;
+	char	*pat;
 	char	**tab;
 	char	*tmp;
 	int		i;
 
-	path = ft_getenv(local, "PATH");
-	if (path == NULL || file_access(curr->command) == 0)
+	if ((c->command[0] == '.' && c->command[1] == '/') || c->command[0] == '/')
 		return (0);
-	tab = ft_split(path, ':');
+	pat = ft_getenv(local, "PATH");
+	if (!pat)
+		return (1);
+	tab = ft_split(pat, ':');
 	i = -1;
 	while (tab[++i])
 	{
-		tmp = ft_strmerge(ft_strjoin(tab[i], "/"), ft_strdup(curr->command));
-		if (!file_access(tmp))
+		tmp = ft_strmerge(ft_strjoin(tab[i], "/"), ft_strdup(c->command));
+		if (!access(tmp, F_OK))
 		{
-			free(curr->command);
-			curr->command = tmp;
+			free(c->command);
+			c->command = tmp;
 			freetab(tab);
 			return (0);
 		}
 		free(tmp);
 	}
 	freetab(tab);
-	path_error(curr->command);
 	return (1);
-}
-
-int	ft_error(char *message)
-{
-	perror(message);
-	return (-1);
 }

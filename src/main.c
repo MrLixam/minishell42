@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/25 21:36:58 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 03:35:20 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ int	main(int argc, char **argv, char **envp)
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		rl_reset_terminal(NULL);
 		str = readline("minishell$ ");
 		if (str == NULL)
 			return (1);
@@ -61,7 +60,7 @@ int	main(int argc, char **argv, char **envp)
 			return (1);
 		if (local->data == NULL)
 			return (1);
-		if (local->data->command != NULL)
+		if ( local->data->command != NULL && *local->data->command != '\0')
 			exec(local);
 		clear_data(local->data);
 		local->child_pid = NULL;

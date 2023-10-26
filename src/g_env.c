@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 14:11:44 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/18 16:11:25 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/26 03:54:12 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,25 @@ int	unset_env(t_local *local, char *unset)
 {
 	char	**new_env;
 	int		i;
+	int		j;
+	char	*tmp;
 
 	if (!unset)
 		return (0);
+	tmp = ft_getenv(local, unset);
+	if (ft_strlen(tmp) == 0)
+	{
+		free(tmp);
+		return (0);
+	}
 	new_env = ft_calloc(ft_tabstrlen(local->env), sizeof(char *));
 	i = -1;
+	j = -1;
 	while (new_env != NULL && local->env[++i])
 	{
 		if (ft_strncmp(local->env[i], unset, ft_strlen(local->env[i]) \
 			- ft_strlen(ft_strchr(local->env[i], '='))))
-			new_env[i] = ft_strdup(local->env[i]);
+			new_env[++j] = ft_strdup(local->env[i]);
 		if (new_env == NULL)
 		{
 			freetab(local->env);
@@ -91,7 +100,7 @@ int	print_env(t_local *local, char **arg)
 	int	i;
 
 	i = -1;
-	if (ft_tabstrlen(arg) > 1)
+	if (arg != NULL && ft_tabstrlen(arg) > 1)
 	{
 		ft_putendl_fd("minishell: env: too many arguments", STDERR_FILENO);
 		return (7);

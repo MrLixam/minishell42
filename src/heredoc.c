@@ -6,11 +6,17 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 14:11:43 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/25 19:23:04 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 02:38:03 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int *getfd(void)
+{
+	static int	fd = -1;
+	return (&fd);
+}
 
 static void	get_input(int fd, char *delim)
 {

@@ -30,11 +30,6 @@ char	**lst_to_str(t_list *lst, char *command)
 	return (str);
 }
 
-int	file_access(char *path)
-{
-	return (access(path, F_OK & R_OK & W_OK & X_OK));
-}
-
 int	is_builtin(char *command)
 {
 	return (!ft_strmcmp(command, "echo") || !ft_strmcmp(command, "cd")
@@ -68,6 +63,7 @@ int	exec_builtin(t_local *local, char **str, t_data *line, int save[2])
 		if (save)
 			fix_fd(save);
 		ft_exit(local);
+		return (1);
 	}
 	return (-1);
 }

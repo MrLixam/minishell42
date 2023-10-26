@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 15:58:14 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/24 16:52:11 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/26 03:44:01 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static char	*check_numeric(t_list *arg)
 
 	i = -1;
 	tmp = ft_strdup(arg->content);
-	if (tmp[0] == '-')
+	if (tmp[0] == '-' || tmp[0] == '+')
 		i++;
 	while (tmp[++i])
 	{

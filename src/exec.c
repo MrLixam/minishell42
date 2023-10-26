@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/25 18:54:36 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 01:47:20 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,34 @@ static int	redir_single(t_data *line, int save[2])
 	return (0);
 }
 
+static void	test_perms_and_type(t_data *line, t_local *local, char **str)
+{
+	if (fix_path(local, line))
+	{
+		ft_cmd_error(line->command, "command not found", str);
+		exit(clear_local(local, 127));
+	}
+	if (((line->command[0] == '.' && line->command[1] == '/')
+			|| line->command[0] == '/'))
+	{
+		if (!closedir(opendir(line->command)))
+		{
+			ft_cmd_error(line->command, "Is a directory", str);
+			exit(clear_local(local, 126));
+		}
+		if (access(line->command, F_OK))
+		{
+			ft_cmd_error(line->command, "No such file or directory", str);
+			exit(clear_local(local, 127));
+		}
+	}
+	if (access(line->command, X_OK))
+	{
+		ft_cmd_error(line->command, "Permission denied", str);
+		exit(clear_local(local, 126));
+	}
+}
+
 static void	fork_logic(t_local *local, int save[2], char **str)
 {
 	if (redir_single(local->data, save))
@@ -45,13 +73,9 @@ static void	fork_logic(t_local *local, int save[2], char **str)
 		freetab(str);
 		exit(clear_local(local, 1));
 	}
-	if (fix_path(local, local->data))
-	{
-		freetab(str);
-		exit(clear_local(local, 127));
-	}
+	test_perms_and_type(local->data, local, str);
 	execve(local->data->command, str, local->env);
-	perror_filename("minishell: execve ", local->data->command);
+	perror_filename("minishell: execve :", local->data->command);
 	clear_local(local, 0);
 }
 
@@ -73,6 +97,7 @@ static int	no_pipe(t_local *local)
 	str = lst_to_str(local->data->arg, local->data->command);
 	if (is_builtin(local->data->command))
 	{
+		var[1] = 1;
 		if (!redir_single(local->data, save))
 			var[1] = exec_builtin(local, str, local->data, save);
 		fix_fd(save);

@@ -6,11 +6,22 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 11:52:19 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/27 01:21:41 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/27 01:53:58 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	end_of_env(char const *s, int *i, int *nb_args)
+{
+		if (s[*i] != '$')
+		{
+			while (s[*i] && (ft_isalnum(s[*i]) || s[*i] == '_'))
+				(*i)++;
+			if (s[*i] != '$')
+				(*nb_args)++;
+		}
+}
 
 static int	cut(char const *s, int s_quote, int d_quote, int nb_args)
 {
@@ -28,13 +39,10 @@ static int	cut(char const *s, int s_quote, int d_quote, int nb_args)
 		if (s[i] == '$' && s_quote > 0)
 		{
 			nb_args++;
-			if (s[i + 1] != '?' && s[i + 1] != '$')
-			{
-				while (s[i + 1] && (ft_isalnum(s[i + 1]) || s[i + 1] == '_'))
-					i++;
-				if (s[i + 1] != '$')
-					nb_args++;
-			}
+			if (s[++i] != '?')
+				end_of_env(s, &i, &nb_args);
+			else if (s[i] && s[i] != '$')
+				nb_args++;
 		}
 	}
 	return (nb_args);

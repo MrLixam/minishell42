@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/26 14:02:57 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 15:42:34 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ int		redirection(char *lexer, t_data *data);
 char	**pre_parser(char *lexer);
 char	**arg_sep(char const *s);
 char	**env_sep(char const *s);
-t_data	*switch_elem(char **lexer, t_data *first);
 char	*ft_strmerge(char *s1, char *s2);
 
 /*			heredoc			*/

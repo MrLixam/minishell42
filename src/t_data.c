@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 16:12:41 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/26 10:32:19 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 19:16:15 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	new_arg(t_list **lst, char *arg)
 
 	tmp = ft_strdup(arg);
 	if (tmp == NULL)
-		return (write(1, "malloc failed \n", 15));
+		return (write(2, "malloc failed \n", 15));
 	new = ft_lstnew(tmp);
 	ft_lstadd_back(lst, new);
 	return (0);

@@ -38,9 +38,9 @@ static int	print_export(t_local *local)
 	return (0);
 }
 
-static int check_export(char *str)
+static int	check_export(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (str[0] == '=' || ft_isdigit(str[0]))

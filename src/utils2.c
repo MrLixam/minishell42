@@ -28,7 +28,7 @@ void	hard_close(int in_child)
 		i = 0;
 	else
 		i = 3;
-	while (i <1024)
+	while (i < 1024)
 		close(i++);
 }
 

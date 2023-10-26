@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 12:26:14 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/26 17:33:37 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 19:25:14 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,8 @@ int	is_last(t_list *redir, int mode)
 
 void	clear_heredoc(t_local *local)
 {
-	t_list *tmp;
-	t_data *curr;
+	t_list	*tmp;
+	t_data	*curr;
 
 	curr = local->data;
 	if (!curr)

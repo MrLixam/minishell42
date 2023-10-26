@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/26 12:35:08 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/26 14:59:43 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,14 @@ void	minishell_loop(t_local *local)
 {
 	char	*str;
 
+	rl_outstream = stderr;
 	while (1)
 	{
 		signal(SIGINT, sig_parent);
 		signal(SIGQUIT, SIG_IGN);
 		str = readline("minishell$ ");
-		if (str == NULL)
-			exit(clear_local(local, 1));
+		if (str == NULL || str[0] == '\0')
+			return ;
 		if (ft_strncmp(str, "\0", 2))
 			add_history(str);
 		if (parser(local, str))
@@ -58,6 +59,8 @@ void	minishell_loop(t_local *local)
 		clear_data(local->data);
 		local->child_pid = NULL;
 		str = NULL;
+		rl_on_new_line();
+		rl_replace_line("", 0);
 	}
 }
 

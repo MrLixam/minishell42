@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/27 00:11:10 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/27 09:14:58 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ int	main(int argc, char **argv, char **envp)
 	init_local(local, envp);
 	(void) argc;
 	(void) argv;
+	signal(SIGINT, sig_parent);
+	signal(SIGQUIT, SIG_IGN);
 	minishell_loop(local);
 	freetab(local->env);
 	free(local);

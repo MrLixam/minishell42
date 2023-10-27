@@ -30,7 +30,7 @@ int	ft_pwd(void)
 	return (0);
 }
 
-static int set_cd_env(t_local *local, char *oldpwd)
+static int	set_cd_env(t_local *local, char *oldpwd)
 {
 	char	*pwd;
 	int		ret;
@@ -59,7 +59,6 @@ int	ft_cd(t_local *local, char **arg)
 	char	*oldpwd;
 	char	*ag;
 
-	printf("%d");
 	if (ft_tabstrlen(arg) > 2)
 		ft_putendl_fd("minishell: cd: too many arguments", STDERR_FILENO);
 	if (ft_tabstrlen(arg) > 2)
@@ -67,14 +66,16 @@ int	ft_cd(t_local *local, char **arg)
 	if (ft_tabstrlen(arg) < 2)
 		ag = ft_getenv(local, "HOME");
 	else
-		ag = ft_strdup(arg[2]);	
+		ag = ft_strdup(arg[1]);
 	if (!ag)
 		return (1);
 	oldpwd = ft_strmerge(ft_strdup("OLDPWD="), getcwd(NULL, 0));
 	if (chdir(ag))
 	{
-		free(ag);
 		perror_filename("minishell: cd: ", ag);
+		free(ag);
+		if (oldpwd)
+			free(oldpwd);
 		return (1);
 	}
 	free(ag);

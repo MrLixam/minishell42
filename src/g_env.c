@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 14:11:44 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/27 02:30:37 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/27 09:03:14 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,7 @@
 int	unset_env(t_local *local, char *unset)
 {
 	char	**new_env;
-	int		i;
-	int		j;
+	int		ij[2];
 	char	*tmp;
 
 	if (!unset)
@@ -24,19 +23,19 @@ int	unset_env(t_local *local, char *unset)
 	tmp = ft_getenv(local, unset);
 	if (!tmp)
 		return (1);
-	i = ft_strlen(tmp);
+	ij[0] = ft_strlen(tmp);
 	free(tmp);
-	if (!i)
+	if (!ij[0])
 		return (0);
 	new_env = ft_calloc(ft_tabstrlen(local->env), sizeof(char *));
 	if (!new_env)
 		return (1);
-	i = -1;
-	j = -1;
-	while (new_env != NULL && local->env[++i])
-		if (ft_strncmp(local->env[i], unset, ft_strlen(local->env[i]) \
-			- ft_strlen(ft_strchr(local->env[i], '='))))
-			new_env[++j] = ft_strdup(local->env[i]);
+	ij[0] = -1;
+	ij[1] = -1;
+	while (new_env != NULL && local->env[++ij[0]])
+		if (ft_strncmp(local->env[ij[0]], unset, ft_strlen(local->env[ij[0]])
+				- ft_strlen(ft_strchr(local->env[ij[0]], '='))))
+			new_env[++ij[1]] = ft_strdup(local->env[ij[0]]);
 	freetab(local->env);
 	local->env = new_env;
 	return (0);

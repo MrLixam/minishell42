@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_sep.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 11:52:19 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/27 02:11:02 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/27 09:27:36 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,27 @@
 
 static void	end_of_env(char const *s, int *i, int *nb_args)
 {
-		if (s[*i] != '$')
+	if (s[*i] != '$')
+	{
+		if (ft_isdigit(s[*i]))
 		{
-			while (s[*i] && (ft_isalnum(s[*i]) || s[*i] == '_'))
-				(*i)++;
-			if (s[*i] && s[*i] != '$')
-				(*nb_args)++;
+			(*i)++;
+			(*nb_args)++;
+			return ;
 		}
+		while (s[*i] && (ft_isalnum(s[*i]) || s[*i] == '_'))
+			(*i)++;
+		if (s[*i] && s[*i] != '$')
+			(*nb_args)++;
+	}
+}
+
+static void	update_quotes(char c, int *s_quote, int *d_quote)
+{
+	if (c == 39)
+		*s_quote *= -1;
+	else if (c == 34)
+		*d_quote *= -1;
 }
 
 static int	cut(char const *s, int s_quote, int d_quote, int nb_args)
@@ -32,11 +46,7 @@ static int	cut(char const *s, int s_quote, int d_quote, int nb_args)
 		return (0);
 	while (s[i])
 	{
-		if (s[i] == 39 && d_quote > 0)
-			s_quote *= -1;
-		else if (s[i] == 34 && s_quote > 0)
-			d_quote *= -1;
-		if (s[i] == '$' && s_quote > 0)
+		update_quotes(s[i], &s_quote, &d_quote);
 		{
 			nb_args++;
 			i++;
@@ -44,6 +54,8 @@ static int	cut(char const *s, int s_quote, int d_quote, int nb_args)
 				end_of_env(s, &i, &nb_args);
 			else if (s[i] && s[i] != '$')
 				nb_args++;
+			if (s[i] == '$')
+				continue ;
 		}
 		if (s[i])
 			i++;
@@ -61,7 +73,7 @@ static int	next_arg(char const *s)
 	if (s[i] == '$')
 	{
 		i++;
-		if (s[i] == '?')
+		if (s[i] == '?' || ft_isdigit(s[i]))
 			return (++i);
 		while (ft_isalnum(s[i]) || s[i] == '_')
 			i++;

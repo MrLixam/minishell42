@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+         #
+#    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/07 16:02:47 by gpouzet           #+#    #+#              #
-#    Updated: 2023/10/26 22:05:18 by lvincent         ###   ########.fr        #
+#    Updated: 2023/10/27 09:29:05 by marvin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC 		=	clang
 
-FLAGS 	=	-Wall -Wextra -Werror -g
+FLAGS 	=	-Wall -Wextra -Werror
 
 NAME 	=	minishell
 

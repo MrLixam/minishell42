@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 14:11:44 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/27 09:03:14 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/27 11:45:53 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,29 @@ int	create_env(t_local *local, char **envp)
 	return (0);
 }
 
+static char *add_quote(char *env)
+{
+	int	i;
+	int	s_quote;
+	int	d_quote;
+
+	i = -1;
+	s_quote = 0;
+	d_quote = 0;
+	while (env[++i])
+	{
+		if (env[i] == 39)
+			s_quote++;
+		if (env[i] == 34)
+			d_quote++;
+	}
+	if (s_quote)
+		return (ft_strmerge(ft_strmerge(ft_strdup("\""), env), ft_strdup("\"")));
+	if (d_quote)
+		return (ft_strmerge(ft_strmerge(ft_strdup("\'"), env), ft_strdup("\'")));
+	return (env);
+}
+
 char	*ft_getenv(t_local *local, char *name)
 {
 	char	*ret_val;
@@ -86,6 +109,7 @@ char	*ft_getenv(t_local *local, char *name)
 	free(tmp);
 	if (ret_val == NULL)
 		ret_val = ft_calloc(1, 1);
+	ret_val = add_quote(ret_val);
 	return (ret_val);
 }
 

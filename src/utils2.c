@@ -35,7 +35,13 @@ void	hard_close(int in_child)
 void	exit_command(t_local *local, int code)
 {
 	hard_close(1);
-	exit(clear_local(local, code));
+	if (local->env)
+		freetab(local->env);
+	clear_data(local->data);
+	if (local->child_pid)
+		free(local->child_pid);
+	free(local);
+	exit(code);
 }
 
 int	fix_path(t_local *local, t_data *c)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 15:58:14 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/27 09:03:56 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/27 18:10:56 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,10 @@ static int	check_numeric(t_list *arg)
 	while (tmp[++i])
 	{
 		if (!ft_isdigit(tmp[i]))
+		{	
+			free(tmp);
 			return (1);
+		}
 	}
 	free(tmp);
 	return (0);
@@ -69,7 +72,7 @@ void	ft_exit(t_local *local, t_data *curr, char **tab)
 	long long	exit_code;
 	int			err2;
 
-	exit_code = 0;
+	exit_code = local->exit_code;
 	if (curr->arg)
 	{
 		exit_code = ft_atol(curr->arg->content, &err2);

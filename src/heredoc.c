@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 14:11:43 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/26 12:34:19 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/27 18:18:06 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,16 @@ static void	get_input(int fd, char *delim)
 		write(fd, line, ft_strlen(line));
 		free(line);
 	}
-	write(fd, "\n", 1);
+	free(delim);
 }
 
-static int	fork_heredoc(int fd, char *delim)
+static int	fork_heredoc(int fd, char *delim, t_local *local)
 {
 	int		pid;
 	int		i;
 
 	pid = fork();
+	i = 0;
 	if (pid == -1)
 	{
 		perror("minishell : error while parsing heredoc");
@@ -59,11 +60,9 @@ static int	fork_heredoc(int fd, char *delim)
 	else if (!pid)
 	{
 		signal(SIGINT, sig_heredoc);
-		*getfd() = fd;
 		get_input(fd, delim);
 		close(fd);
-		*getfd() = -1;
-		exit(0);
+		exit_command(local, 0);
 	}
 	else
 	{
@@ -74,18 +73,18 @@ static int	fork_heredoc(int fd, char *delim)
 	return (i);
 }
 
-static int	create_heredoc_file(char *delim, t_list *curr)
+static int	create_heredoc_file(char *delim, t_list *curr, t_local *local)
 {
 	int		fd;
 	char	*tmp;
 	int		i;
 
 	i = 0;
-	tmp = ft_strjoin("/tmp/.heredoc", ft_itoa(i));
+	tmp = ft_strmerge(ft_strdup("/tmp/.heredoc"), ft_itoa(i));
 	while (!access(tmp, F_OK))
 	{
 		free(tmp);
-		tmp = ft_strjoin("/tmp/.heredoc", ft_itoa(++i));
+		tmp = ft_strmerge(ft_strdup("/tmp/.heredoc"), ft_itoa(++i));
 	}
 	fd = open(tmp, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	free(curr->content);
@@ -96,36 +95,36 @@ static int	create_heredoc_file(char *delim, t_list *curr)
 		perror("minishell : error while parsing heredoc");
 		return (1);
 	}
-	i = fork_heredoc(fd, delim);
+	i = fork_heredoc(fd, delim, local);
 	close(fd);
 	return (i);
 }
 
-int	heredoc(t_data **line)
+int	heredoc(t_local *local)
 {
 	t_list	*curr;
-	t_data	*local;
+	t_data	*line;
 	char	*delim;
 	int		i;
 
-	local = *line;
-	while (local)
+	line = local->data;
+	while (line)
 	{
-		curr = local->redir;
+		curr = line->redir;
 		while (curr)
 		{
 			if (ft_strncmp(curr->content, "<<", 2) == 0)
 			{
 				curr = curr->next;
 				delim = ft_strdup(curr->content);
-				i = create_heredoc_file(delim, curr);
+				i = create_heredoc_file(delim, curr, local);
 				free(delim);
 				if (i)
 					return (i);
 			}
 			curr = curr->next;
 		}
-		local = local->next;
+		line = line->next;
 	}
 	return (0);
 }

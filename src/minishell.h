@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/27 06:29:47 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/27 17:59:13 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ typedef struct s_data
 	struct s_data	*next;
 }	t_data;
 
+extern int	g_sig;
+
 /*			utils		*/
 int		ft_strmcmp(char *s1, char *s2);
 int		clear_local(t_local	*local, int exit_code);
@@ -56,6 +58,7 @@ char	*ft_strcut(char *str, char *set);
 void	sig_parent(int sig);
 void	sig_child(int sig);
 void	sig_heredoc(int sig);
+void	check_sigint(t_local *local);
 
 /*			data			*/
 t_data	*new_data(void);
@@ -78,7 +81,7 @@ char	**env_sep(char const *s);
 char	*ft_strmerge(char *s1, char *s2);
 
 /*			heredoc			*/
-int		heredoc(t_data **line);
+int	heredoc(t_local *local);
 int		*getfd(void);
 void	clear_heredoc(t_local *local);
 

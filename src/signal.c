@@ -16,6 +16,7 @@ void	sig_parent(int sig)
 {
 	if (sig == SIGINT)
 	{
+		g_sig = 1;
 		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
@@ -26,7 +27,10 @@ void	sig_parent(int sig)
 void	sig_child(int sig)
 {
 	if (sig == SIGINT)
+	{
+		g_sig = 1;
 		printf("\n");
+	}
 	else if (sig == SIGQUIT)
 		printf("Quit\n");
 }
@@ -38,5 +42,14 @@ void	sig_heredoc(int sig)
 		if (*getfd() != -1)
 			close(*getfd());
 		exit(1);
+	}
+}
+
+void	check_sigint(t_local *local)
+{
+	if (g_sig)
+	{
+		g_sig = 0;
+		local->exit_code = 130;
 	}
 }

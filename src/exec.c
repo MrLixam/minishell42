@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/27 03:05:13 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/27 18:10:39 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	test_perms_and_type(t_data *line, t_local *local, char **str)
 	if (fix_path(local, line))
 	{
 		ft_cmd_error(line->command, "command not found", str);
-		exit(clear_local(local, 127));
+		exit_command(local, 127);
 	}
 	if (((line->command[0] == '.' && line->command[1] == '/')
 			|| line->command[0] == '/'))
@@ -49,18 +49,18 @@ static void	test_perms_and_type(t_data *line, t_local *local, char **str)
 		if (!closedir(opendir(line->command)))
 		{
 			ft_cmd_error(line->command, "Is a directory", str);
-			exit(clear_local(local, 126));
+			exit_command(local, 126);
 		}
 		if (access(line->command, F_OK))
 		{
 			ft_cmd_error(line->command, "No such file or directory", str);
-			exit(clear_local(local, 127));
+			exit_command(local, 127);
 		}
 	}
 	if (access(line->command, X_OK))
 	{
 		ft_cmd_error(line->command, "Permission denied", str);
-		exit(clear_local(local, 126));
+		exit_command(local, 126);
 	}
 }
 
@@ -70,7 +70,7 @@ static void	fork_logic(t_local *local, char **str)
 	if (redir_single(local->data))
 	{
 		freetab(str);
-		exit(clear_local(local, 1));
+		exit_command(local, 1);
 	}
 	test_perms_and_type(local->data, local, str);
 	hard_close(0);
@@ -113,7 +113,7 @@ void	exec(t_local *local)
 {
 	int		ret;
 
-	ret = heredoc(&local->data);
+	ret = heredoc(local);
 	signal(SIGINT, sig_child);
 	signal(SIGQUIT, sig_child);
 	if (data_len(local->data) > 1 && !ret)

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 14:11:44 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/27 11:45:53 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/27 12:12:59 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	create_env(t_local *local, char **envp)
 	return (0);
 }
 
-static char *add_quote(char *env)
+static char	*add_quote(char *env)
 {
 	int	i;
 	int	s_quote;

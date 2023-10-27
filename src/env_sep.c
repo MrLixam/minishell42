@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 11:52:19 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/27 01:53:58 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/27 02:11:02 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	end_of_env(char const *s, int *i, int *nb_args)
 		{
 			while (s[*i] && (ft_isalnum(s[*i]) || s[*i] == '_'))
 				(*i)++;
-			if (s[*i] != '$')
+			if (s[*i] && s[*i] != '$')
 				(*nb_args)++;
 		}
 }
@@ -27,10 +27,10 @@ static int	cut(char const *s, int s_quote, int d_quote, int nb_args)
 {
 	int	i;
 
-	i = -1;
+	i = 0;
 	if (!*s)
 		return (0);
-	while (s[++i])
+	while (s[i])
 	{
 		if (s[i] == 39 && d_quote > 0)
 			s_quote *= -1;
@@ -39,11 +39,14 @@ static int	cut(char const *s, int s_quote, int d_quote, int nb_args)
 		if (s[i] == '$' && s_quote > 0)
 		{
 			nb_args++;
-			if (s[++i] != '?')
+			i++;
+			if (s[i] && s[i] != '?')
 				end_of_env(s, &i, &nb_args);
 			else if (s[i] && s[i] != '$')
 				nb_args++;
 		}
+		if (s[i])
+			i++;
 	}
 	return (nb_args);
 }

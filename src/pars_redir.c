@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars_redir.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gpouzet <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 13:39:40 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/26 17:49:34 by r                ###   ########.fr       */
+/*   Updated: 2023/10/28 17:10:46 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,16 @@ static int	redir_size(char *lexer)
 		while (lexer[i] == '<')
 			i++;
 		if (i > 2)
-			ft_putstr_fd(" syntax error near unexpected token `<'", 2);
+			ft_putendl_fd("minishell: syntax error near unexpected token `<'",
+				2);
 	}
 	else if (lexer[i] == '>')
 	{
 		while (lexer[i] == '>')
 			i++;
 		if (i > 2)
-			ft_putstr_fd(" syntax error near unexpected token `>'", 2);
+			ft_putendl_fd("minishell: syntax error near unexpected token `>'",
+				2);
 	}
 	if (i > 2)
 		return (-1);

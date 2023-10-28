@@ -102,11 +102,7 @@ void	redirect(int in, int out, t_data *curr, int redir[2])
 void	link_redir(int pipes[2], int fd, t_data *curr, t_local *local)
 {
 	int	redir[2];
-	int	fds[3];
 
-	fds[0] = pipes[0];
-	fds[1] = pipes[1];
-	fds[2] = fd;
 	redirect(fd, pipes[1], curr, redir);
 	if (redir[0] == -1 || redir[1] == -1)
 		exit_command(local, 1);

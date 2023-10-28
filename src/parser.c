@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:23 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/27 08:41:12 by marvin           ###   ########.fr       */
+/*   Updated: 2023/10/28 19:17:53 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,8 +126,10 @@ int	parser(t_local *local, char *lexer)
 	if (!local->data)
 		return (1);
 	err = switch_elem(tmp, local->data, -1, -1);
+	freetab(tmp);
+	if (err)
+		clear_data(local->data);
 	if (err)
 		return (err);
-	freetab(tmp);
 	return (0);
 }

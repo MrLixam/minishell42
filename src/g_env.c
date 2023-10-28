@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 14:11:44 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/28 11:46:36 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/28 17:56:36 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ int	unset_env(t_local *local, char *unset)
 		return (1);
 	ij[0] = ft_strlen(tmp);
 	free(tmp);
-	if (!ij[0])
-		return (0);
 	new_env = ft_calloc(ft_tabstrlen(local->env), sizeof(char *));
 	if (!new_env)
 		return (1);

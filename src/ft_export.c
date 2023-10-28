@@ -12,29 +12,73 @@
 
 #include "minishell.h"
 
-static int	print_export(t_local *local)
+int	ft_duptab(char ***new, char **old)
 {
 	int	i;
-	int	j;
 
 	i = -1;
-	while (local->env[++i])
+	*new = ft_calloc(ft_tabstrlen(old) + 1, sizeof(char *));
+	while (old[++i])
+	{
+		(*new)[i] = ft_strdup(old[i]);
+		if ((*new)[i] == NULL)
+		{
+			freetab(*new);
+			return (1);
+		}
+	}
+	return (0);
+}
+
+static char	**ft_sort_tab(char **tab)
+{
+	int		i;
+	int		j;
+	char	*tmp;
+
+	i = 0;
+	while (tab[i])
 	{
 		j = 0;
-		ft_putstr_fd("declare -x ", 1);
-		while (local->env[i][j] != '='
-			&& (ft_isalnum(local->env[i][j]) || local->env[i][j] == '_'))
-			ft_putchar_fd(local->env[i][j++], 1);
-		if (local->env[i][j] == '=')
+		while (tab[j])
 		{
-			ft_putchar_fd(local->env[i][j++], 1);
+			if (ft_strmcmp(tab[i], tab[j]) < 0)
+			{
+				tmp = tab[i];
+				tab[i] = tab[j];
+				tab[j] = tmp;
+			}
+			j++;
+		}
+		i++;
+	}
+	return (tab);
+}
+
+static int	print_export(t_local *local)
+{
+	int		i;
+	char	**sorted;
+
+	i = -1;
+	if (ft_duptab(&sorted, local->env))
+		return (1);
+	sorted = ft_sort_tab(sorted);
+	while (sorted[++i])
+	{
+		ft_putstr_fd("declare -x ", 1);
+		if (ft_strchr(sorted[i], '='))
+		{
+			write(1, sorted[i], ft_strchr(sorted[i], '=') - sorted[i] + 1);
 			ft_putchar_fd('"', 1);
-			while (local->env[i][j])
-				ft_putchar_fd(local->env[i][j++], 1);
+			ft_putstr_fd(ft_strchr(sorted[i], '=') + 1, 1);
 			ft_putchar_fd('"', 1);
 		}
+		else
+			ft_putstr_fd(sorted[i], 1);
 		ft_putchar_fd('\n', 1);
 	}
+	freetab(sorted);
 	return (0);
 }
 

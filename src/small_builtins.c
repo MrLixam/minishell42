@@ -67,9 +67,13 @@ int	ft_cd(t_local *local, char **arg)
 		ag = ft_getenv(local, "HOME");
 	else
 		ag = ft_strdup(arg[1]);
-	if (!ag)
-		return (1);
-	oldpwd = ft_strmerge(ft_strdup("OLDPWD="), getcwd(NULL, 0));
+	if (ag[0] == '\0')
+	{
+		free(ag);
+		return (ft_putendl_fd("minishell: cd: HOME not set",
+				STDERR_FILENO) > 0);
+	}
+	oldpwd = ft_strmerge(ft_strdup("OLDPWD="), ft_getenv(local, "PWD"));
 	if (chdir(ag))
 	{
 		perror_filename("minishell: cd: ", ag);

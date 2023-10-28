@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 21:53:33 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/28 16:18:55 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/28 19:21:01 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	fix_single(int save[2], char **str, int retval)
 
 int	no_command(t_data *line, int save[2])
 {
-	int i;
+	int	i;
 
 	i = redir_single(line);
 	fix_fd(save);

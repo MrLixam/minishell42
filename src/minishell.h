@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/27 17:59:13 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/28 12:10:09 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ char	**env_sep(char const *s);
 char	*ft_strmerge(char *s1, char *s2);
 
 /*			heredoc			*/
-int	heredoc(t_local *local);
+int		heredoc(t_local *local);
 int		*getfd(void);
 void	clear_heredoc(t_local *local);
 

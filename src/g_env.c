@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   g_env.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 14:11:44 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/27 12:12:59 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/28 11:46:36 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,11 @@ static char	*add_quote(char *env)
 			d_quote++;
 	}
 	if (s_quote)
-		return (ft_strmerge(ft_strmerge(ft_strdup("\""), env), ft_strdup("\"")));
+		return (ft_strmerge(ft_strmerge(ft_strdup("\""), env),
+				ft_strdup("\"")));
 	if (d_quote)
-		return (ft_strmerge(ft_strmerge(ft_strdup("\'"), env), ft_strdup("\'")));
+		return (ft_strmerge(ft_strmerge(ft_strdup("\'"), env),
+				ft_strdup("\'")));
 	return (env);
 }
 

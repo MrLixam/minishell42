@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   arg_sep.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:12:58 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/26 16:47:56 by r                ###   ########.fr       */
+/*   Updated: 2023/10/28 10:34:06 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,15 +86,14 @@ char	**arg_sep(char const *s)
 	args = ft_calloc(cut(s) + 1, sizeof(char *));
 	if (!args)
 		return (args);
-	while (s[i] && s)
+	while (s[i])
 	{
 		while (s[i] && wspac(s[i]))
 			i++;
 		next = next_arg(s + i);
-		if (s[i] || wspac(s[i - 1]))
+		if (s[i] && !wspac(s[i - (i != 0)]))
 			args[j++] = ft_substr(s + i, 0, next);
 		i += next + (wspac(s[i + next]));
 	}
-	args[j] = 0;
 	return (args);
 }

@@ -3,15 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
+#    By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/03 16:01:39 by gpouzet           #+#    #+#              #
-#    Updated: 2023/10/26 02:45:24 by marvin           ###   ########.fr        #
+#    Updated: 2023/10/28 11:17:05 by lvincent         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = clang
-FLAGS = -Wall -Wextra -Werror 
+FLAGS =	-Wall -Wextra -Werror
 
 NAME = libft.a
 
@@ -65,4 +65,7 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all so list clean fclean re
+debug_lib: FLAGS += -g
+debug_lib: $(NAME)
+
+.PHONY: all so list clean fclean re debug_lib

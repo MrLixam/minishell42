@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
+#    By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/07 16:02:47 by gpouzet           #+#    #+#              #
-#    Updated: 2023/10/27 09:29:05 by marvin           ###   ########.fr        #
+#    Updated: 2023/10/28 11:19:57 by lvincent         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ $(NAME): $(OBJ)
 
 clean:
 	@make fclean --no-print-directory -C libft
-	@rm -rf $(OBJ) $(OBJB)
+	@rm -rf $(OBJ)
 
 fclean: clean
 	@rm -rf $(NAME)
@@ -49,4 +49,11 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+debug: FLAGS += -g
+debug: fclean $(OBJ)
+	@make debug_lib -s --no-print-directory -C libft
+	@$(CC) $(FLAGS) -g $(OBJ) -lreadline -L./libft -lft -o $(NAME)
+	@echo -n "\\r\033[2K"
+	@echo "\033[1;32m[executable created]"
+
+.PHONY: all clean fclean re debug

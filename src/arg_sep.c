@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 17:12:58 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/28 10:34:06 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/28 12:26:24 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ char	**arg_sep(char const *s)
 		while (s[i] && wspac(s[i]))
 			i++;
 		next = next_arg(s + i);
-		if (s[i] && !wspac(s[i - (i != 0)]))
+		if (s[i])
 			args[j++] = ft_substr(s + i, 0, next);
 		i += next + (wspac(s[i + next]));
 	}

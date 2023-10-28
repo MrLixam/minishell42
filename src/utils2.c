@@ -35,8 +35,7 @@ void	hard_close(int in_child)
 void	exit_command(t_local *local, int code)
 {
 	hard_close(1);
-	if (local->env)
-		freetab(local->env);
+	freetab(local->env);
 	clear_data(local->data);
 	if (local->child_pid)
 		free(local->child_pid);

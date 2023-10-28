@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 15:58:14 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/27 18:10:56 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/28 12:53:36 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static int	check_numeric(t_list *arg)
 	while (tmp[++i])
 	{
 		if (!ft_isdigit(tmp[i]))
-		{	
+		{
 			free(tmp);
 			return (1);
 		}
@@ -73,7 +73,7 @@ void	ft_exit(t_local *local, t_data *curr, char **tab)
 	int			err2;
 
 	exit_code = local->exit_code;
-	if (curr->arg)
+	if (curr && curr->arg)
 	{
 		exit_code = ft_atol(curr->arg->content, &err2);
 		if ((check_numeric(curr->arg) || err2))
@@ -90,7 +90,7 @@ void	ft_exit(t_local *local, t_data *curr, char **tab)
 		exit_code = exit_code % 256;
 	}
 	freetab(tab);
-	if (data_len(local->data) == 1)
+	if (data_len(local->data) <= 1)
 		ft_putendl_fd("exit", 2);
 	exit(clear_local(local, exit_code));
 }

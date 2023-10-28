@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/28 12:10:09 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/28 15:53:34 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char	*ft_strcut(char *str, char *set);
 void	sig_parent(int sig);
 void	sig_child(int sig);
 void	sig_heredoc(int sig);
-void	check_sigint(t_local *local);
+void	check_sig(t_local *local);
 
 /*			data			*/
 t_data	*new_data(void);
@@ -122,6 +122,7 @@ void	redirect(int in, int out, t_data *curr, int redir[2]);
 int		redir_present(t_data *command);
 void	link_redir(int pipes[2], int fd, t_data *curr, t_local *local);
 int		is_last(t_list *redir, int mode);
+void	reset_redir(int *fd, int mode);
 
 int		pipeline(t_local *local);
 void	exit_command(t_local *local, int code);

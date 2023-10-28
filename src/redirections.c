@@ -64,10 +64,10 @@ int	redirect_loop_logic(t_list *local_redir, char **tmp, int redir[2], int i)
 		return (1);
 	if (redir[0] != STDIN_FILENO)
 		if (!is_last(local_redir, 0))
-			close(redir[0]);
+			reset_redir(&redir[0], 0);
 	if (redir[1] != STDOUT_FILENO)
 		if (!is_last(local_redir, 1))
-			close(redir[1]);
+			reset_redir(&redir[1], 1);
 	return (0);
 }
 

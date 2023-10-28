@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:11 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/27 12:35:37 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/28 16:30:30 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,15 @@ int	g_sig;
 
 static void	init_local(t_local *local, char **envp)
 {
+	int	i;
+
 	local->child_pid = NULL;
 	local->env = NULL;
+	local->data = NULL;
 	local->exit_code = 0;
-	create_env(local, envp);
+	i = create_env(local, envp);
+	if (i)
+		exit(1);
 }
 
 static int	wspace(char *c)
@@ -42,9 +47,12 @@ void	reset(t_local *local, char **str)
 {
 	clear_data(local->data);
 	local->child_pid = NULL;
+	local->data = NULL;
 	*str = NULL;
 	rl_on_new_line();
 	rl_replace_line("", 0);
+	signal(SIGINT, sig_parent);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 void	minishell_loop(t_local *local)
@@ -55,7 +63,7 @@ void	minishell_loop(t_local *local)
 	while (1)
 	{
 		str = readline("minishell$ ");
-		check_sigint(local);
+		check_sig(local);
 		if (str == NULL)
 			return ;
 		if (wspace(str))
@@ -89,7 +97,8 @@ int	main(int argc, char **argv, char **envp)
 	signal(SIGINT, sig_parent);
 	signal(SIGQUIT, SIG_IGN);
 	minishell_loop(local);
+	ft_putendl_fd("exit", 1);
 	freetab(local->env);
 	free(local);
-	return (0);
+	return (130);
 }

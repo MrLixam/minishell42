@@ -14,7 +14,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
-#include <readline/readline.h>
 
 int	ft_pwd(void)
 {
@@ -88,6 +87,7 @@ int	ft_unset(char **arg)
 
 void	ft_exit(t_data *line)
 {
+<<<<<<< HEAD
 	int	exit_code;
 
 	exit_code = 0;
@@ -117,7 +117,8 @@ void	ft_exit(t_data *line)
 		if (exit_code < 0)
 			exit_code = 256 + exit_code;
 	}
+=======
+>>>>>>> parent of e826d0e (updates to ft_exit, adding argument checking)
 	clear_data(line);
-	rl_clear_history();
-	exit(exit_code);
+	exit(0);
 }

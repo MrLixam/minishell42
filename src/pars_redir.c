@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 13:39:40 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/28 17:18:27 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/30 18:55:02 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,45 +23,66 @@ static int	redir(t_list **redir, char *lexer, int i, int j)
 	return (0);
 }
 
-static int	redir_size(char *lexer)
+static int	redir_size_in(char *lexer)
 {
 	int	i;
 
 	i = 0;
-	if (lexer[i] == '<')
+	while (lexer[i] == '<' || lexer[i] == '>')
 	{
-		while (lexer[i] == '<')
-			i++;
-		if (i > 2)
-			ft_putendl_fd("minishell: syntax error near unexpected token `<'",
-				2);
-	}
-	else if (lexer[i] == '>')
-	{
-		while (lexer[i] == '>')
-			i++;
-		if (i > 2)
-			ft_putendl_fd("minishell: syntax error near unexpected token `>'",
-				2);
+		if (lexer[i] == '>')
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putendl_fd("syntax error near unexpected token `newline'", 2);
+			return (-1);
+		}
+		i++;
 	}
 	if (i > 2)
+	{
+		ft_putendl_fd("minishell: syntax error near unexpected token `<'", 2);
 		return (-1);
+	}
 	return (i);
 }
 
-int	redirection(char *lexer, t_data *data)
+static int	redir_size_out(char *lexer)
 {
-	int		i;
-	int		j;
+	int	i;
+
+	i = 0;
+	while (lexer[i] == '>' || lexer[i] == '<')
+	{
+		if (lexer[i] == '<')
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putendl_fd("syntax error near unexpected token `<'", 2);
+			return (-1);
+		}
+		i++;
+	}
+	if (i > 2)
+	{
+		ft_putendl_fd("minishell: syntax error near unexpected token `>'", 2);
+		return (-1);
+	}
+	return (i);
+}
+
+int redirection(char *lexer, t_data *data)
+{
+	int	i;
+	int	j;
 
 	i = 0;
 	while (lexer[i])
 	{
 		j = i;
-		if (!ft_strncmp(lexer, "<>", 2) || !ft_strncmp(lexer, "><", 2))
-			return (1);
-		i += redir_size(lexer);
-		if (i < 0)
+		if (lexer[i] == '<')
+			i += redir_size_in(lexer);
+		else if (lexer[i] == '>')
+			i += redir_size_out(lexer);
+		if (i < j)
 			return (2);
 		if (redir(&data->redir, lexer, i, j))
 			return (1);

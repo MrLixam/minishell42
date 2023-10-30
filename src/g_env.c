@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 14:11:44 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/28 17:56:36 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/30 18:17:35 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,29 +59,17 @@ int	create_env(t_local *local, char **envp)
 	return (0);
 }
 
-static char	*add_quote(char *env)
+static char	*empty_env(char *ret_val)
 {
-	int	i;
-	int	s_quote;
-	int	d_quote;
-
-	i = -1;
-	s_quote = 0;
-	d_quote = 0;
-	while (env[++i])
+	if (ret_val == NULL)
+		ret_val = ft_calloc(1, 1);
+	if (ft_strlen(ret_val) == 0)
 	{
-		if (env[i] == 39)
-			s_quote++;
-		if (env[i] == 34)
-			d_quote++;
+		free(ret_val);
+		return (ft_strdup("\"\""));
 	}
-	if (s_quote)
-		return (ft_strmerge(ft_strmerge(ft_strdup("\""), env),
-				ft_strdup("\"")));
-	if (d_quote)
-		return (ft_strmerge(ft_strmerge(ft_strdup("\'"), env),
-				ft_strdup("\'")));
-	return (env);
+	ret_val = add_quote(ret_val, 1, 1, 0);
+	return (ret_val);
 }
 
 char	*ft_getenv(t_local *local, char *name)
@@ -107,10 +95,7 @@ char	*ft_getenv(t_local *local, char *name)
 		}
 	}
 	free(tmp);
-	if (ret_val == NULL)
-		ret_val = ft_calloc(1, 1);
-	ret_val = add_quote(ret_val);
-	return (ret_val);
+	return (empty_env(ret_val));
 }
 
 int	print_env(t_local *local, char **arg)

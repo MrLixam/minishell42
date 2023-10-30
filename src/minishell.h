@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/28 15:53:34 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/30 18:11:47 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,8 @@ int		new_arg(t_list **lst, char *arg);
 /*			parser			*/
 int		check_quote(char *readline);
 int		parser(t_local *local, char *lexer);
-int		swap_env_var(t_local *local, char **lex);
+char	*swap_env_var(t_local *local, char *lex);
+char	*add_quote(char *src, int s_quote, int d_quote, int j);
 int		check_quote(char *readline);
 int		format_quote(t_data *current);
 int		redirection(char *lexer, t_data *data);

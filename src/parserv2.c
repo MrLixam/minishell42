@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:28:26 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/28 10:21:17 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/28 21:59:15 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,28 +105,13 @@ static char	*format_env_var(t_local *local, char *var, int i)
 	return (new);
 }
 
-int	swap_env_var(t_local *local, char **lex)
+char	*swap_env_var(t_local *local, char *lex)
 {
-	int		i;
 	char	*tmp;
 
-	i = -1;
-	while (lex[++i])
-	{
-		if (ft_strchr(lex[i], '$') != NULL)
-		{
-			tmp = format_env_var(local, lex[i], 0);
-			if (!tmp)
-				return (1);
-			free(lex[i]);
-			lex[i] = ft_strdup(tmp);
-			free(tmp);
-			if (!lex[i])
-			{
-				freetab(lex);
-				return (1);
-			}
-		}
-	}
-	return (0);
+	tmp = format_env_var(local, lex, 0);
+	if (!tmp)
+		return (NULL);
+	free(lex);
+	return (tmp);
 }

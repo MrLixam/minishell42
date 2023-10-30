@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 16:03:23 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/28 19:17:53 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/30 17:56:10 by r                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,13 +90,13 @@ static int	switch_elem(char **lexer, t_data *first, int i, int cmp)
 			cmp = next_data(&curent);
 		if (cmp > 0)
 			return (cmp);
-		if (cmp && curent->command == NULL && ft_strlen(lexer[i]))
+		if (cmp && curent->command == NULL && ft_strncmp(lexer[i], "\"\"", 2))
 		{
 			curent->command = ft_strdup(lexer[i]);
 			if (curent->command == NULL)
 				return (1);
 		}
-		else if (cmp && ft_strncmp(lexer[i], "|", ft_strlen(lexer[i])))
+		else if (cmp && ft_strncmp(lexer[i], "|", 2))
 			if (new_arg(&curent->arg, lexer[i]))
 				return (1);
 	}
@@ -113,13 +113,11 @@ int	parser(t_local *local, char *lexer)
 		ft_putendl_fd("minishell : syntax error unresolved quote", 2);
 	if (check_quote(lexer))
 		return (1);
+	lexer = swap_env_var(local, lexer);
+	if (!lexer)
+		return (1);
 	tmp = arg_sep(lexer);
 	free(lexer);
-	if (tmp == NULL)
-		return (1);
-	err = swap_env_var(local, tmp);
-	if (err)
-		return (err);
 	if (tmp == NULL)
 		return (1);
 	local->data = new_data();

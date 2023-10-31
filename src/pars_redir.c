@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 13:39:40 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/30 18:55:02 by r                ###   ########.fr       */
+/*   Updated: 2023/10/31 01:05:13 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,9 @@ int redirection(char *lexer, t_data *data)
 	{
 		j = i;
 		if (lexer[i] == '<')
-			i += redir_size_in(lexer);
+			i += redir_size_in(lexer + i);
 		else if (lexer[i] == '>')
-			i += redir_size_out(lexer);
+			i += redir_size_out(lexer + i);
 		if (i < j)
 			return (2);
 		if (redir(&data->redir, lexer, i, j))

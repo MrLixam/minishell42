@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/28 16:30:51 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/31 01:35:13 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ void	exec(t_local *local)
 	}
 	else if (!ret)
 		ret = no_pipe(local);
-	if (WIFEXITED(ret))
+	if (WIFEXITED(ret) || WIFSIGNALED(ret))
 	{
 		local->exit_code = WEXITSTATUS(ret);
 		if (WIFSIGNALED(ret))

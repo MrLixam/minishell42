@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 13:39:40 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/31 01:05:13 by gpouzet          ###   ########.fr       */
+/*   Updated: 2023/10/31 01:22:03 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static int	redir_size_out(char *lexer)
 	return (i);
 }
 
-int redirection(char *lexer, t_data *data)
+int	redirection(char *lexer, t_data *data)
 {
 	int	i;
 	int	j;

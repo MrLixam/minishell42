@@ -40,8 +40,7 @@ void	sig_heredoc(int sig)
 {
 	if (sig == SIGINT)
 	{
-		if (*getfd() != -1)
-			close(*getfd());
+		hard_close(1);
 		exit(130);
 	}
 }

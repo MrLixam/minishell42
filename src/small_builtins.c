@@ -30,11 +30,12 @@ int	ft_pwd(void)
 	return (0);
 }
 
-static int	set_cd_env(t_local *local, char *oldpwd)
+static int	set_cd_env(t_local *local, char *oldpwd, char *ag)
 {
 	char	*pwd;
 	int		ret;
 
+	free(ag);
 	ret = 0;
 	if (!oldpwd)
 		ret = 1;
@@ -54,6 +55,15 @@ static int	set_cd_env(t_local *local, char *oldpwd)
 	return (ret);
 }
 
+static int	error_minishell(char *oldpwd, char *arg)
+{
+	perror_filename("minishell: cd: ", arg);
+	free(arg);
+	if (oldpwd)
+		free(oldpwd);
+	return (1);
+}
+
 int	ft_cd(t_local *local, char **arg)
 {
 	char	*oldpwd;
@@ -70,20 +80,12 @@ int	ft_cd(t_local *local, char **arg)
 	if (ag[0] == '\0')
 	{
 		free(ag);
-		return (ft_putendl_fd("minishell: cd: HOME not set",
-				STDERR_FILENO) > 0);
+		return (ft_putendl_fd("minishell: cd: no $HOME", STDERR_FILENO) > 0);
 	}
 	oldpwd = ft_strmerge(ft_strdup("OLDPWD="), ft_getenv(local, "PWD"));
 	if (chdir(ag))
-	{
-		perror_filename("minishell: cd: ", ag);
-		free(ag);
-		if (oldpwd)
-			free(oldpwd);
-		return (1);
-	}
-	free(ag);
-	return (set_cd_env(local, oldpwd));
+		return (error_minishell(oldpwd, ag));
+	return (set_cd_env(local, oldpwd, ag));
 }
 
 int	ft_unset(t_local *local, char **arg)

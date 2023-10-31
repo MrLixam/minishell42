@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 14:11:44 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/30 18:17:35 by r                ###   ########.fr       */
+/*   Updated: 2023/10/31 02:52:40 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@ int	unset_env(t_local *local, char *unset)
 	if (!unset)
 		return (0);
 	tmp = ft_getenv(local, unset);
-	if (!tmp)
-		return (1);
+	if (!tmp || ft_strlen(tmp) == 0)
+		return (check_unset(tmp));
+	if (ft_strmcmp(tmp, "\"\""))
+		tmp = ft_realloc_string(tmp, ft_strdup(""));
 	ij[0] = ft_strlen(tmp);
 	free(tmp);
 	new_env = ft_calloc(ft_tabstrlen(local->env), sizeof(char *));
@@ -62,39 +64,37 @@ int	create_env(t_local *local, char **envp)
 static char	*empty_env(char *ret_val)
 {
 	if (ret_val == NULL)
-		ret_val = ft_calloc(1, 1);
+		return (ft_calloc(1, 1));
 	if (ft_strlen(ret_val) == 0)
 	{
 		free(ret_val);
 		return (ft_strdup("\"\""));
 	}
-	ret_val = add_quote(ret_val, 1, 1, 0);
 	return (ret_val);
 }
 
 char	*ft_getenv(t_local *local, char *name)
 {
-	char	*ret_val;
-	char	*tmp;
+	char	*ret_val;	
 	int		i;
 
-	tmp = ft_strjoin(name, "=");
 	i = -1;
 	ret_val = NULL;
 	if (!local->env)
 		return (NULL);
 	while (local->env[++i])
 	{
-		if (!ft_strncmp(tmp, local->env[i], ft_strlen(tmp)))
+		if (!ft_strncmp(local->env[i], name,
+				ft_strlen(local->env[i]) - new_env_len(local->env[i])))
 		{
-			ret_val = ft_substr(local->env[i], ft_strlen(tmp), \
-						ft_strlen(local->env[i]));
+			ret_val = ft_substr(local->env[i], ft_strlen(name)
+					+ (new_env_len(local->env[i]) != 0),
+					ft_strlen(local->env[i]));
 			if (ret_val == NULL)
 				return (NULL);
 			break ;
 		}
 	}
-	free(tmp);
 	return (empty_env(ret_val));
 }
 
@@ -106,7 +106,7 @@ int	print_env(t_local *local, char **arg)
 	if (arg != NULL && ft_tabstrlen(arg) > 1)
 	{
 		ft_putendl_fd("minishell: env: too many arguments", STDERR_FILENO);
-		return (7);
+		return (127);
 	}
 	while (local->env[++i])
 	{

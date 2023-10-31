@@ -6,13 +6,13 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 20:51:06 by marvin            #+#    #+#             */
-/*   Updated: 2023/10/28 19:21:10 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/31 02:05:15 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	check_env(t_local *local, char *find)
+int	check_env(t_local *local, char *find)
 {
 	int	i;
 

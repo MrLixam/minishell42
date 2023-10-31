@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/30 18:11:47 by r                ###   ########.fr       */
+/*   Updated: 2023/10/31 02:53:05 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,10 @@ int		create_env(t_local *local, char **envp);
 int		unset_env(t_local *local, char *unset);
 int		export_env(t_local *local, char *env);
 int		print_env(t_local *local, char **arg);
+int		check_env(t_local *local, char *find);
+int		new_env_len(char *add);
+char	*ft_realloc_string(char *old, char *new);
+int		check_unset(char *tmp);
 
 /*			error			*/
 int		perror_filename(char *command, char *filename);

@@ -12,3 +12,6 @@ and a few more
 
 please feel free to browse the code, and ask questions if needed,
 but please if you are a student doing this project, don't copy/paste code you don't understand!
+
+
+Update : Finished 97/100

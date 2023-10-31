@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 16:36:55 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/31 03:23:05 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/31 03:54:32 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void	exec(t_local *local)
 	if (WIFEXITED(ret) && !WIFSIGNALED(ret))
 		local->exit_code = WEXITSTATUS(ret);
 	else
-		local->exit_code = WTERMSIG(ret) + 128;
+		local->exit_code = WTERMSIG(ret);
 	clear_heredoc(local);
 	hard_close(0);
 }

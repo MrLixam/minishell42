@@ -41,7 +41,7 @@ void	sig_heredoc(int sig)
 	if (sig == SIGINT)
 	{
 		hard_close(1);
-		exit(130);
+		g_sig = sig;
 	}
 }
 

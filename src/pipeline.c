@@ -50,6 +50,8 @@ static void	do_logic(int pipes[2], int fd, t_data *curr, t_local *local)
 
 	signal(SIGINT, sig_child);
 	signal(SIGQUIT, sig_child);
+	if (curr->command == NULL)
+		no_command_pipe(local, pipes, curr, fd);
 	link_redir(pipes, fd, curr, local);
 	str = lst_to_str(curr->arg, curr->command);
 	if (is_builtin(curr->command))

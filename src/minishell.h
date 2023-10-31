@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 13:59:09 by lvincent          #+#    #+#             */
-/*   Updated: 2023/10/31 02:53:05 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/31 03:38:21 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ char	*ft_strmerge(char *s1, char *s2);
 int		heredoc(t_local *local);
 int		*getfd(void);
 void	clear_heredoc(t_local *local);
+void	heredoc_interrupt(char *delim);
 
 /*			builtins		*/
 int		ft_pwd(void);
@@ -118,6 +119,7 @@ char	**lst_to_str(t_list *lst, char *command);
 int		fix_path(t_local *local, t_data *curr);
 int		fix_single(int save[2], char **str, int retval);
 int		no_command(t_data *line, int save[2]);
+void	no_command_pipe(t_local *local, int pipes[2], t_data *curr, int fd);
 
 int		is_builtin(char *command);
 int		exec_builtin(t_local *local, char **str, t_data *line, int save[2]);

@@ -6,18 +6,11 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 14:11:43 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/31 01:21:48 by lvincent         ###   ########.fr       */
+/*   Updated: 2023/10/31 03:37:47 by lvincent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	heredoc_interrupt(char *delim)
-{
-	ft_putstr_fd("minishell: warn: heredoc end by EOF (want `", 2);
-	ft_putstr_fd(delim, 2);
-	ft_putstr_fd("')\n", 2);
-}
 
 static void	get_input(int fd, char *delim)
 {
@@ -45,6 +38,16 @@ static void	get_input(int fd, char *delim)
 	free(delim);
 }
 
+static void	heredoc_fork_logic(t_local *local, int fd, char *delim)
+{
+	signal(SIGINT, sig_heredoc);
+	get_input(fd, delim);
+	close(fd);
+	if (!g_sig)
+		exit_command(local, 0);
+	exit_command(local, 130);
+}
+
 static int	fork_heredoc(int fd, char *delim, t_local *local)
 {
 	int		pid;
@@ -58,12 +61,7 @@ static int	fork_heredoc(int fd, char *delim, t_local *local)
 		return (1);
 	}
 	else if (!pid)
-	{
-		signal(SIGINT, sig_heredoc);
-		get_input(fd, delim);
-		close(fd);
-		exit_command(local, 0);
-	}
+		heredoc_fork_logic(local, fd, delim);
 	else
 	{
 		signal(SIGINT, sig_child);

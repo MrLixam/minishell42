@@ -6,7 +6,7 @@
 /*   By: lvincent <lvincent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 15:28:26 by gpouzet           #+#    #+#             */
-/*   Updated: 2023/10/28 21:59:15 by r                ###   ########.fr       */
+/*   Updated: 2023/10/31 03:19:38 by gpouzet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	elem_add(t_local *local, char **split, char **new, int i)
 	char	*tmp2;
 
 	tmp2 = ft_substr(split[i], 1, ft_strlen(split[i]) + 1);
-	tmp = ft_getenv(local, tmp2);
+	tmp = getenv_pars(local, tmp2);
 	free (tmp2);
 	if (!tmp)
 	{
@@ -65,7 +65,7 @@ static char	*elem_first(t_local *local, char **split, int *i)
 	else
 	{
 		tmp = ft_substr(split[*i], 1, ft_strlen(split[*i]) + 1);
-		new = ft_getenv(local, tmp);
+		new = getenv_pars(local, tmp);
 		free(tmp);
 	}
 	if (!new)
